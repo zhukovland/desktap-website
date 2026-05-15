@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Desktap — Your Mac's New Sidekick</title>
+  <meta name="description" content="Turn your iPhone or iPad into a programmable command center for your Mac. Native Swift, glass UI, AI-powered setup.">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="icon" href="assets/favicon.ico" sizes="any">
+  <meta name="theme-color" content="#000000">
+
+  <link rel="stylesheet" href="assets/style.css?v=20260515g">
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <a href="/" class="nav-logo" aria-label="Desktap home">
+        <img src="assets/icon.png" alt="" width="28" height="28">
+        desktap
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#ai">AI</a></li>
+        <li><a href="#how-it-works">Setup</a></li>
+        <li>
+          <a href="#" class="nav-cta">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            Download
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Cosmos animated background (matches iOS app) -->
+  <canvas id="cosmos-bg" aria-hidden="true"></canvas>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Meet your Mac's new <span class="accent">sidekick</span></h1>
+        <p class="hero-subtitle">Turn your iPhone into a programmable remote for your Mac. Tap to fire hotkeys, scripts, and app launches — or pin live data straight to a button.</p>
+        <div class="hero-actions">
+          <a href="#" class="btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+            </svg>
+            App Store
+          </a>
+          <a href="#" class="btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            Mac Agent
+          </a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="phone-frame">
+          <img src="assets/screenshot.png" alt="Desktap dashboard on iPhone">
+          <div class="float-tag">⌘ Hotkey</div>
+          <div class="float-tag">▶ Launch App</div>
+          <div class="float-tag">⚙ System</div>
+          <div class="float-tag">$ Shell</div>
+          <div class="float-tag">✦ AppleScript</div>
+          <div class="float-tag">◐ Shortcut</div>
+          <div class="float-tag">→ Open URL</div>
+          <div class="float-tag">¶ Snippet</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span class="marquee-item">Keyboard Shortcuts</span>
+      <span class="marquee-item">Shell Scripts</span>
+      <span class="marquee-item">AppleScript</span>
+      <span class="marquee-item">Siri Shortcuts</span>
+      <span class="marquee-item">App Launcher</span>
+      <span class="marquee-item">Live Widgets</span>
+      <span class="marquee-item">System Actions</span>
+      <span class="marquee-item">URL Schemes</span>
+      <span class="marquee-item">Text Snippets</span>
+      <span class="marquee-item">MCP Integration</span>
+      <span class="marquee-item">iCloud Sync</span>
+      <span class="marquee-item">iPad Support</span>
+      <!-- duplicate for seamless loop -->
+      <span class="marquee-item">Keyboard Shortcuts</span>
+      <span class="marquee-item">Shell Scripts</span>
+      <span class="marquee-item">AppleScript</span>
+      <span class="marquee-item">Siri Shortcuts</span>
+      <span class="marquee-item">App Launcher</span>
+      <span class="marquee-item">Live Widgets</span>
+      <span class="marquee-item">System Actions</span>
+      <span class="marquee-item">URL Schemes</span>
+      <span class="marquee-item">Text Snippets</span>
+      <span class="marquee-item">MCP Integration</span>
+      <span class="marquee-item">iCloud Sync</span>
+      <span class="marquee-item">iPad Support</span>
+    </div>
+  </div>
+
+  <!-- For whom — 3 typographic glass cards (use cases) -->
+  <section class="for-whom" id="for-whom">
+    <div class="container">
+      <div class="for-grid">
+
+        <article class="for-card for-engineers reveal">
+          <div class="for-meta">
+            <span class="for-num">01</span>
+            <span class="for-label">Engineers</span>
+          </div>
+          <h3 class="for-headline">Ship without <em>touching the keyboard.</em></h3>
+          <span class="for-rule" aria-hidden="true"></span>
+          <ul class="for-list">
+            <li>Deploy in one tap — not in five Slack messages</li>
+            <li>The five git commands you type all day, on buttons</li>
+            <li>Tail prod logs without opening a terminal</li>
+            <li>Run migrations from your phone, not from finding your laptop</li>
+            <li>Restart that service whose name you forgot</li>
+          </ul>
+        </article>
+
+        <article class="for-card for-designers reveal">
+          <div class="for-meta">
+            <span class="for-num">02</span>
+            <span class="for-label">Designers</span>
+          </div>
+          <h3 class="for-headline">Your <em>shortcut sheet,</em> retired.</h3>
+          <span class="for-rule" aria-hidden="true"></span>
+          <ul class="for-list">
+            <li>Color picker, eyedropper, vector mode — on labelled buttons</li>
+            <li>Toggle layers, masks, UI without leaving the canvas</li>
+            <li>Export PSD, PNG, SVG — one tap, every preset</li>
+            <li>Switch tools — the buttons follow you</li>
+            <li>Stop memorising 200 shortcuts per tool</li>
+          </ul>
+        </article>
+
+        <article class="for-card for-power reveal">
+          <div class="for-meta">
+            <span class="for-num">03</span>
+            <span class="for-label">Advanced users</span>
+          </div>
+          <h3 class="for-headline">Your <em>whole day,</em> on one tile.</h3>
+          <span class="for-rule" aria-hidden="true"></span>
+          <ul class="for-list">
+            <li>"Focus" mutes Slack, hides the dock, kills notifications</li>
+            <li>"Work setup" launches every app you need at 9 a.m.</li>
+            <li>That AppleScript from 2023 — finally one tap away</li>
+            <li>Caffeinate, brightness, sleep — labelled, not memorised</li>
+            <li>Fifty forgotten hotkeys, parked on labelled buttons</li>
+          </ul>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Features — Bento Grid -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="features-header">
+        <div>
+          <div class="label">Capabilities</div>
+          <h2>Built different.<br>Not <span style="color:var(--text-tertiary)">built generic.</span></h2>
+        </div>
+        <p>Eight command types. Live widgets. Context-aware pages. Multi-profile workflows. iCloud sync. An MCP server your AI can drive. Engineered for power users who don't compromise.</p>
+      </div>
+
+      <div class="bento stagger">
+        <!-- 01 — Every action (wide) -->
+        <div class="bento-card span-8 card-commands reveal">
+          <span class="card-number">01</span>
+          <div class="bento-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m9 10 2 2-2 2"/><path d="M13 14h3"/></svg>
+          </div>
+          <h3>Every action your Mac responds to — now in your hand</h3>
+          <p>Hotkeys, app launches, system actions, shell scripts, AppleScript, Siri Shortcuts, URL schemes, text snippets. If your Mac can do it, a Desktap button can fire it — instantly, without stealing focus.</p>
+          <div class="cmd-tags">
+            <span class="cmd-tag active">⌘ Hotkey</span>
+            <span class="cmd-tag">▶ Launch</span>
+            <span class="cmd-tag">⚙ System</span>
+            <span class="cmd-tag active">$ Shell</span>
+            <span class="cmd-tag">✦ AppleScript</span>
+            <span class="cmd-tag">◐ Shortcut</span>
+            <span class="cmd-tag">→ Open URL</span>
+            <span class="cmd-tag active">¶ Snippet</span>
+          </div>
+        </div>
+
+        <!-- 02 — Live widgets -->
+        <div class="bento-card span-4 reveal">
+          <span class="card-number">02</span>
+          <div class="bento-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <h3>Buttons that breathe</h3>
+          <p>A button doesn't have to fire. Some pulse — pinning a live number that refreshes on its own, glancing back when you tap.</p>
+          <div class="live-bars">
+            <div class="live-bar"></div>
+            <div class="live-bar"></div>
+            <div class="live-bar"></div>
+            <div class="live-bar"></div>
+            <div class="live-bar"></div>
+            <div class="live-bar"></div>
+            <div class="live-bar"></div>
+            <div class="live-bar"></div>
+          </div>
+        </div>
+
+        <!-- 03 — Context-Aware Pages -->
+        <div class="bento-card span-4 reveal">
+          <span class="card-number">03</span>
+          <div class="bento-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 12h16"/><path d="M12 4v16"/></svg>
+          </div>
+          <h3>Pages that read the room</h3>
+          <p>Bind a page to an app once. Open Figma — your design controls appear. Switch to Xcode — the build panel takes over. Your remote thinks ahead so you don't have to.</p>
+        </div>
+
+        <!-- 04 — Profiles -->
+        <div class="bento-card span-4 reveal">
+          <span class="card-number">04</span>
+          <div class="bento-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3>A profile for every you</h3>
+          <p>Work, gaming, music production, focus mode. Switch profiles like switching brains — each keeps its own pages, buttons, and logic, perfectly apart.</p>
+          <div class="profile-chips">
+            <span class="profile-chip active">Work</span>
+            <span class="profile-chip">Gaming</span>
+            <span class="profile-chip">Personal</span>
+          </div>
+        </div>
+
+        <!-- 05 — Grid -->
+        <div class="bento-card span-4 reveal">
+          <span class="card-number">05</span>
+          <div class="bento-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          </div>
+          <h3>A grid you actually shape</h3>
+          <p>4×8 on iPhone. 6×8 on iPad. Stretch a single button across cells — a media bar, a giant focus toggle, a header. The layout bends to you.</p>
+          <div class="grid-mini">
+            <span class="g-cell g-2x1 active"></span>
+            <span class="g-cell"></span>
+            <span class="g-cell"></span>
+            <span class="g-cell"></span>
+            <span class="g-cell active"></span>
+            <span class="g-cell"></span>
+            <span class="g-cell"></span>
+          </div>
+        </div>
+
+        <!-- 06 — AI / MCP (wide) -->
+        <div class="bento-card span-8 reveal">
+          <span class="card-number">06</span>
+          <div class="bento-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c.36 5.49 1.86 10.14 12 12-10.14 1.86-11.64 6.51-12 12-.36-5.49-1.86-10.14-12-12C10.14 10.14 11.64 5.49 12 0z"/></svg>
+          </div>
+          <h3>Your AI, in the driver's seat</h3>
+          <p>Built-in MCP server. Pair Desktap with Claude Desktop, Codex, or any compatible client and your assistant becomes the configurator. Describe a workflow in plain English. Get a fully assembled page — buttons, icons, hotkeys, live data — synced to your phone in seconds.</p>
+        </div>
+
+        <!-- 07 — Synced & Private -->
+        <div class="bento-card span-4 reveal">
+          <span class="card-number">07</span>
+          <div class="bento-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/><path d="M12 12v6"/><path d="m9 15 3 3 3-3"/></svg>
+          </div>
+          <h3>Synced everywhere. Stored nowhere we can see.</h3>
+          <p>Phone and Mac pair over Wi-Fi with a PIN. Profiles sync across your devices via iCloud. Nothing routes through our servers — because there are none.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live widgets — what info can sit on a button -->
+  <section class="widgets" id="widgets">
+    <div class="container">
+      <header class="ww-head">
+        <div class="label">Live widgets</div>
+        <h2>Anything with a <em>pulse,</em> on a button.</h2>
+        <p class="ww-sub">Buttons don't just fire actions — they glance back. Pin any number from any API, script, or sensor on your Mac. The tile refreshes itself.</p>
+      </header>
+
+      <div class="ww-wall reveal">
+        <span class="ww-pill"><span class="ww-icon">≡</span><span class="ww-key">CPU</span><span class="ww-val">42%</span></span>
+        <span class="ww-pill"><span class="ww-icon">$</span><span class="ww-key">AAPL</span><span class="ww-val ww-up">184.32 ▲</span></span>
+        <span class="ww-pill"><span class="ww-icon">☀</span><span class="ww-key">SF</span><span class="ww-val">72°F</span></span>
+        <span class="ww-pill"><span class="ww-icon">♪</span><span class="ww-key">Now</span><span class="ww-val">Lorde · Royals</span></span>
+        <span class="ww-pill"><span class="ww-dot ww-dot-ok"></span><span class="ww-key">prod</span><span class="ww-val ww-ok">99.9%</span></span>
+        <span class="ww-pill"><span class="ww-icon">⌘</span><span class="ww-key">PRs</span><span class="ww-val">3 open</span></span>
+        <span class="ww-pill"><span class="ww-icon">⊙</span><span class="ww-key">Next</span><span class="ww-val">standup · 12m</span></span>
+        <span class="ww-pill"><span class="ww-icon">₿</span><span class="ww-key">BTC</span><span class="ww-val ww-down">67,420 ▼</span></span>
+        <span class="ww-pill"><span class="ww-icon">✉</span><span class="ww-key">Inbox</span><span class="ww-val">12 unread</span></span>
+        <span class="ww-pill"><span class="ww-icon">↑</span><span class="ww-key">Build</span><span class="ww-val ww-ok">#4823 ✓</span></span>
+        <span class="ww-pill"><span class="ww-icon">▤</span><span class="ww-key">Disk</span><span class="ww-val">421 GB free</span></span>
+        <span class="ww-pill"><span class="ww-icon">≈</span><span class="ww-key">Ping</span><span class="ww-val">124 ms</span></span>
+        <span class="ww-pill"><span class="ww-icon">☁</span><span class="ww-key">London</span><span class="ww-val">18°C · rain</span></span>
+        <span class="ww-pill"><span class="ww-icon">▣</span><span class="ww-key">Docker</span><span class="ww-val">3 / 4 up</span></span>
+        <span class="ww-pill"><span class="ww-icon">!</span><span class="ww-key">Alerts</span><span class="ww-val ww-warn">2</span></span>
+        <span class="ww-pill"><span class="ww-icon">⚡</span><span class="ww-key">Battery</span><span class="ww-val">89%</span></span>
+        <span class="ww-pill"><span class="ww-icon">€</span><span class="ww-key">EUR/USD</span><span class="ww-val">1.0834</span></span>
+        <span class="ww-pill"><span class="ww-icon">◐</span><span class="ww-key">Focus</span><span class="ww-val ww-ok">on · 1h 24m</span></span>
+      </div>
+
+      <p class="ww-foot">If it has an API, a shell script, or a number — pin it. Set your own refresh rate.</p>
+    </div>
+  </section>
+
+  <!-- MCP -->
+  <section class="mcp" id="ai">
+    <div class="container">
+      <div class="mcp-layout reveal">
+        <div class="mcp-content">
+          <div class="label">MCP Server</div>
+          <h2>Bring your own <span class="serif-accent">AI.</span></h2>
+          <p>Desktap ships with a built-in MCP server. The real power unlocks when you pair it with Claude Desktop, Codex, or any compatible client — your AI becomes the editor.</p>
+          <p>Describe a workflow. Get a working page. Buttons, icons, hotkeys, live widgets — generated and synced to your phone in seconds.</p>
+          <div class="compat-list">
+            <span class="compat-item">Claude Desktop</span>
+            <span class="compat-item">Codex</span>
+            <span class="compat-item">Any MCP Client</span>
+          </div>
+        </div>
+        <div class="mcp-visual">
+          <div class="mcp-flow">
+            <!-- Client card: AI assistant chat -->
+            <div class="flow-card flow-client">
+              <div class="flow-card-header">
+                <div class="flow-avatar flow-avatar-claude" aria-label="Claude">
+                  <img src="assets/claude.png" alt="" width="38" height="38">
+                </div>
+                <div>
+                  <div class="flow-card-title">Claude Desktop</div>
+                  <div class="flow-card-meta">via MCP</div>
+                </div>
+              </div>
+              <div class="flow-bubble">Add Spotify media controls to my Desktap.</div>
+            </div>
+
+            <!-- Connecting pipe -->
+            <div class="flow-pipe">
+              <span class="flow-pipe-label">MCP</span>
+            </div>
+
+            <!-- Result card: buttons appear in Desktap -->
+            <div class="flow-card flow-result">
+              <div class="flow-card-header">
+                <div class="flow-avatar flow-avatar-app">
+                  <img src="assets/icon.png" alt="" width="22" height="22">
+                </div>
+                <div>
+                  <div class="flow-card-title">Desktap on iPhone</div>
+                  <div class="flow-card-meta">Page "Spotify" · synced just now</div>
+                </div>
+              </div>
+              <div class="flow-buttons">
+                <div class="flow-btn"><span class="flow-btn-icon">⏯</span><span>Play / Pause</span></div>
+                <div class="flow-btn"><span class="flow-btn-icon">⏭</span><span>Next Track</span></div>
+                <div class="flow-btn"><span class="flow-btn-icon">⏮</span><span>Previous</span></div>
+                <div class="flow-btn"><span class="flow-btn-icon">🔊</span><span>Volume Up</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="container">
+      <div class="how-header">
+        <div class="label" style="justify-content: center;">Setup</div>
+        <h2>Three steps. <span>That's it.</span></h2>
+        <p class="how-subtitle">Pairing takes about a minute. No account, no cloud signup, no setup wizard.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+          </div>
+          <span class="step-number">01</span>
+          <h3>Get the iPhone app</h3>
+          <p>Download Desktap from the App Store. No account, no signup, nothing to configure on first launch.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M2 8h20"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <span class="step-number">02</span>
+          <h3>Install the Mac agent</h3>
+          <p>A tiny menubar app — free, native, lives quietly in your menu bar and stays out of the way.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+          </div>
+          <span class="step-number">03</span>
+          <h3>Same Wi-Fi, you're in</h3>
+          <p>Your phone finds the Mac automatically. Confirm a PIN once — that's the whole pairing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Ready to try?</h2>
+      <p>Free to start. Pro unlocks everything.</p>
+      <div class="cta-actions">
+        <a href="#" class="btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+          </svg>
+          Download on App Store
+        </a>
+        <a href="#" class="btn-secondary">
+          Get Mac Agent — Free
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-left">
+        <span class="footer-logo">desktap</span>
+        <ul class="footer-links">
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="terms.html">Terms</a></li>
+          <li><a href="mailto:support@desktap.app">Support</a></li>
+        </ul>
+      </div>
+      <div class="footer-right">&copy; 2026 Desktap</div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Cosmos Background ──
+    // Port of AnimatedBackground + BackgroundTheme.cosmos from Swift
+    (function() {
+      const canvas = document.getElementById('cosmos-bg');
+      const ctx = canvas.getContext('2d');
+
+      const blobs = [
+        { baseX: 0.2,  baseY: 0.15, radius: 0.35, r: 120, g: 50,  b: 180, speedX: 0.25, speedY: 0.20, phase: 0   },
+        { baseX: 0.8,  baseY: 0.45, radius: 0.30, r: 40,  g: 100, b: 220, speedX: 0.30, speedY: 0.25, phase: 2.1 },
+        { baseX: 0.25, baseY: 0.75, radius: 0.32, r: 200, g: 50,  b: 100, speedX: 0.20, speedY: 0.30, phase: 4.2 },
+        { baseX: 0.75, baseY: 0.20, radius: 0.25, r: 50,  g: 180, b: 140, speedX: 0.35, speedY: 0.22, phase: 1.0 },
+      ];
+
+      let dpr = 1;
+      function resize() {
+        dpr = window.devicePixelRatio || 1;
+        canvas.width = window.innerWidth * dpr;
+        canvas.height = window.innerHeight * dpr;
+        canvas.style.width = window.innerWidth + 'px';
+        canvas.style.height = window.innerHeight + 'px';
+      }
+
+      window.addEventListener('resize', resize);
+      resize();
+
+      function draw(time) {
+        const t = time * 0.001; // seconds
+        const w = canvas.width;
+        const h = canvas.height;
+        const minSide = Math.min(w, h);
+
+        ctx.clearRect(0, 0, w, h);
+
+        for (const blob of blobs) {
+          const x = blob.baseX * w + Math.sin(t * blob.speedX + blob.phase) * w * 0.18;
+          const y = blob.baseY * h + Math.cos(t * blob.speedY + blob.phase * 1.3) * h * 0.12;
+
+          const wobble = 1.0 + Math.sin(t * 0.3 + blob.phase) * 0.15;
+          const radius = blob.radius * minSide * wobble;
+          const ellipseRadius = radius * 1.5;
+
+          const rotation = Math.sin(t * 0.15 + blob.phase) * 0.3;
+
+          ctx.save();
+          ctx.translate(x, y);
+          ctx.rotate(rotation);
+
+          const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, ellipseRadius);
+          grad.addColorStop(0,    'rgba(' + blob.r + ',' + blob.g + ',' + blob.b + ', 0.3)');
+          grad.addColorStop(0.35, 'rgba(' + blob.r + ',' + blob.g + ',' + blob.b + ', 0.15)');
+          grad.addColorStop(0.7,  'rgba(' + blob.r + ',' + blob.g + ',' + blob.b + ', 0.04)');
+          grad.addColorStop(1,    'rgba(' + blob.r + ',' + blob.g + ',' + blob.b + ', 0)');
+
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.ellipse(0, 0, ellipseRadius, ellipseRadius * 0.85, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.restore();
+        }
+
+        requestAnimationFrame(draw);
+      }
+
+      requestAnimationFrame(draw);
+    })();
+
+    // ── Screenshot mode: force-reveal everything + scroll to anchor ──
+    if (location.search.includes('ss=1')) {
+      document.documentElement.classList.add('ss-mode');
+      requestAnimationFrame(() => {
+        document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+        if (location.hash) {
+          const el = document.querySelector(location.hash);
+          if (el) el.scrollIntoView({ block: 'start', behavior: 'instant' });
+        }
+      });
+    }
+
+    // ── Scroll-triggered reveal ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ── Smooth scroll ──
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+      });
+    });
+
+    // ── Card glow follow mouse ──
+    document.querySelectorAll('.bento-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--mouse-x', (e.clientX - r.left) + 'px');
+        card.style.setProperty('--mouse-y', (e.clientY - r.top) + 'px');
+      });
+    });
+
+    // ── MCP flow re-animate buttons on scroll ──
+    const flowObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const btns = entry.target.querySelectorAll('.flow-btn');
+          btns.forEach(b => {
+            b.style.animation = 'none';
+            b.offsetHeight;
+            b.style.animation = '';
+          });
+          flowObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.mcp-flow').forEach(el => flowObserver.observe(el));
+  </script>
+</body>
+</html>
