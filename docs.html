@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Docs — Desktap</title>
+  <meta name="description" content="Desktap developer documentation — Button Update API, MCP integration, recipes and reference.">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="icon" href="assets/favicon.ico" sizes="any">
+  <meta name="theme-color" content="#000000">
+  <link rel="stylesheet" href="assets/style.css?v=20260518f">
+</head>
+<body class="docs-body">
+
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <a href="/" class="nav-logo" aria-label="Desktap home">
+        <img src="assets/icon.png" alt="" width="28" height="28">
+        desktap
+      </a>
+      <ul class="nav-links">
+        <li><a href="/#features">Features</a></li>
+        <li><a href="/#ai">AI</a></li>
+        <li><a href="docs.html" aria-current="page">Docs</a></li>
+        <li>
+          <a href="#" class="nav-cta">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            Download
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <button class="docs-toc-toggle" id="tocToggle" aria-label="Open table of contents" aria-expanded="false">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    <span>Contents</span>
+  </button>
+
+  <div class="docs-shell">
+
+    <aside class="docs-toc" id="docsToc" aria-label="Table of contents">
+      <div class="docs-toc-inner">
+        <div class="docs-toc-label">On this page</div>
+        <nav>
+          <ul class="docs-toc-list" id="tocList"></ul>
+        </nav>
+      </div>
+    </aside>
+
+    <main class="docs-main">
+      <div class="docs-eyebrow">Developer documentation</div>
+      <div class="docs-meta">
+        <span class="docs-meta-info" id="docsMetaInfo"></span>
+        <a class="docs-jump" id="docsJump" href="#quick-start">
+          <span class="docs-jump-arrow" aria-hidden="true">↓</span>
+          Jump to Quick Start
+        </a>
+      </div>
+      <div class="docs-content" id="docsContent">
+        <div class="docs-loading">Loading documentation…</div>
+      </div>
+      <div class="docs-source-note">
+        Source: <a href="assets/docs/button-update-api.md">button-update-api.md</a>
+      </div>
+    </main>
+
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-left">
+        <span class="footer-logo">desktap</span>
+        <ul class="footer-links">
+          <li><a href="docs.html">Docs</a></li>
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="terms.html">Terms</a></li>
+          <li><a href="mailto:support@desktap.app">Support</a></li>
+        </ul>
+      </div>
+      <div class="footer-right">&copy; 2026 Desktap</div>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { marked } from 'https://cdn.jsdelivr.net/npm/marked@14.1.3/+esm';
+
+    marked.setOptions({ gfm: true, breaks: false });
+
+    // GitHub-style slug: lowercase, drop non-word/space/hyphen, spaces→hyphen
+    function slugify(text) {
+      return text
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+    }
+
+    const content = document.getElementById('docsContent');
+    const metaInfo = document.getElementById('docsMetaInfo');
+    const tocList = document.getElementById('tocList');
+    const tocToggle = document.getElementById('tocToggle');
+    const tocPanel = document.getElementById('docsToc');
+
+    // Parse <!-- key: value --> markers from MD source and remove them before render
+    function extractMeta(md) {
+      const out = { version: null, updated: null };
+      md = md.replace(/<!--\s*(version|updated)\s*:\s*([^>]+?)\s*-->\s*\n?/gi, (_, k, v) => {
+        out[k.toLowerCase()] = v.trim();
+        return '';
+      });
+      return { md, meta: out };
+    }
+
+    function formatUpdated(s) {
+      // Accept "2026-05-18" → "May 18, 2026". Fallback: return as-is.
+      const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s);
+      if (!m) return s;
+      const d = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]));
+      return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+    }
+
+    function renderMeta(info) {
+      const parts = [];
+      if (info.version) parts.push('v' + info.version);
+      if (info.updated) parts.push('Updated ' + formatUpdated(info.updated));
+      metaInfo.textContent = parts.join(' · ');
+    }
+
+    const COPY_ICON = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+    const CHECK_ICON = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
+
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch {
+        // Fallback for non-secure contexts or older browsers
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        let ok = false;
+        try { ok = document.execCommand('copy'); } catch {}
+        document.body.removeChild(ta);
+        return ok;
+      }
+    }
+
+    function findRecipeH3s() {
+      const h2 = content.querySelector('h2#recipe-examples');
+      if (!h2) return [];
+      const out = [];
+      let n = h2.nextElementSibling;
+      while (n && n.tagName !== 'H2') {
+        if (n.tagName === 'H3') out.push(n);
+        n = n.nextElementSibling;
+      }
+      return out;
+    }
+
+    function firstParagraphAfter(h3) {
+      let n = h3.nextElementSibling;
+      while (n && !['P', 'H3', 'H2'].includes(n.tagName)) n = n.nextElementSibling;
+      return n && n.tagName === 'P' ? n : null;
+    }
+
+    function truncate(text, limit) {
+      if (text.length <= limit) return text;
+      return text.slice(0, limit).replace(/\s+\S*$/, '').trimEnd() + '…';
+    }
+
+    function buildRecipeIndex(h3s) {
+      if (!h3s.length) return;
+      const wrap = document.createElement('aside');
+      wrap.className = 'docs-recipe-index';
+      const label = document.createElement('div');
+      label.className = 'docs-recipe-index-label';
+      label.textContent = h3s.length + ' recipes ↓';
+      wrap.appendChild(label);
+
+      h3s.forEach((h3, i) => {
+        const row = document.createElement('a');
+        row.className = 'docs-recipe-row';
+        row.href = '#' + h3.id;
+
+        const num = document.createElement('span');
+        num.className = 'docs-recipe-row-num';
+        num.textContent = String(i + 1).padStart(2, '0');
+
+        const body = document.createElement('div');
+        body.className = 'docs-recipe-row-body';
+        const title = document.createElement('div');
+        title.className = 'docs-recipe-row-title';
+        title.textContent = h3.textContent;
+        body.appendChild(title);
+        const descP = firstParagraphAfter(h3);
+        if (descP) {
+          const desc = document.createElement('div');
+          desc.className = 'docs-recipe-row-desc';
+          desc.textContent = truncate(descP.textContent.trim(), 130);
+          body.appendChild(desc);
+        }
+
+        const arrow = document.createElement('span');
+        arrow.className = 'docs-recipe-row-arrow';
+        arrow.setAttribute('aria-hidden', 'true');
+        arrow.textContent = '→';
+
+        row.append(num, body, arrow);
+        wrap.appendChild(row);
+      });
+
+      h3s[0].parentNode.insertBefore(wrap, h3s[0]);
+    }
+
+    function tagRecipeHeadings(h3s) {
+      h3s.forEach((h3, i) => {
+        const eb = document.createElement('div');
+        eb.className = 'docs-recipe-eyebrow';
+        eb.textContent = '— Recipe ' + String(i + 1).padStart(2, '0');
+        h3.parentNode.insertBefore(eb, h3);
+      });
+    }
+
+    function decorateRecipes() {
+      const h3s = findRecipeH3s();
+      buildRecipeIndex(h3s);
+      tagRecipeHeadings(h3s);
+    }
+
+    function attachCopyButtons() {
+      // Locate the first <pre> after the Quick Start heading
+      const qsHeading = content.querySelector('h2#quick-start');
+      let qsPre = qsHeading ? qsHeading.nextElementSibling : null;
+      while (qsPre && qsPre.tagName !== 'PRE') qsPre = qsPre.nextElementSibling;
+
+      content.querySelectorAll('pre').forEach(pre => {
+        const codeEl = pre.querySelector('code');
+        if (!codeEl) return;
+
+        const isPrimary = pre === qsPre;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'docs-copy' + (isPrimary ? ' docs-copy-primary' : '');
+        btn.setAttribute('aria-label', 'Copy code to clipboard');
+
+        const iconHTML = isPrimary
+          ? '<span class="docs-copy-icon" aria-hidden="true">▸</span>'
+          : '<span class="docs-copy-icon">' + COPY_ICON + '</span>';
+        const labelText = isPrimary ? 'paste & run' : 'Copy';
+        btn.innerHTML = iconHTML + '<span class="docs-copy-text">' + labelText + '</span>';
+
+        let resetTimer = 0;
+        btn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          if (resetTimer) return;
+          const ok = await copyText(codeEl.textContent);
+          if (!ok) return;
+          const iconEl = btn.querySelector('.docs-copy-icon');
+          const textEl = btn.querySelector('.docs-copy-text');
+          const origIcon = iconEl.innerHTML;
+          const origText = textEl.textContent;
+          btn.classList.add('is-copied');
+          iconEl.innerHTML = CHECK_ICON;
+          textEl.textContent = 'Copied';
+          resetTimer = window.setTimeout(() => {
+            btn.classList.remove('is-copied');
+            iconEl.innerHTML = origIcon;
+            textEl.textContent = origText;
+            resetTimer = 0;
+          }, 1600);
+        });
+
+        pre.appendChild(btn);
+      });
+    }
+
+    async function load() {
+      let md;
+      try {
+        const res = await fetch('assets/docs/button-update-api.md', { cache: 'no-store' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        md = await res.text();
+      } catch (err) {
+        content.innerHTML = '<p class="docs-error">Failed to load documentation: ' + err.message + '</p>';
+        return;
+      }
+
+      const parsed = extractMeta(md);
+      renderMeta(parsed.meta);
+      content.innerHTML = marked.parse(parsed.md);
+
+      // Assign IDs to headings (used for both anchor targets and TOC)
+      const usedIds = new Set();
+      content.querySelectorAll('h1, h2, h3, h4').forEach(h => {
+        let base = slugify(h.textContent);
+        let id = base, n = 1;
+        while (usedIds.has(id)) id = base + '-' + (++n);
+        usedIds.add(id);
+        h.id = id;
+      });
+
+      decorateRecipes();
+      attachCopyButtons();
+
+      // Build sidebar TOC from h2 (with h3 nested)
+      const h2s = content.querySelectorAll('h2');
+      h2s.forEach(h2 => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#' + h2.id;
+        a.textContent = h2.textContent;
+        li.appendChild(a);
+
+        const subUl = document.createElement('ul');
+        let sib = h2.nextElementSibling;
+        while (sib && sib.tagName !== 'H2') {
+          if (sib.tagName === 'H3') {
+            const subLi = document.createElement('li');
+            const subA = document.createElement('a');
+            subA.href = '#' + sib.id;
+            subA.textContent = sib.textContent;
+            subLi.appendChild(subA);
+            subUl.appendChild(subLi);
+          }
+          sib = sib.nextElementSibling;
+        }
+        if (subUl.children.length) li.appendChild(subUl);
+        tocList.appendChild(li);
+      });
+
+      wireInteractions();
+
+      // Honor initial hash
+      if (location.hash) {
+        const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+        if (target) {
+          requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
+        }
+      }
+    }
+
+    function wireInteractions() {
+      // Smooth scroll for in-page anchors
+      document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+          const id = a.getAttribute('href').slice(1);
+          if (!id) return;
+          const t = document.getElementById(id);
+          if (t) {
+            e.preventDefault();
+            t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            history.replaceState(null, '', '#' + id);
+            // Close mobile TOC on tap
+            if (window.matchMedia('(max-width: 900px)').matches) {
+              tocPanel.classList.remove('open');
+              tocToggle.setAttribute('aria-expanded', 'false');
+            }
+          }
+        });
+      });
+
+      // Scroll-spy
+      const headings = Array.from(content.querySelectorAll('h2[id], h3[id]'));
+      const linkById = new Map();
+      tocList.querySelectorAll('a[href^="#"]').forEach(a => {
+        linkById.set(a.getAttribute('href').slice(1), a);
+      });
+
+      let active = null;
+      function setActive(id) {
+        if (active === id) return;
+        linkById.forEach(l => l.classList.remove('active'));
+        const link = linkById.get(id);
+        if (link) {
+          link.classList.add('active');
+          // Keep active link in view inside the TOC
+          const inner = document.querySelector('.docs-toc-inner');
+          if (inner) {
+            const lr = link.getBoundingClientRect();
+            const tr = inner.getBoundingClientRect();
+            if (lr.top < tr.top || lr.bottom > tr.bottom) {
+              link.scrollIntoView({ block: 'nearest' });
+            }
+          }
+        }
+        active = id;
+      }
+
+      function onScroll() {
+        const probe = window.scrollY + 120;
+        let current = headings[0] && headings[0].id;
+        for (const h of headings) {
+          if (h.offsetTop <= probe) current = h.id;
+          else break;
+        }
+        if (current) setActive(current);
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    }
+
+    // Mobile TOC toggle
+    tocToggle.addEventListener('click', () => {
+      const open = tocPanel.classList.toggle('open');
+      tocToggle.setAttribute('aria-expanded', String(open));
+    });
+
+    load();
+  </script>
+</body>
+</html>
