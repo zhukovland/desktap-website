@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Downloading Desktap Agent…</title>
+  <meta name="robots" content="noindex">
+  <!-- Redirect straight to the latest notarized DMG hosted on GitHub Releases. -->
+  <meta http-equiv="refresh" content="0; url=https://github.com/zhukovland/desktap-website/releases/latest/download/DesktapAgent.dmg">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+  <meta name="theme-color" content="#000000">
+  <link rel="stylesheet" href="/assets/style.css?v=20260518b">
+  <style>
+    .dl-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 2rem; }
+    .dl-card { max-width: 34rem; }
+    .dl-card h1 { margin-bottom: 0.75rem; }
+    .dl-card p { margin-bottom: 1.5rem; opacity: 0.8; }
+    .dl-card .dl-back { display: inline-block; margin-top: 2rem; opacity: 0.7; }
+  </style>
+</head>
+<body>
+  <main class="dl-wrap">
+    <div class="dl-card">
+      <h1>Your download is starting…</h1>
+      <p>Desktap Agent for Mac. If the download doesn't begin automatically, use the button below.</p>
+      <a class="btn-primary" href="https://github.com/zhukovland/desktap-website/releases/latest/download/DesktapAgent.dmg">
+        Download Desktap Agent for Mac
+      </a>
+      <p class="dl-back"><a href="/">← Back to desktap.app</a></p>
+    </div>
+  </main>
+  <script>
+    // Belt-and-suspenders: also trigger the download via JS in case meta refresh is blocked.
+    window.location.href = "https://github.com/zhukovland/desktap-website/releases/latest/download/DesktapAgent.dmg";
+  </script>
+</body>
+</html>
