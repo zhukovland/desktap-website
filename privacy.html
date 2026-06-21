@@ -31,37 +31,70 @@
 
   <main class="legal container">
     <h1>Privacy Policy</h1>
-    <span class="legal-updated">Last updated: April 17, 2026</span>
+    <span class="legal-updated">Last updated: May 25, 2026</span>
 
-    <h2>Overview</h2>
-    <p>Desktap is designed with privacy as a core principle. The app operates entirely over your local Wi-Fi network, and we do not collect, store, or transmit your personal data to any external servers.</p>
+    <h2>Who runs Desktap</h2>
+    <p>Desktap is built and operated by Mikhail Zhukov, an individual software developer based in Cyprus. You can reach me at <a href="mailto:support@desktap.app">support@desktap.app</a>. For the purposes of the EU General Data Protection Regulation, I am the data controller.</p>
 
-    <h2>Data Collection</h2>
-    <p>Desktap does not collect personal information. No analytics, no tracking, no telemetry. The app works offline within your local network.</p>
+    <h2>The short version</h2>
+    <p>Desktap is designed to keep your data on your own devices. There is no Desktap server. The iOS app and the Mac agent talk to each other directly over your local Wi-Fi network. I do not collect analytics, telemetry, crash reports, or any personal data from the apps themselves.</p>
 
-    <h2>Local Communication</h2>
-    <p>Desktap communicates between your iPhone/iPad and your Mac exclusively over your local Wi-Fi network. Commands, button configurations, and all other data travel directly between your devices. Nothing passes through our servers.</p>
+    <h2>What stays on your devices</h2>
+    <ul>
+      <li><strong>Button configurations, scripts, and pages</strong> live on your iPhone, iPad, and Mac. They are never sent to me.</li>
+      <li><strong>Logs</strong> written by the Desktap Mac agent are stored locally on your Mac and are not transmitted anywhere. You can delete them at any time.</li>
+      <li><strong>The authentication token</strong> the agent generates (<code>~/.desktap-mcp-token</code>) stays on your Mac with file permissions <code>0600</code>. It is never uploaded anywhere.</li>
+    </ul>
 
-    <h2>iCloud Sync</h2>
-    <p>If you use iCloud sync, your button configurations are stored in your personal iCloud account using Apple's CloudKit framework. This data is managed entirely by Apple under their privacy policy. We do not have access to your iCloud data.</p>
+    <h2>Local network and discovery</h2>
+    <p>To pair your iPhone or iPad with your Mac, the apps broadcast their presence on your local network using Bonjour (mDNS), an Apple system service. This advertises the device's hostname to other devices on the same Wi-Fi network. I do not see this traffic — it stays on your LAN.</p>
 
-    <h2>In-App Purchases</h2>
-    <p>Subscriptions and purchases are processed entirely by Apple through the App Store. We do not collect, see, or store any payment information, billing details, or financial data.</p>
+    <h2>iCloud sync</h2>
+    <p>If you enable iCloud sync, your button configurations are stored in your personal iCloud account through Apple's iCloud Drive. This data is governed by <a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">Apple's privacy policy</a>. I do not have access to your iCloud data.</p>
 
-    <h2>MCP Integration</h2>
-    <p>When you use AI-powered button creation via MCP (Model Context Protocol), communication happens directly between your AI assistant (e.g., Claude Desktop) and the Desktap Agent on your Mac. No data is routed through Desktap servers.</p>
+    <h2>In-app purchases</h2>
+    <p>Subscriptions and the lifetime purchase are processed entirely by Apple through the App Store. I never see your payment details, billing address, or card information. Apple shares only anonymous, aggregated sales statistics with me — no personally identifiable information.</p>
 
-    <h2>Third-Party Services</h2>
-    <p>Desktap does not integrate with any third-party analytics, advertising, or tracking services.</p>
+    <h2>AI assistants and MCP</h2>
+    <p>Desktap supports the Model Context Protocol (MCP) so that AI assistants — for example, Claude Desktop — can create and update buttons for you. A few things to know:</p>
+    <ul>
+      <li>The MCP bridge runs <strong>locally on your Mac</strong>. The AI assistant talks to the Desktap agent through a local connection on your machine.</li>
+      <li>However, the messages you send to the AI assistant — your prompts and any configuration data it reads or writes on your behalf — <strong>are sent to that assistant's servers</strong> as part of how it normally works. That is governed by the AI assistant's own privacy policy, not mine.</li>
+      <li>If you don't want this, simply don't enable MCP in the agent — Desktap works fully without it.</li>
+    </ul>
 
-    <h2>Children's Privacy</h2>
-    <p>Desktap does not knowingly collect data from children under 13. Since we do not collect any personal data, no special provisions are needed.</p>
+    <h2>If you contact me</h2>
+    <p>When you email <a href="mailto:support@desktap.app">support@desktap.app</a>, your message and email address are processed by my email provider as part of normal email delivery. Depending on the provider, this may involve processing on servers located outside the European Economic Area; in such cases, Standard Contractual Clauses or other safeguards permitted by the GDPR apply to the transfer.</p>
+    <p>I keep support correspondence for up to 24 months after our last exchange — long enough to recognise repeat issues and reference prior bug reports — and delete it afterwards. You can ask me to delete your messages sooner at any time by writing to the same address.</p>
 
-    <h2>Changes to This Policy</h2>
-    <p>We may update this policy from time to time. Changes will be posted on this page with an updated revision date.</p>
+    <h2>Children</h2>
+    <p>Desktap is not directed at children under 13. I do not knowingly collect any data from children.</p>
+
+    <h2>Legal basis for processing</h2>
+    <p>Where I process your personal data, I rely on the following legal bases under the GDPR:</p>
+    <ul>
+      <li><strong>Performance of a contract</strong> (Art. 6(1)(b)) — for delivering Desktap to you. App Store purchases are processed by Apple, who is the seller of record.</li>
+      <li><strong>Legitimate interests</strong> (Art. 6(1)(f)) — for handling your support emails and keeping a minimal record of bugs and feature requests, so I can improve the app and recognise repeat issues. You can object to this at any time by emailing me.</li>
+      <li><strong>Compliance with legal obligations</strong> (Art. 6(1)(c)) — for retaining records required by tax or accounting law, where applicable.</li>
+    </ul>
+    <p>If I ever add a feature that would require your consent (Art. 6(1)(a)) — for example, opt-in analytics — I will ask for it in the app before collecting any data.</p>
+
+    <h2>Your rights</h2>
+    <p>Because I don't collect personal data through the apps, there is generally nothing to access, correct, or delete on my side. If you've contacted me by email and want me to remove that correspondence, just write to <a href="mailto:support@desktap.app">support@desktap.app</a>.</p>
+    <p>If you are in the EU, you have the rights set out in articles 15–22 of the GDPR — access, rectification, erasure, restriction, portability, and objection — and you can exercise any of them by emailing the same address. I will respond within one month, as required by Article 12(3).</p>
+    <p>You also have the right to lodge a complaint with a data-protection supervisory authority. My supervisory authority is the Office of the Commissioner for Personal Data Protection of the Republic of Cyprus (<a href="https://www.dataprotection.gov.cy" target="_blank" rel="noopener">dataprotection.gov.cy</a>). You may also complain to the supervisory authority in your country of residence.</p>
+
+    <h2>Third-party services</h2>
+    <p>Desktap does not include any third-party analytics, advertising, tracking SDKs, or crash-reporting services. The only third parties involved are Apple (App Store, CloudKit, iCloud) and — only if you choose to connect one — your AI assistant.</p>
+
+    <h2>About this website</h2>
+    <p>This website (desktap.app) is hosted on GitHub Pages with Cloudflare in front of it. Those providers may keep standard server access logs (IP address, user-agent, requested URL, timestamp) for short periods to deliver the site and protect against abuse. I do not run any analytics, cookies, or tracking on this site, and I do not have access to those infrastructure logs.</p>
+
+    <h2>Changes</h2>
+    <p>If this policy changes, I will update the date at the top of this page and post the new version here. If a change materially affects how I handle your data, I will note it in the next app release.</p>
 
     <h2>Contact</h2>
-    <p>If you have questions about this privacy policy, contact us at <a href="mailto:support@desktap.app">support@desktap.app</a>.</p>
+    <p>Questions, requests, or anything else — <a href="mailto:support@desktap.app">support@desktap.app</a>.</p>
   </main>
 
   <footer class="footer">
