@@ -2425,3 +2425,41 @@ img { display: block; max-width: 100%; }
   .ww-key { font-size: 0.75rem; }
   .ww-val { font-size: 0.6875rem; }
 }
+
+/* Respect users who ask the system to reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  #cosmos-bg { display: none; }
+  .marquee-track { animation: none !important; }
+  .reveal { opacity: 1 !important; transform: none !important; }
+}
+
+/* Keyboard skip link + visible focus */
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -64px;
+  z-index: 1000;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: top 0.18s ease;
+}
+.skip-link:focus {
+  top: 12px;
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}

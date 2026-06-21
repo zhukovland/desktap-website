@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  :root{
+    --accent:#3B82F6;
+    --display:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',system-ui,sans-serif;
+    --sans:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{width:1200px;height:630px;overflow:hidden;}
+  body{
+    background:#000;
+    position:relative;
+    font-family:var(--sans);
+    color:#F0F0F0;
+  }
+  /* Cosmos blobs — same palette as the site's animated background */
+  .blob{position:absolute;border-radius:50%;filter:blur(8px);}
+  .b1{width:760px;height:640px;left:-160px;top:-200px;
+      background:radial-gradient(closest-side,rgba(120,50,180,.32),rgba(120,50,180,0));}
+  .b2{width:720px;height:600px;right:-200px;top:120px;
+      background:radial-gradient(closest-side,rgba(40,100,220,.30),rgba(40,100,220,0));}
+  .b3{width:640px;height:560px;left:120px;bottom:-260px;
+      background:radial-gradient(closest-side,rgba(200,50,100,.22),rgba(200,50,100,0));}
+  .b4{width:520px;height:460px;right:160px;top:-160px;
+      background:radial-gradient(closest-side,rgba(50,180,140,.20),rgba(50,180,140,0));}
+  .vignette{position:absolute;inset:0;
+      background:radial-gradient(120% 120% at 50% 40%,transparent 50%,rgba(0,0,0,.55) 100%);}
+
+  .wrap{position:relative;height:100%;display:flex;align-items:stretch;
+        padding:0 72px;gap:36px;}
+  .left{flex:1;max-width:620px;display:flex;flex-direction:column;justify-content:center;}
+
+  .brand{display:flex;align-items:center;gap:16px;margin-bottom:38px;}
+  .brand img{width:60px;height:60px;border-radius:14px;}
+  .brand span{font-family:var(--display);font-size:34px;font-weight:600;letter-spacing:-.02em;}
+
+  h1{font-family:var(--display);font-size:66px;line-height:1.04;
+     font-weight:700;letter-spacing:-.03em;}
+  h1 .accent{
+    background:linear-gradient(135deg,#bf5af2 0%,#64d2ff 50%,#30d158 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    font-style:italic;font-weight:700;padding-right:.04em;
+  }
+  .sub{margin-top:26px;font-size:27px;line-height:1.4;color:#A8A8B2;
+       font-weight:400;max-width:560px;}
+
+  .tags{margin-top:38px;display:flex;gap:12px;flex-wrap:wrap;}
+  .tag{font-family:var(--sans);font-size:18px;color:#C8C8D0;
+       padding:9px 16px;border:1px solid rgba(255,255,255,.12);
+       border-radius:999px;background:rgba(255,255,255,.03);}
+
+  .right{position:relative;width:372px;flex-shrink:0;display:flex;
+         justify-content:center;align-items:flex-start;}
+
+  /* Phone with bezel — large, bleeding off the bottom so button labels stay legible.
+     The body's overflow:hidden crops the bottom; side shadows stay visible. */
+  .phone-frame{
+    position:relative;width:384px;margin-top:60px;padding:14px;border-radius:62px;
+    background:linear-gradient(145deg,#2a2a30 0%,#0a0a0e 50%,#1c1c22 100%);
+    box-shadow:
+      inset 0 0 0 1.5px rgba(255,255,255,.08),
+      inset 0 1px 0 rgba(255,255,255,.12),
+      inset 0 -1px 0 rgba(0,0,0,.6),
+      0 0 0 1px rgba(0,0,0,.8),
+      0 24px 60px rgba(0,0,0,.6),
+      0 0 120px rgba(120,50,180,.30);
+  }
+  .phone-frame::before{ /* notch */
+    content:'';position:absolute;top:22px;left:50%;transform:translateX(-50%);
+    width:96px;height:28px;background:#000;border-radius:20px;z-index:2;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.04);
+  }
+  .phone-frame::after{ /* side buttons */
+    content:'';position:absolute;left:-2px;top:110px;width:3px;height:32px;
+    background:linear-gradient(90deg,#1a1a1e,#3a3a40);border-radius:2px 0 0 2px;
+    box-shadow:0 50px 0 #1a1a1e,0 50px 0 0 #3a3a40,0 96px 0 #1a1a1e;
+  }
+  .phone-frame img{
+    width:100%;height:auto;display:block;border-radius:50px;background:#000;
+    filter:contrast(1.05) saturate(1.08) brightness(1.02);
+  }
+</style>
+</head>
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="blob b4"></div>
+  <div class="vignette"></div>
+
+  <div class="wrap">
+    <div class="left">
+      <div class="brand">
+        <img src="assets/icon.png" alt="">
+        <span>desktap</span>
+      </div>
+      <h1>Meet your Mac's<br>new <span class="accent">sidekick</span></h1>
+      <p class="sub">A living command center at your fingertips. Hotkeys, scripts, and live data — one tap away.</p>
+      <div class="tags">
+        <span class="tag">⌘ Hotkeys</span>
+        <span class="tag">$ Shell</span>
+        <span class="tag">✦ AppleScript</span>
+        <span class="tag">✶ MCP</span>
+      </div>
+    </div>
+    <div class="right">
+      <div class="phone-frame">
+        <img src="assets/screenshot.png" alt="">
+      </div>
+    </div>
+  </div>
+</body>
+</html>
