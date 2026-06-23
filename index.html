@@ -88,7 +88,7 @@
         <h1>Meet your Mac's new <span class="accent">sidekick</span></h1>
         <p class="hero-subtitle">Turn your iPhone into a programmable remote for your Mac. Tap to fire hotkeys, scripts, and app launches — or pin live data straight to a button.</p>
         <div class="hero-actions">
-          <a href="#" class="btn-primary">
+          <a href="#" class="btn-primary js-ios-soon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
             </svg>
@@ -461,7 +461,7 @@
       <h2>Ready to try?</h2>
       <p>Free to start. Pro unlocks everything.</p>
       <div class="cta-actions">
-        <a href="#" class="btn-primary">
+        <a href="#" class="btn-primary js-ios-soon">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
           </svg>
@@ -489,6 +489,66 @@
       <div class="footer-right">&copy; 2026 Desktap</div>
     </div>
   </footer>
+
+  <!-- iOS "coming soon" modal -->
+  <style>
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: center; padding: 1.5rem;
+      background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px);
+    }
+    .modal-overlay[hidden] { display: none; }
+    .modal {
+      position: relative; max-width: 26rem; width: 100%; padding: 2.25rem 2rem; text-align: center;
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px;
+      box-shadow: 0 24px 64px -16px rgba(0, 0, 0, 0.8);
+    }
+    .modal h2 { margin: 0 0 0.6rem; color: var(--text-primary); }
+    .modal p { margin: 0 0 1.5rem; color: var(--text-secondary); }
+    .modal-close {
+      position: absolute; top: 0.6rem; right: 0.85rem;
+      background: none; border: none; color: var(--text-tertiary);
+      font-size: 1.7rem; line-height: 1; cursor: pointer;
+    }
+    .modal-close:hover { color: var(--text-primary); }
+  </style>
+  <div class="modal-overlay" id="ios-modal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ios-modal-title">
+      <button class="modal-close" type="button" aria-label="Close">&times;</button>
+      <h2 id="ios-modal-title">iOS app — coming soon</h2>
+      <p>The iPhone &amp; iPad remote is still in development. Meanwhile, the Mac agent is ready to download.</p>
+      <a class="btn-primary" href="/download">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Get Mac Agent
+      </a>
+    </div>
+  </div>
+  <script>
+    // iOS "coming soon" modal. Bound before the global smooth-scroll handler
+    // below, so stopImmediatePropagation keeps these href="#" buttons from
+    // also triggering a scroll.
+    (function () {
+      const modal = document.getElementById('ios-modal');
+      if (!modal) return;
+      const open = (e) => {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        modal.hidden = false;
+        document.body.style.overflow = 'hidden';
+      };
+      const close = () => {
+        modal.hidden = true;
+        document.body.style.overflow = '';
+      };
+      document.querySelectorAll('.js-ios-soon').forEach((b) => b.addEventListener('click', open));
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal || e.target.closest('.modal-close')) close();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modal.hidden) close();
+      });
+    })();
+  </script>
 
   <script>
     // ── Cosmos Background ──
