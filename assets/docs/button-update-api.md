@@ -1,9 +1,9 @@
-<!-- version: 1.0 -->
-<!-- updated: 2026-05-25 -->
+<!-- version: 1.1 -->
+<!-- updated: 2026-08-28 -->
 
 Button Update API
 
-Desktap Agent exposes a local HTTP API that lets your shell scripts dynamically update button appearance on the connected iOS device. This is useful for showing live status, progress indicators, or feedback directly on your deck buttons.
+Desktap Agent exposes a local HTTP API that lets your shell scripts dynamically update button appearance on the connected iOS device and send local notifications with action buttons to the phone and the Mac. Together with **startup scripts** — scripts the agent keeps running while your device is connected — this turns buttons into live widgets: CPU load, prices, timers, build status, all updating on their own.
 
 ## Table of Contents
 
@@ -16,12 +16,19 @@ Desktap Agent exposes a local HTTP API that lets your shell scripts dynamically 
 - [Endpoint: POST /api/update-button](#endpoint-post-apiupdate-button)
 - [Quick Start](#quick-start)
 - [Calling the API from AppleScript](#calling-the-api-from-applescript)
+- [Endpoint: POST /api/notify](#endpoint-post-apinotify)
+  - [Notification fields](#notification-fields)
+  - [Action buttons](#action-buttons)
+  - [Targets: phone, Mac, or both](#targets-phone-mac-or-both)
+  - [What tapping does](#what-tapping-does)
+  - [Notify responses](#notify-responses)
 - [Core Concepts](#core-concepts)
   - [The `{{CELL_ID}}` placeholder](#the-cell_id-placeholder)
   - [Partial updates](#partial-updates)
   - [Overlay persistence](#overlay-persistence)
   - [Cross-button updates](#cross-button-updates)
   - [Persistent storage](#persistent-storage)
+  - [Startup scripts (live widgets)](#startup-scripts-live-widgets)
   - [Process timeout](#process-timeout)
 - [Reference](#reference)
   - [Environment variables](#environment-variables)
@@ -33,6 +40,9 @@ Desktap Agent exposes a local HTTP API that lets your shell scripts dynamically 
 - [Recipe Examples](#recipe-examples)
   - [Live CPU Usage Monitor](#live-cpu-usage-monitor)
   - [Live Bitcoin Price](#live-bitcoin-price)
+  - [Focus Timer with a "Done" notification](#focus-timer-with-a-done-notification)
+  - [Deploy finished — notification with actions](#deploy-finished-notification-with-actions)
+  - [Disk space alert (threshold notification)](#disk-space-alert-threshold-notification)
   - [Pomodoro Timer (cross-button)](#pomodoro-timer-cross-button)
 - [MCP (Model Context Protocol)](#mcp-model-context-protocol)
 - [Troubleshooting](#troubleshooting)
@@ -50,18 +60,18 @@ These updates are **runtime-only**: they don't persist across app restarts or re
 To use the API you need:
 
 1. **Desktap Agent** installed and running on your Mac (the menu-bar icon must be present).
-2. **Desktap iOS app** installed on your iPhone or iPad and **paired** with the Mac. The agent will not accept any update calls until a device is connected — `/api/update-button` returns `503` otherwise.
+2. **Desktap iOS app** installed on your iPhone or iPad and **paired** with the Mac. The agent will not accept any update calls until a device is connected — `/api/update-button` returns `503` otherwise. (Notifications are different: `/api/notify` queues phone notifications while the device is away and delivers them on the next connect.)
 
 Once both are running and connected, create a button:
 
 1. Open the **Desktap iOS app** and tap the **edit icon** in the top-right corner of the deck — it looks like a dashed square with a plus inside (SF Symbol `plus.square.dashed`). The grid enters edit mode and existing buttons start wiggling.
 2. Tap an empty cell in the grid to add a new button.
-3. Choose **Shell Command** as the action type and paste your script into the command field.
-4. *(For long-running scripts)* Toggle **Long Running** on inside the same Shell Command section — this disables the 30-second timeout. While any script for this button is running, the section also shows a **Stop Process** button you can use from the editor.
+3. Choose **Shell Command** as the action type and paste your script into the command field. This is the **tap** script: it runs when you press the button and is killed after **60 seconds**.
+4. *(For live widgets)* Scroll down to the **Startup Script** section and paste the loop there. A startup script is started by the agent as soon as your device connects and keeps running — no timeout — until the device disconnects. It can belong to a button of *any* action type. See [Startup scripts (live widgets)](#startup-scripts-live-widgets).
 5. *(Optional)* Set a default title, icon, emoji, and color for the button. Runtime API updates layer on top of these defaults; sending `reset:true` returns the button to exactly what you configured here.
 6. Tap **Save**.
 
-To trigger the script, simply tap the button on the deck. Changes you make via the API appear immediately — no reload needed.
+The tap script runs when you tap the button; the startup script is already running. Changes you make via the API appear immediately — no reload needed.
 
 > **Shell:** all Shell Command actions are executed with `/bin/zsh -c "<your script>"` — not with the user's `$SHELL`. zsh-compatible scripts work as-is; bash-only constructs (e.g. `shopt`, `mapfile`, certain `read -a` forms) need to be rewritten or wrapped with `bash -c '...'`. A `#!/bin/...` shebang at the top of the field is treated as a comment by zsh and does **not** change the executor.
 
@@ -86,7 +96,7 @@ If you suspect the token has leaked:
 1. Quit the Desktap Agent (menu-bar icon → **Quit**). This automatically terminates every running button script as part of shutdown, so no process keeps the old token alive.
 2. Delete the file: `rm ~/.desktap-mcp-token`.
 3. Re-launch the agent. A fresh UUID is generated and written to the same path on startup.
-4. Re-press any long-running buttons you want to resume — they were killed in step 1 and need to be launched fresh. They will pick up the new token via `$DESKTAP_TOKEN`.
+4. Reconnect the device (or just wait for auto-reconnect). Startup scripts are relaunched on connect and pick up the new token via `$DESKTAP_TOKEN`.
 
 ### Tooling note
 
@@ -174,6 +184,104 @@ Open the button editor in the Desktap iOS app — the **Button ID** section show
 {"status": "error", "message": "No device connected"}
 ```
 
+## Endpoint: POST /api/notify
+
+Shows a **local notification** — on the connected iPhone/iPad, on the Mac, or both — with up to four action buttons. Each action carries a regular Desktap command that runs on the Mac when the button is tapped. This is the "loud" channel next to the quiet button overlay: use it for things the user did not trigger and should not miss — a build finished, a meeting is about to start, a backup is stale, a value crossed a threshold.
+
+Notifications are system notifications: title, subtitle, body, sound, and buttons. They cannot render custom content (no images, HTML, or scripts).
+
+```bash
+curl -s -m 5 http://localhost:9848/api/notify \
+  -H "Authorization: Bearer $DESKTAP_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "cellId": "{{CELL_ID}}",
+    "title": "Deploy finished",
+    "body": "main → production, 3m 12s",
+    "targets": ["phone", "mac"],
+    "actions": [
+      { "id": "logs", "title": "Open logs", "command": { "openURL": { "url": "https://ci.example.com/runs/42" } } },
+      { "id": "rollback", "title": "Rollback", "destructive": true,
+        "command": { "shellCommand": { "command": "./deploy rollback" } } }
+    ]
+  }'
+```
+
+### Notification fields
+
+| Field      | Type     | Required | Description |
+|------------|----------|----------|-------------|
+| `title`    | String   | **Yes**  | Headline. Keep it short. |
+| `body`     | String   | No       | Text under the title. Multi-line is fine — this is where details go (e.g. a list of prices that does not fit on a button). |
+| `subtitle` | String   | No       | Second line under the title. |
+| `cellId`   | String   | No       | UUID of the button this notification belongs to — use `{{CELL_ID}}`. Tapping the notification body opens that button's page on the phone, action commands run with it as `{{CELL_ID}}`, and notifications from one button are grouped together. Strongly recommended. |
+| `targets`  | Array    | No       | `["phone"]` (default), `["mac"]`, or `["phone", "mac"]`. |
+| `sound`    | Boolean  | No       | Play the default sound. Default `true`. |
+| `actions`  | Array    | No       | Up to **4** action buttons — see below. |
+| `id`       | String   | No       | UUID. Send the same `id` again to **replace** the previous notification instead of stacking a new one (progress updates). Generated when omitted. |
+
+**Only these fields are accepted.** Any unknown field returns `400`.
+
+### Action buttons
+
+Each entry in `actions`:
+
+| Field         | Type    | Required | Description |
+|---------------|---------|----------|-------------|
+| `id`          | String  | **Yes**  | Unique within the notification (e.g. `"logs"`). |
+| `title`       | String  | **Yes**  | Button label. |
+| `command`     | Object  | No       | A Desktap command in the same JSON shape buttons use. Omit for a plain "dismiss" button. |
+| `destructive` | Boolean | No       | Renders the button in the destructive (red) style. |
+
+**An action can run any command a button can run** — the `command` object uses exactly the same JSON shape as a button's command in the configuration. Everything below is valid; the only exception is `switchPage`, which is executed locally on the phone and is not available from a notification (actions always run on the Mac).
+
+| Command | JSON | Notes |
+|---------|------|-------|
+| Open a URL / file / app link | `{ "openURL": { "url": "https://…" } }` | `https://`, `file:///…`, `slack://…`, `x-apple.systempreferences:…` |
+| Launch an app | `{ "launchApp": { "bundleIdentifier": "com.apple.ActivityMonitor" } }` | Bundle id, see `get_installed_apps` |
+| Shell command | `{ "shellCommand": { "command": "…" } }` | Same environment and 60 s timeout as a tap script |
+| AppleScript | `{ "appleScript": { "code": "tell application \"Music\" to playpause" } }` | |
+| System action | `{ "systemAction": { "_0": "mute" } }` | `spotlight`, `missionControl`, `launchpad`, `playPause`, `nextTrack`, `previousTrack`, `volumeUp`, `volumeDown`, `mute`, `brightnessUp`, `brightnessDown`, `screenshot`, `screenshotRegion`, `lockScreen`, `muteMic`, `unmuteMic`, `darkMode`, `lightMode`, `sleep`, `logout`, `emptyTrash` |
+| Keyboard shortcut | `{ "keystroke": { "_0": { "keyCode": 49, "modifiers": ["command"] } } }` | Virtual key code + any of `command`, `option`, `control`, `shift` |
+| Run a Shortcut | `{ "runShortcut": { "name": "Start Focus" } }` | Name from the Shortcuts app |
+| Type text | `{ "textSnippet": { "text": "Thanks, will do!" } }` | Pasted into the active field on the Mac |
+| Ping | `{ "ping": {} }` | Handy as a no-op that still flashes the button |
+
+So a single notification can, for example, offer **[Join]** (`openURL` to a Meet link), **[Mute mic]** (`systemAction` `muteMic`), and **[Reply "on my way"]** (`textSnippet`) side by side. Commands that need Accessibility (`keystroke`, `systemAction`, `textSnippet`) are subject to the same permission check as a button press.
+
+A `shellCommand` action gets the same environment as a button script — `$DESKTAP_TOKEN`, `$DESKTAP_STORAGE`, `{{CELL_ID}}` — and the same 60-second timeout. The natural pattern is **the action changes state, the startup script renders it**: `[Restart 25 min]` writes a new end-time to a file, the timer loop picks it up on its next tick.
+
+### Targets: phone, Mac, or both
+
+- **`phone`** — shown on the connected iPhone/iPad, as a banner even while Desktap is on screen. If no device is connected, the notification is **queued on the agent** (up to 20, for 12 hours) and delivered when the device pairs again. Tapping an action sends its command to the Mac exactly like a button press: the button flashes green or red with the result. If the phone was locked or Desktap was in the background, tapping an action brings the app to the foreground first so the connection is alive; the command is queued and sent as soon as the agent is reachable.
+- **`mac`** — shown by Desktap Agent through macOS Notification Center. Action commands run locally. The first notification asks for permission; grant it in the dialog (or in System Settings → Notifications → Desktap Agent). macOS shows action buttons on hover for the default *Banners* style — switch the agent to *Alerts* if you want the buttons visible right away.
+
+### What tapping does
+
+| Tap                                  | Result |
+|--------------------------------------|--------|
+| Notification body (phone)            | Desktap opens the page holding the button with that `cellId`. |
+| Notification body (Mac)              | Nothing — dismisses. |
+| Action with `command`                | The command runs on the Mac. |
+| Action without `command`             | Dismisses. |
+
+Taps keep working after the app or the agent has been restarted — the notification carries everything it needs.
+
+### Notify responses
+
+**Success (200):**
+```json
+{"status":"ok","delivered":{"phone":"sent","mac":"shown"}}
+```
+
+Per target: `phone` is `sent` or `queued` (no device connected — kept for the next connect); `mac` is `shown` or `denied` (notifications not allowed for the agent).
+
+**Error (400)** — missing body, unknown field, invalid JSON, or validation: `"title is required."`, `"At most 4 actions are supported."`, `"Action ids must be unique."`, `"Every action needs a non-empty id and title."`
+
+Other status codes (`401`, `404`) behave exactly as for `/api/update-button`.
+
+> **Do not notify from inside a loop unconditionally.** A monitor that fires every iteration is spam. Notify on *transitions* — the value crossed a threshold, the status changed — and remember the last state in `$DESKTAP_STORAGE`. See the [disk space alert](#disk-space-alert-threshold-notification) recipe.
+
 ## Quick Start
 
 A minimal script that updates the button that triggered it:
@@ -235,7 +343,10 @@ Overlays are cleared in two ways:
 - You send `reset: true` for that `cellId` explicitly.
 - The script backing this overlay is **terminated** by the agent. This happens when:
   - You tap **Stop Process** in the iOS button editor.
-  - You re-press the same button — a new instance replaces the running one (each `(button, press-type)` slot holds at most one process).
+  - A **startup script** is stopped, removed, or replaced (Stop in the agent's *Running Scripts* window, the script edited or cleared, a config delivery that changed it).
+  - A **tap script** is still running and you save the button in the editor.
+
+Re-pressing a button whose tap script is still running does **not** start a second copy — the tap is rejected until the first one exits (the button flashes red). Each `(button, slot)` — tap, long-press, startup — holds at most one process.
 
 **Mass clearing** (every overlay in memory, including overlays for stale `cellId`s and for buttons whose script never ran):
 - The iOS app loses its connection to the Mac. This includes user-initiated disconnect, the agent quitting, the device going to sleep, network interruption — anything that drops the TCP link. The iOS app wipes the entire overlay store and stops processing further updates until reconnect.
@@ -292,17 +403,47 @@ Other use cases:
 - Save the last known value when the API is temporarily unavailable
 - Save target end-time (epoch) for timers that survive process restarts
 
+### Startup scripts (live widgets)
+
+Every button has an optional **Startup Script** (button editor → *Startup Script* section). It is a shell script the **agent launches automatically when your device connects** and keeps running, with no timeout, until the device disconnects. It applies to every button on every page of every profile — the page does not have to be visible. This is the mechanism for live widgets: instead of tapping a button to "start" a monitor, the widget is simply live whenever your phone is paired.
+
+A typical startup script is a loop:
+
+```bash
+# CPU load every 5s
+ub() {
+  curl -s -m 5 http://localhost:9848/api/update-button \
+    -H "Authorization: Bearer $DESKTAP_TOKEN" -H "Content-Type: application/json" \
+    -d "$1" >/dev/null
+}
+refresh() {
+  LOAD=$(sysctl -n vm.loadavg | awk '{print $2}')
+  ub "{\"cellId\":\"{{CELL_ID}}\",\"title\":\"CPU|$LOAD\"}"
+}
+refresh                    # show a value right after connect
+while true; do
+  sleep 5
+  refresh
+done
+```
+
+Lifecycle:
+
+- **Connect** → all startup scripts start (in parallel). **Disconnect** → all are killed (`SIGTERM`, then `SIGKILL` after 2 s — use `trap ... TERM` to clean up).
+- **Editing** the script (in the editor or via MCP) restarts only that script; **clearing** it stops it. Other edits to the button leave the running script alone.
+- **Exit 0** means "done" — the script is not restarted. **Non-zero exit** or an external kill is treated as a failure: the agent restarts it with backoff (5, 10, 20, 40, 60 s, up to 5 attempts), then marks it *Failed*. A script that ran for at least a minute before failing gets its attempt counter reset. The agent's *Running Scripts* window shows each script's state with **Stop** and **Restart**; the button editor has a **Restart Startup Script** button.
+- The tap script stays free for **interaction** and has its own 60-second timeout. Recommended split: the startup script *renders* (read state → `update-button` → sleep), the tap script *changes state* (write a file to `$DESKTAP_STORAGE`, then exit) — the loop picks it up on its next tick. Do not have both update the same button's overlay, or they will overwrite each other.
+- Startup scripts start from scratch on every connect, so persist anything that must survive — for timers, the target end-time — in `$DESKTAP_STORAGE`.
+
+The first comment line of a script (`# CPU load every 5s`) is what the *Running Scripts* window shows as its name — always start with one.
+
 ### Process timeout
 
-By default, button scripts have a **30-second timeout**. If your script needs more time (e.g., a build process or a monitoring loop), enable the **Long Running** option in the button editor. This removes the timeout entirely.
+Tap and long-press scripts are killed after **60 seconds**, no exceptions — the whole process group, so child `sleep`/`curl` processes do not survive. Loops, monitors, and anything that must keep running belong in the **startup script**, which has no timeout.
 
-When a long-running script is terminated — by **Stop Process** in iOS, by re-pressing the same button, or on device disconnect — the agent first sends `SIGTERM`, then `SIGKILL` after **2 seconds** if the process is still alive. Use a `trap ... TERM` handler if you need to clean up state, save progress, or send a final `reset:true` before exiting.
+When any script is terminated by the agent — timeout, **Stop Process**, a startup script stopped or replaced, device disconnect — the agent sends `SIGTERM` first and `SIGKILL` **2 seconds** later. Use `trap ... TERM` to save state or send a final `reset:true`.
 
-> **Important:** Long-running scripts have two restart scenarios, and both wipe in-memory state:
-> - **Device reconnect** — when the iPhone disconnects, the agent saves a snapshot of running scripts, kills them, and **auto-restarts** them from scratch when the same device reconnects.
-> - **Agent restart** — when the agent quits, all running scripts are terminated and **not** auto-restarted. You need to re-press the button manually after the agent comes back.
->
-> Either way, the script starts with no in-memory state. For timers and countdowns, never rely on an in-memory counter — save the target end-time (epoch seconds) to `$DESKTAP_STORAGE` and compute `remaining = END - NOW` on every iteration. This survives both scenarios.
+> **In-memory state does not survive.** Startup scripts are relaunched from scratch on every device connect (and after an agent restart, on the next connect). For timers and countdowns never rely on an in-memory counter — save the target end-time (epoch seconds) to `$DESKTAP_STORAGE` and compute `remaining = END - NOW` on every iteration.
 
 ## Reference
 
@@ -373,6 +514,8 @@ For static text without special characters, inline JSON in `-d '{...}'` is fine.
 
 ## Other Endpoints
 
+`POST /api/notify` — local notifications with action buttons, see [above](#endpoint-post-apinotify).
+
 ### GET /api/status
 
 Check if a device is connected:
@@ -400,15 +543,16 @@ Response includes the full `AppConfig` with all profiles, pages, and cells (each
 
 ## Recipe Examples
 
-All long-running examples require **Long Running** enabled in the button editor (otherwise the 30-second timeout will kill the script).
+Every looping example below goes into the button's **Startup Script** field — it starts on connect and runs without a timeout. Use the tap script (Shell Command) for the action you want on press: open the source page, start/stop, refresh now.
 
 > **Tip:** Use `trap cleanup EXIT TERM` to reset the button when the script is stopped — `EXIT` alone does not fire when the agent kills the process with SIGTERM, so the overlay would stay with the last value. See [Process timeout](#process-timeout).
 
 ### Live CPU Usage Monitor
 
-Displays current CPU load (user + system) with color thresholds: green (normal), orange (>50%), red (>80%).
+Displays current CPU load (user + system) with color thresholds: green (normal), orange (>50%), red (>80%). Startup script; a good tap action is `launchApp` → Activity Monitor.
 
 ```bash
+# CPU load every 5s
 CELL_ID="{{CELL_ID}}"
 
 update_button() {
@@ -438,9 +582,10 @@ Note: `top -l 1` takes about 1 second to sample, so the actual update interval i
 
 ### Live Bitcoin Price
 
-Shows the current BTC price in EUR, updated every 60 seconds.
+Shows the current BTC price in EUR, updated every 60 seconds. Startup script; a good tap action is `openURL` → the CoinGecko page.
 
 ```bash
+# Bitcoin price in EUR every 60s
 CELL_ID="{{CELL_ID}}"
 
 update_button() {
@@ -469,18 +614,163 @@ The script silently skips updates if the API returns an empty response (e.g., ra
 
 CoinGecko's free API allows ~10-30 requests per minute. The 60-second interval stays well within limits.
 
+### Focus Timer with a "Done" notification
+
+One button, two scripts. The **tap script** starts a 25-minute timer or cancels it; the **startup script** renders the countdown every second and, when time is up, sends a notification whose buttons restart or reset the timer. State lives in one file, so the timer survives reconnects and agent restarts.
+
+**Tap script** (Shell Command):
+
+```bash
+# Focus timer: tap starts 25 minutes, tap again cancels
+STATE="$DESKTAP_STORAGE/focus_timer"
+NOW=$(date +%s)
+END=$(cat "$STATE" 2>/dev/null)
+if [ -n "$END" ] && [ "$END" -gt "$NOW" ]; then
+  rm -f "$STATE"
+else
+  echo $((NOW + 1500)) > "$STATE"
+fi
+```
+
+**Startup script:**
+
+```bash
+# Focus timer widget — 25-min countdown, notifies when done
+api() {
+  curl -s -m 5 "http://localhost:9848/api/$1" \
+    -H "Authorization: Bearer $DESKTAP_TOKEN" -H "Content-Type: application/json" \
+    -d "$2" >/dev/null
+}
+STATE="$DESKTAP_STORAGE/focus_timer"
+LAST=""
+show() {                      # send only when the text changed
+  [ "$1" = "$LAST" ] && return
+  LAST="$1"; api update-button "$2"
+}
+notify_done() {
+  local payload
+  payload=$(python3 - "$STATE" <<'PY'
+import json, sys
+state = sys.argv[1]
+print(json.dumps({
+  "cellId": "{{CELL_ID}}", "title": "Focus session done",
+  "body": "25 minutes are up — take a break.", "targets": ["phone", "mac"],
+  "actions": [
+    {"id": "again", "title": "Restart 25 min",
+     "command": {"shellCommand": {"command": f'echo $(( $(date +%s) + 1500 )) > "{state}"'}}},
+    {"id": "reset", "title": "Reset",
+     "command": {"shellCommand": {"command": f'rm -f "{state}"'}}},
+  ]}))
+PY
+)
+  api notify "$payload"
+}
+while true; do
+  NOW=$(date +%s); END=$(cat "$STATE" 2>/dev/null)
+  if [ -z "$END" ]; then
+    rm -f "$STATE.notified"
+    show idle '{"cellId":"{{CELL_ID}}","title":"Focus|25 min","icon":"timer","color":"#8E8E93"}'
+  elif [ "$END" -gt "$NOW" ]; then
+    rm -f "$STATE.notified"
+    LEFT=$((END - NOW)); COLOR="#30D158"
+    [ "$LEFT" -le 300 ] && COLOR="#FF9F0A"
+    [ "$LEFT" -le 60 ] && COLOR="#FF453A"
+    show "run$LEFT" "{\"cellId\":\"{{CELL_ID}}\",\"title\":\"Focus|$(printf '%02d:%02d' $((LEFT / 60)) $((LEFT % 60)))\",\"icon\":\"timer\",\"color\":\"$COLOR\"}"
+  else
+    show done '{"cellId":"{{CELL_ID}}","title":"Done!|Tap to restart","icon":"checkmark.circle.fill","color":"#BF5AF2"}'
+    if [ ! -f "$STATE.notified" ]; then
+      touch "$STATE.notified"      # notify once per session
+      notify_done
+    fi
+  fi
+  sleep 1
+done
+```
+
+Because the notification's actions are ordinary commands that write the same state file, the timer can be restarted from the lock screen or from the Mac's Notification Center without opening Desktap.
+
+### Deploy finished — notification with actions
+
+A tap script that runs a deploy and reports the result with useful buttons. Building the JSON with `python3 json.dumps` keeps dynamic text (commit messages, error output) from breaking the payload.
+
+```bash
+# Deploy main and notify with [Open logs] [Rollback]
+cd "$HOME/Projects/app" || exit 1
+START=$(date +%s)
+if ./deploy production > "$DESKTAP_STORAGE/deploy.log" 2>&1; then
+  TITLE="Deploy finished"; BODY="main → production in $(( $(date +%s) - START ))s"
+else
+  TITLE="Deploy FAILED"; BODY=$(tail -n 3 "$DESKTAP_STORAGE/deploy.log")
+fi
+python3 - "$TITLE" "$BODY" <<'PY' | curl -s -m 5 http://localhost:9848/api/notify \
+  -H "Authorization: Bearer $DESKTAP_TOKEN" -H "Content-Type: application/json" -d @- >/dev/null
+import json, sys
+title, body = sys.argv[1], sys.argv[2]
+print(json.dumps({
+  "cellId": "{{CELL_ID}}", "title": title, "body": body, "targets": ["phone", "mac"],
+  "actions": [
+    {"id": "logs", "title": "Open logs",
+     "command": {"shellCommand": {"command": "open -a Console \"$DESKTAP_STORAGE/deploy.log\""}}},
+    {"id": "rollback", "title": "Rollback", "destructive": True,
+     "command": {"shellCommand": {"command": "cd $HOME/Projects/app && ./deploy rollback"}}},
+  ]}))
+PY
+```
+
+### Disk space alert (threshold notification)
+
+A startup script that shows free space on the button and notifies **once** when it drops below 10 GB — and again only after it recovered. The last state is remembered in `$DESKTAP_STORAGE`, so reconnects do not re-fire the alert.
+
+```bash
+# Free disk space every 60s, alert below 10 GB
+api() {
+  curl -s -m 5 "http://localhost:9848/api/$1" \
+    -H "Authorization: Bearer $DESKTAP_TOKEN" -H "Content-Type: application/json" \
+    -d "$2" >/dev/null
+}
+FLAG="$DESKTAP_STORAGE/disk_low"
+while true; do
+  FREE_KB=$(df -k / | awk 'NR==2{print $4}')
+  FREE_GB=$((FREE_KB / 1024 / 1024))
+  if [ "$FREE_GB" -lt 10 ]; then
+    api update-button "{\"cellId\":\"{{CELL_ID}}\",\"title\":\"Disk|${FREE_GB} GB\",\"color\":\"#FF453A\"}"
+    if [ ! -f "$FLAG" ]; then
+      touch "$FLAG"
+      PAYLOAD=$(python3 - "$FREE_GB" <<'PY'
+import json, sys
+print(json.dumps({
+  "cellId": "{{CELL_ID}}", "title": "Disk space low",
+  "body": f"{sys.argv[1]} GB left on the startup disk.",
+  "actions": [
+    {"id": "derived", "title": "Clean DerivedData",
+     "command": {"shellCommand": {"command": "rm -rf ~/Library/Developer/Xcode/DerivedData"}}},
+    {"id": "storage", "title": "Storage settings",
+     "command": {"openURL": {"url": "x-apple.systempreferences:com.apple.settings.Storage"}}},
+  ]}))
+PY
+)
+      api notify "$PAYLOAD"
+    fi
+  else
+    api update-button "{\"cellId\":\"{{CELL_ID}}\",\"title\":\"Disk|${FREE_GB} GB\",\"color\":\"#30D158\"}"
+    rm -f "$FLAG"
+  fi
+  sleep 60
+done
+```
+
 ### Pomodoro Timer (cross-button)
 
-Two buttons work together — a **Start/Stop** control button and a **Timer** display button that shows the countdown. The control button's script updates both itself and the timer button.
+Two buttons work together — a **Start/Stop** control button and a **Timer** display button that shows the countdown. The control button's script updates both itself and the timer button. This example keeps the older "one script per press" style to show cross-button updates; for a version that is always live and controllable from a notification, combine it with the [Focus Timer](#focus-timer-with-a-done-notification) pattern.
 
-The script saves the **target end-time** (epoch seconds) to `$DESKTAP_STORAGE` and computes the remaining time on every iteration. This way the timer survives an agent restart or a device reconnect — without it, a long-running script that gets restarted would silently reset the countdown to its starting value.
+The script saves the **target end-time** (epoch seconds) to `$DESKTAP_STORAGE` and computes the remaining time on every iteration. This way the timer survives an agent restart or a device reconnect — without it, a script that gets restarted would silently reset the countdown to its starting value.
 
 **Setup:**
 1. Create two buttons side by side
 2. Copy the timer display button's UUID (from the button editor)
-3. Paste the script below into the **control button's** shell command
+3. Paste the script below into the **control button's Startup Script**
 4. Replace `TIMER_BUTTON` with the display button's UUID
-5. Enable **Long Running** in the control button editor
+5. Keep the control button's tap script empty or use it to delete the state file (stop)
 
 ```bash
 CONTROL_BUTTON="{{CELL_ID}}"
@@ -576,10 +866,10 @@ done
 ```
 
 How it works:
-- **Press** → saves `END_TIME = NOW + 25 min` to `$DESKTAP_STORAGE`, starts the countdown, control button shows "Stop".
-- **Press "Stop"** → the process is terminated; `trap` fires, deletes the state file, resets both buttons.
-- **Device reconnect mid-countdown** → the agent automatically relaunches the script (same device only). The new instance reads the saved `END_TIME` and resumes from the correct remaining time, no user action needed.
-- **Agent restart mid-countdown** → the script is killed when the agent quits and is **not** auto-resumed. The state file persists, so the next time you press the button (after the agent comes back), the script reads `END_TIME` and resumes from the correct remaining time.
+- **Connect** → the startup script saves `END_TIME = NOW + 25 min` to `$DESKTAP_STORAGE` (or resumes a saved one), starts the countdown, control button shows "Stop".
+- **Stop** (Stop in the agent's Running Scripts window, or a tap script that deletes the state file) → `trap` fires, resets both buttons.
+- **Device reconnect mid-countdown** → the agent relaunches the script on connect. The new instance reads the saved `END_TIME` and resumes from the correct remaining time, no user action needed.
+- **Agent restart mid-countdown** → same thing on the next connect: the state file persists, the script resumes from the correct remaining time.
 - **Work phase ends** → switches to a 5-minute break and updates the state file; control button shows "Skip".
 - **Break ends** → timer shows "Done!", state file is deleted, both buttons reset.
 
@@ -624,12 +914,12 @@ The most useful tools for AI assistants:
 
 | Tool                      | Description                                                |
 |---------------------------|------------------------------------------------------------|
-| `get_available_actions`   | Returns the full schema of supported command types, icons, grid sizes, env vars, and the runtime API contract. **Call this first** — its output is the canonical reference and stays in sync with the agent. |
+| `get_available_actions`   | Returns the full schema of supported command types, icons, grid sizes, env vars, the runtime API contract, startup-script lifecycle, and the notification endpoint. **Call this first** — its output is the canonical reference and stays in sync with the agent. |
 | `get_profiles`            | List all profiles                                          |
 | `get_profile_detail`      | Read a full profile with pages and buttons (UUIDs included) |
 | `create_full_profile`     | Create a complete profile with pages and buttons in one call |
 | `create_full_page`        | Create a complete page with buttons in one call            |
-| `update_button_by_uuid`   | Modify a single button by its UUID (any field)             |
+| `update_button_by_uuid`   | Modify a single button by its UUID (any field, including `startupScript`) |
 | `update_buttons_by_uuid`  | Batch-modify multiple buttons in one operation             |
 | `get_installed_apps`      | List installed apps (for the `openApp` action)             |
 | `get_active_app`          | Identify the currently focused app                         |
@@ -655,9 +945,15 @@ This approval flow ensures you always have full control over what appears on you
 | Button doesn't update | Verify the `cellId` UUID is correct (check via `/api/config`) |
 | AppleScript-built request returns `401` | AppleScript can't reference `$DESKTAP_TOKEN` directly — it's a shell variable. Use `do shell script "echo $DESKTAP_TOKEN"` to pull it into an AppleScript variable first. See [Calling the API from AppleScript](#calling-the-api-from-applescript) |
 | Color rejected | Use exactly `#RRGGBB` format (6 hex digits, with `#`) |
-| Script times out | Enable "Long Running" in button editor for scripts over 30 seconds |
+| Script times out | Tap and long-press scripts are killed after 60 s. Move loops and monitors into the **Startup Script** |
 | Unknown field error | Only use: `cellId`, `title`, `icon`, `emoji`, `color`, `reset` |
-| Long-running script lost state on agent restart | In-memory variables don't survive restarts. Save state (e.g. timer end-time) to `$DESKTAP_STORAGE` — see the [Pomodoro recipe](#pomodoro-timer-cross-button) |
+| Startup script lost state after reconnect | Startup scripts restart from scratch on every connect. Save state (e.g. timer end-time) to `$DESKTAP_STORAGE` — see the [Focus Timer recipe](#focus-timer-with-a-done-notification) |
+| Startup script shows *Failed* in Running Scripts | It exited non-zero five times in a row. Check its stderr (the agent's Dev Log), fix, then **Restart** — or save any change to the script |
+| Widget stopped updating | The script may have exited with status 0 (not restarted by design) or the device reconnected in the middle of a request. Check Running Scripts; make sure the loop never falls through to `exit 0` |
+| No notification appears on the phone | Notifications were denied for Desktap — enable them in iOS Settings → Desktap. Also check the `delivered` field in the `/api/notify` response: `queued` means no device was connected |
+| No notification appears on the Mac | `"mac":"denied"` in the response — allow notifications for Desktap Agent in System Settings → Notifications. Buttons hidden? Switch the agent's style from *Banners* to *Alerts* |
+| Tapping a notification action does nothing | The command runs on the Mac, so the phone must reach the agent: bring Desktap to the foreground and let it reconnect — the action is queued for up to 10 minutes. On the Mac, check the agent log for the command's error |
+| `/api/notify` returns 400 | Only `title` is required; at most 4 actions with unique `id`s; only the documented fields are accepted |
 | Dynamic JSON breaks intermittently | Shell interpolation of values containing quotes/backslashes/non-ASCII produces invalid JSON. Use the `python3 -c "import json; print(json.dumps(...))"` pattern from [JSON safety](#json-safety-with-dynamic-strings) |
 | Overlay stuck after script | Send `reset: true` to clear, or terminate the process from iOS |
 | Cleanup never runs on stop | A bare `trap ... EXIT` does not fire on SIGTERM. Use `trap cleanup EXIT TERM` so the handler runs when the agent terminates the process |
