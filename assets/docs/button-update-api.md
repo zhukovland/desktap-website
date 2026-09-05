@@ -1,5 +1,5 @@
-<!-- version: 1.1 -->
-<!-- updated: 2026-08-28 -->
+<!-- version: 1.1.1 -->
+<!-- updated: 2026-09-05 -->
 
 Button Update API
 
@@ -13,15 +13,15 @@ Desktap Agent exposes a local HTTP API that lets your shell scripts dynamically 
   - [Rotating the token](#rotating-the-token)
   - [Tooling note](#tooling-note)
 - [Authentication](#authentication)
-- [Endpoint: POST /api/update-button](#endpoint-post-apiupdate-button)
 - [Quick Start](#quick-start)
-- [Calling the API from AppleScript](#calling-the-api-from-applescript)
+- [Endpoint: POST /api/update-button](#endpoint-post-apiupdate-button)
 - [Endpoint: POST /api/notify](#endpoint-post-apinotify)
   - [Notification fields](#notification-fields)
   - [Action buttons](#action-buttons)
   - [Targets: phone, Mac, or both](#targets-phone-mac-or-both)
   - [What tapping does](#what-tapping-does)
   - [Notify responses](#notify-responses)
+- [Calling the API from AppleScript](#calling-the-api-from-applescript)
 - [Core Concepts](#core-concepts)
   - [The `{{CELL_ID}}` placeholder](#the-cell_id-placeholder)
   - [Partial updates](#partial-updates)
@@ -126,6 +126,19 @@ curl -s http://localhost:9848/api/update-button \
   -d '...'
 ```
 
+## Quick Start
+
+A minimal script that updates the button that triggered it:
+
+```bash
+curl -s http://localhost:9848/api/update-button \
+  -H "Authorization: Bearer $DESKTAP_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d "{\"cellId\":\"{{CELL_ID}}\",\"title\":\"Hello!\",\"emoji\":\"👋\",\"color\":\"#30D158\"}"
+```
+
+Paste this into a button's shell command field. When pressed, the button updates its own title, emoji, and color.
+
 ## Endpoint: POST /api/update-button
 
 ### Request Body
@@ -133,7 +146,7 @@ curl -s http://localhost:9848/api/update-button \
 | Field    | Type    | Required | Description                                         |
 |----------|---------|----------|-----------------------------------------------------|
 | `cellId` | String  | **Yes**  | UUID of the button to update                        |
-| `title`  | String  | No       | New button label text                               |
+| `title`  | String  | No       | New button label text. Shown on up to two lines, wrapping at spaces. The recipes in this document use `Label\|Value` (e.g. `CPU\|42%`) purely as a visual convention — the `\|` is displayed as-is, it is not a line break |
 | `icon`   | String  | No       | SF Symbol name (e.g. `"checkmark.circle"`)          |
 | `emoji`  | String  | No       | Emoji characters (overrides `icon` if both set). The agent doesn't enforce a length, but **1–3 emoji** are recommended — anything longer gets clipped on the button face |
 | `color`  | String  | No       | Hex color in `#RRGGBB` format (e.g. `"#FF5733"`)   |
@@ -174,7 +187,7 @@ Open the button editor in the Desktap iOS app — the **Button ID** section show
 {"error": "Unauthorized"}
 ```
 
-**Not Found (404)** — the path is not one of the documented endpoints:
+**Not Found (404)** — unknown path or method (e.g. `GET /api/update-button`):
 ```json
 {"error": "Not found"}
 ```
@@ -276,24 +289,19 @@ Taps keep working after the app or the agent has been restarted — the notifica
 
 Per target: `phone` is `sent` or `queued` (no device connected — kept for the next connect); `mac` is `shown` or `denied` (notifications not allowed for the agent).
 
-**Error (400)** — missing body, unknown field, invalid JSON, or validation: `"title is required."`, `"At most 4 actions are supported."`, `"Action ids must be unique."`, `"Every action needs a non-empty id and title."`
+**Error (400)** — same envelope as `/api/update-button` (`{"status":"error","message":…}`). Possible messages:
+- `"Missing request body"`
+- `"Body must be a JSON object."`
+- `"Unknown field(s): foo. Valid fields: actions, body, cellId, id, sound, subtitle, targets, title."`
+- `"Invalid notification JSON: …"` (wrong type, e.g. `targets` not an array, `id` not a UUID, or an unknown `command` shape)
+- `"title is required."`
+- `"At most 4 actions are supported."`
+- `"Action ids must be unique."`
+- `"Every action needs a non-empty id and title."`
 
 Other status codes (`401`, `404`) behave exactly as for `/api/update-button`.
 
 > **Do not notify from inside a loop unconditionally.** A monitor that fires every iteration is spam. Notify on *transitions* — the value crossed a threshold, the status changed — and remember the last state in `$DESKTAP_STORAGE`. See the [disk space alert](#disk-space-alert-threshold-notification) recipe.
-
-## Quick Start
-
-A minimal script that updates the button that triggered it:
-
-```bash
-curl -s http://localhost:9848/api/update-button \
-  -H "Authorization: Bearer $DESKTAP_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d "{\"cellId\":\"{{CELL_ID}}\",\"title\":\"Hello!\",\"emoji\":\"👋\",\"color\":\"#30D158\"}"
-```
-
-Paste this into a button's shell command field. When pressed, the button updates its own title, emoji, and color.
 
 ## Calling the API from AppleScript
 
@@ -429,9 +437,9 @@ done
 
 Lifecycle:
 
-- **Connect** → all startup scripts start (in parallel). **Disconnect** → all are killed (`SIGTERM`, then `SIGKILL` after 2 s — use `trap ... TERM` to clean up).
+- **Connect** → all startup scripts start (in parallel). **Disconnect** → all are killed (`SIGTERM`, then `SIGKILL` after 2 s — clean up in a `TERM` trap that ends with `exit`, see [Process timeout](#process-timeout)).
 - **Editing** the script (in the editor or via MCP) restarts only that script; **clearing** it stops it. Other edits to the button leave the running script alone.
-- **Exit 0** means "done" — the script is not restarted. **Non-zero exit** or an external kill is treated as a failure: the agent restarts it with backoff (5, 10, 20, 40, 60 s, up to 5 attempts), then marks it *Failed*. A script that ran for at least a minute before failing gets its attempt counter reset. The agent's *Running Scripts* window shows each script's state with **Stop** and **Restart**; the button editor has a **Restart Startup Script** button.
+- **Exit 0** means "done" — the script is not restarted. **Non-zero exit** or an external kill is treated as a failure: the agent restarts it with backoff (5, 10, 20, 40, 60 s, up to 5 attempts), then marks it *Failed*. A script that ran for at least a minute before failing gets its attempt counter reset. The agent's *Running Scripts* window shows each script's state with **Stop** and **Restart**; the button editor has a **Restart Startup Script** button. A *Failed* script also gets one fresh attempt on the next config sync from the phone (any save in the editor).
 - The tap script stays free for **interaction** and has its own 60-second timeout. Recommended split: the startup script *renders* (read state → `update-button` → sleep), the tap script *changes state* (write a file to `$DESKTAP_STORAGE`, then exit) — the loop picks it up on its next tick. Do not have both update the same button's overlay, or they will overwrite each other.
 - Startup scripts start from scratch on every connect, so persist anything that must survive — for timers, the target end-time — in `$DESKTAP_STORAGE`.
 
@@ -441,7 +449,15 @@ The first comment line of a script (`# CPU load every 5s`) is what the *Running 
 
 Tap and long-press scripts are killed after **60 seconds**, no exceptions — the whole process group, so child `sleep`/`curl` processes do not survive. Loops, monitors, and anything that must keep running belong in the **startup script**, which has no timeout.
 
-When any script is terminated by the agent — timeout, **Stop Process**, a startup script stopped or replaced, device disconnect — the agent sends `SIGTERM` first and `SIGKILL` **2 seconds** later. Use `trap ... TERM` to save state or send a final `reset:true`.
+When any script is terminated by the agent — timeout, **Stop Process**, a startup script stopped or replaced, device disconnect — the agent sends `SIGTERM` first and `SIGKILL` **2 seconds** later. Use a `TERM` trap to save state or send a final `reset:true`, and **end the handler with `exit`**:
+
+```bash
+cleanup() { ...; }
+trap cleanup EXIT
+trap 'cleanup; exit 0' TERM
+```
+
+> **Why `exit` matters.** zsh does not stop the script after a trapped `SIGTERM` — it runs the handler and then *continues the loop* until `SIGKILL` arrives 2 seconds later. Meanwhile the agent has already told the device to clear the overlay. A loop that keeps going can repaint the button with a stale value in that window, and nothing clears it afterwards. `exit` in the handler closes the window; the `EXIT` trap still fires, so cleanup runs exactly once on either path.
 
 > **In-memory state does not survive.** Startup scripts are relaunched from scratch on every device connect (and after an agent restart, on the next connect). For timers and countdowns never rely on an in-memory counter — save the target end-time (epoch seconds) to `$DESKTAP_STORAGE` and compute `remaining = END - NOW` on every iteration.
 
@@ -516,6 +532,8 @@ For static text without special characters, inline JSON in `-d '{...}'` is fine.
 
 `POST /api/notify` — local notifications with action buttons, see [above](#endpoint-post-apinotify).
 
+The agent also serves three endpoints used by the MCP bridge: `POST /api/execute` (runs any `Command` — see [Security model](#security-model)), `POST /api/deliver` (pushes a config change to the phone for approval) and `POST /api/probe` (approval-gated one-off shell command, see `run_probe`). They are not part of the scripting API and their request shapes may change between releases; scripts should stick to the endpoints documented on this page.
+
 ### GET /api/status
 
 Check if a device is connected:
@@ -539,13 +557,18 @@ curl -s http://localhost:9848/api/config \
   -H "Authorization: Bearer $DESKTAP_TOKEN" | python3 -m json.tool
 ```
 
-Response includes the full `AppConfig` with all profiles, pages, and cells (each cell has an `id` field — that's the UUID you need).
+Response:
+```json
+{"connected": true, "config": { "profiles": [ ... ] }}
+```
+
+`config` is the full `AppConfig` with all profiles, pages, and cells (each cell has an `id` field — that's the UUID you need). Unlike `/api/update-button`, this endpoint does **not** return `503` without a device: it answers `200` with `"connected": false, "config": null`, so check `connected` before reading `config`.
 
 ## Recipe Examples
 
 Every looping example below goes into the button's **Startup Script** field — it starts on connect and runs without a timeout. Use the tap script (Shell Command) for the action you want on press: open the source page, start/stop, refresh now.
 
-> **Tip:** Use `trap cleanup EXIT TERM` to reset the button when the script is stopped — `EXIT` alone does not fire when the agent kills the process with SIGTERM, so the overlay would stay with the last value. See [Process timeout](#process-timeout).
+> **Tip:** Reset the button when the script is stopped with two traps — `trap cleanup EXIT` and `trap 'cleanup; exit 0' TERM`. `EXIT` alone does not fire when the agent kills the process with SIGTERM, and a `TERM` handler without `exit` lets the loop keep repainting the button for up to 2 seconds after the overlay was cleared. See [Process timeout](#process-timeout).
 
 ### Live CPU Usage Monitor
 
@@ -556,14 +579,17 @@ Displays current CPU load (user + system) with color thresholds: green (normal),
 CELL_ID="{{CELL_ID}}"
 
 update_button() {
-  curl -s http://localhost:9848/api/update-button \
+  curl -s -m 5 http://localhost:9848/api/update-button \
     -H "Authorization: Bearer $DESKTAP_TOKEN" \
     -H "Content-Type: application/json" \
     -d "$1" > /dev/null
 }
 
-# Reset button on normal exit AND on SIGTERM (sent when iOS terminates the script)
-trap 'update_button "{\"cellId\":\"$CELL_ID\",\"reset\":true}"' EXIT TERM
+# Reset button on normal exit AND on SIGTERM (sent when the agent stops the script).
+# The TERM handler must exit — otherwise the loop keeps running until SIGKILL.
+cleanup() { update_button "{\"cellId\":\"$CELL_ID\",\"reset\":true}"; }
+trap cleanup EXIT
+trap 'cleanup; exit 0' TERM
 
 while true; do
   # top fields on macOS: $3 = user%, $5 = sys%, $7 = idle%. Sum user+sys for total load.
@@ -589,19 +615,21 @@ Shows the current BTC price in EUR, updated every 60 seconds. Startup script; a 
 CELL_ID="{{CELL_ID}}"
 
 update_button() {
-  curl -s http://localhost:9848/api/update-button \
+  curl -s -m 5 http://localhost:9848/api/update-button \
     -H "Authorization: Bearer $DESKTAP_TOKEN" \
     -H "Content-Type: application/json" \
     -d "$1" > /dev/null
 }
 
-trap 'update_button "{\"cellId\":\"$CELL_ID\",\"reset\":true}"' EXIT TERM
+cleanup() { update_button "{\"cellId\":\"$CELL_ID\",\"reset\":true}"; }
+trap cleanup EXIT
+trap 'cleanup; exit 0' TERM
 
 # Show loading state immediately
 update_button "{\"cellId\":\"$CELL_ID\",\"title\":\"Loading...\",\"emoji\":\"₿\"}"
 
 while true; do
-  PRICE=$(curl -s 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur' \
+  PRICE=$(curl -s -m 10 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur' \
     | python3 -c "import sys,json; print(f'{json.load(sys.stdin)[\"bitcoin\"][\"eur\"]:,.0f}')" 2>/dev/null)
   if [ -n "$PRICE" ]; then
     update_button "{\"cellId\":\"$CELL_ID\",\"title\":\"€$PRICE\",\"emoji\":\"₿\"}"
@@ -788,13 +816,16 @@ update_button() {
     -d "$1" > /dev/null
 }
 
-# Clean up on exit OR termination (SIGTERM is sent before SIGKILL after 2s)
+# Clean up on exit OR termination (SIGTERM is sent before SIGKILL after 2s).
+# The TERM handler exits explicitly: without it the loop would keep repainting
+# the timer button until SIGKILL — and nothing clears that button afterwards.
 cleanup() {
   rm -f "$STATE_FILE"
   update_button "{\"cellId\":\"$CONTROL_BUTTON\",\"reset\":true}"
   update_button "{\"cellId\":\"$TIMER_BUTTON\",\"reset\":true}"
 }
-trap cleanup EXIT TERM
+trap cleanup EXIT
+trap 'cleanup; exit 0' TERM
 
 # Resume from a previous run if state exists, otherwise start a new work phase.
 # IMPORTANT: parse the state file explicitly — never `source` it. A `source`d file
@@ -876,7 +907,7 @@ How it works:
 This demonstrates the key cross-button patterns:
 - One script controlling multiple buttons via their UUIDs
 - Persistent state in `$DESKTAP_STORAGE` so timers survive restarts
-- Cleanup via `trap ... EXIT TERM` (SIGTERM is sent before SIGKILL — see [Process timeout](#process-timeout))
+- Cleanup via `trap cleanup EXIT` + `trap 'cleanup; exit 0' TERM` (SIGTERM is sent before SIGKILL — see [Process timeout](#process-timeout))
 
 ## MCP (Model Context Protocol)
 
@@ -924,7 +955,7 @@ The most useful tools for AI assistants:
 | `get_installed_apps`      | List installed apps (for the `openApp` action)             |
 | `get_active_app`          | Identify the currently focused app                         |
 | `get_available_shortcuts` | List user-defined shortcuts available to bind              |
-| `run_probe`               | Execute a one-off shell command on the Mac (with iOS approval) |
+| `run_probe`               | Execute a one-off shell command on the Mac. **Off by default** — enable *Allow probe commands* in the agent window first; every call then asks for approval on the iPhone. While disabled the tool returns `Probe commands are disabled in Agent settings.` |
 
 Lower-level building blocks (`create_profile`, `create_page`, `add_button`, `update_button`, `delete_button`, `delete_page`, `delete_profile`, `add_buttons_to_client`, `add_pages_to_client`, `deliver_to_client`, `ping`) are also registered — `get_available_actions` enumerates and describes all of them at runtime.
 
@@ -948,7 +979,7 @@ This approval flow ensures you always have full control over what appears on you
 | Script times out | Tap and long-press scripts are killed after 60 s. Move loops and monitors into the **Startup Script** |
 | Unknown field error | Only use: `cellId`, `title`, `icon`, `emoji`, `color`, `reset` |
 | Startup script lost state after reconnect | Startup scripts restart from scratch on every connect. Save state (e.g. timer end-time) to `$DESKTAP_STORAGE` — see the [Focus Timer recipe](#focus-timer-with-a-done-notification) |
-| Startup script shows *Failed* in Running Scripts | It exited non-zero five times in a row. Check its stderr (the agent's Dev Log), fix, then **Restart** — or save any change to the script |
+| Startup script shows *Failed* in Running Scripts | It exited non-zero five times in a row. Check its stderr (the agent's Dev Log), fix, then **Restart**. Any config sync from the phone (saving any button, not just this one) also gives a failed script one fresh attempt |
 | Widget stopped updating | The script may have exited with status 0 (not restarted by design) or the device reconnected in the middle of a request. Check Running Scripts; make sure the loop never falls through to `exit 0` |
 | No notification appears on the phone | Notifications were denied for Desktap — enable them in iOS Settings → Desktap. Also check the `delivered` field in the `/api/notify` response: `queued` means no device was connected |
 | No notification appears on the Mac | `"mac":"denied"` in the response — allow notifications for Desktap Agent in System Settings → Notifications. Buttons hidden? Switch the agent's style from *Banners* to *Alerts* |
@@ -956,6 +987,7 @@ This approval flow ensures you always have full control over what appears on you
 | `/api/notify` returns 400 | Only `title` is required; at most 4 actions with unique `id`s; only the documented fields are accepted |
 | Dynamic JSON breaks intermittently | Shell interpolation of values containing quotes/backslashes/non-ASCII produces invalid JSON. Use the `python3 -c "import json; print(json.dumps(...))"` pattern from [JSON safety](#json-safety-with-dynamic-strings) |
 | Overlay stuck after script | Send `reset: true` to clear, or terminate the process from iOS |
-| Cleanup never runs on stop | A bare `trap ... EXIT` does not fire on SIGTERM. Use `trap cleanup EXIT TERM` so the handler runs when the agent terminates the process |
+| Cleanup never runs on stop | A bare `trap ... EXIT` does not fire on SIGTERM. Add `trap 'cleanup; exit 0' TERM` so the handler runs when the agent terminates the process |
+| Button shows a stale value after Stop | The `TERM` handler did not `exit`, so the loop repainted the button after the overlay was cleared. End the handler with `exit 0` — see [Process timeout](#process-timeout) |
 | `python3: command not found` | Modern macOS doesn't bundle `python3`. Install it with `xcode-select --install`, or replace the example with `jq` (`brew install jq`). See [Tooling note](#tooling-note) |
 | Token leaked or committed accidentally | Treat the token like an SSH key — it grants full local code execution via `/api/execute`. Rotate it immediately: see [Rotating the token](#rotating-the-token) |
