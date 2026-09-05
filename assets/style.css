@@ -39,7 +39,9 @@ body {
   background: var(--bg);
   color: var(--text-primary);
   line-height: 1.6;
-  overflow-x: hidden;
+  /* `clip`, not `hidden`: with `hidden` (and html also non-visible) body becomes
+     its own scroll container, which breaks position: sticky (docs TOC). */
+  overflow-x: clip;
 }
 
 /* Grain overlay */
