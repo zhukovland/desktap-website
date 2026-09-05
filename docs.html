@@ -27,7 +27,7 @@
   <link rel="icon" href="assets/favicon.ico" sizes="any">
   <meta name="theme-color" content="#000000">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="stylesheet" href="assets/style.css?v=20260518f">
+  <link rel="stylesheet" href="assets/style.css?v=20260905">
 </head>
 <body class="docs-body">
 
@@ -399,13 +399,17 @@
         const link = linkById.get(id);
         if (link) {
           link.classList.add('active');
-          // Keep active link in view inside the TOC
+          // Keep active link in view inside the TOC.
+          // Adjust only the TOC's own scrollTop — scrollIntoView() would also
+          // scroll the window (and, with a sticky ancestor, jump the page up).
           const inner = document.querySelector('.docs-toc-inner');
           if (inner) {
             const lr = link.getBoundingClientRect();
             const tr = inner.getBoundingClientRect();
-            if (lr.top < tr.top || lr.bottom > tr.bottom) {
-              link.scrollIntoView({ block: 'nearest' });
+            if (lr.top < tr.top) {
+              inner.scrollTop -= (tr.top - lr.top);
+            } else if (lr.bottom > tr.bottom) {
+              inner.scrollTop += (lr.bottom - tr.bottom);
             }
           }
         }
