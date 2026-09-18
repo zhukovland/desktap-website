@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="756" height="756" viewBox="0 0 756 756" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', Helvetica, Arial, sans-serif">
+<rect id="bg" width="756" height="756" rx="20" fill="#0A0A10"/>
+<g transform="translate(0 0)">
+<rect width="372" height="372" rx="28" fill="#FFFFFF" fill-opacity="0.08"/>
+<rect x="0.5" y="0.5" width="371" height="371" rx="27.5" fill="none" stroke="#FFFFFF" stroke-opacity="0.14"/>
+<svg x="0" y="0" width="372" height="372" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet" color="#3B82F6">
+  <circle id="track" cx="72" cy="74" r="56" fill="none" stroke="#FFFFFF" stroke-opacity="0.15" stroke-width="12"/>
+  <circle id="ring" cx="72" cy="74" r="56" fill="none" stroke="#34C759" stroke-width="12" stroke-linecap="round" stroke-dasharray="351.86 351.86" stroke-dashoffset="204.08" transform="rotate(-90 72 74)"/>
+  <text id="cpu" x="72" y="82" font-size="26" font-weight="bold" text-anchor="middle" fill="#FFFFFF">42%</text>
+  <text id="cpu-label" x="72" y="100" font-size="14" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.6">cpu</text>
+  <g id="scroll" transform="translate(0.00 0)">
+    <polyline id="spark" points="140.0,86.0 145.3,82.0 150.7,78.0 156.0,66.0 161.3,76.4 166.7,79.6 172.0,74.0 177.3,62.0 182.7,54.0 188.0,68.4 193.3,71.6 198.7,76.4 204.0,76.4" fill="none" stroke="#34C759" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+  </g>
+  <text id="mem-label" x="20" y="148" font-size="16" fill="#FFFFFF" fill-opacity="0.7">memory</text>
+  <text id="mem" x="180" y="148" font-size="16" font-weight="bold" text-anchor="end" fill="#FFFFFF">63%</text>
+  <rect id="mem-track" x="20" y="158" width="160" height="10" rx="5" fill="#FFFFFF" fill-opacity="0.15"/>
+  <rect id="mem-bar" x="20" y="158" width="94.5" height="10" rx="5" fill="#BF5AF2"/>
+</svg>
+
+</g>
+<g transform="translate(384 0)">
+<rect width="372" height="372" rx="28" fill="#FFFFFF" fill-opacity="0.08"/>
+<rect x="0.5" y="0.5" width="371" height="371" rx="27.5" fill="none" stroke="#FFFFFF" stroke-opacity="0.14"/>
+<svg x="0" y="0" width="372" height="372" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet" color="#FF453A">
+  <circle cx="100" cy="88" r="78" fill="#FFFFFF" fill-opacity="0.06"/>
+  <line x1="100.0" y1="16.0" x2="100.0" y2="26.0" stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="4" stroke-linecap="round"/><line x1="136.0" y1="25.6" x2="133.0" y2="30.8" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round"/><line x1="162.4" y1="52.0" x2="157.2" y2="55.0" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round"/><line x1="172.0" y1="88.0" x2="162.0" y2="88.0" stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="4" stroke-linecap="round"/><line x1="162.4" y1="124.0" x2="157.2" y2="121.0" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round"/><line x1="136.0" y1="150.4" x2="133.0" y2="145.2" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round"/><line x1="100.0" y1="160.0" x2="100.0" y2="150.0" stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="4" stroke-linecap="round"/><line x1="64.0" y1="150.4" x2="67.0" y2="145.2" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round"/><line x1="37.6" y1="124.0" x2="42.8" y2="121.0" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round"/><line x1="28.0" y1="88.0" x2="38.0" y2="88.0" stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="4" stroke-linecap="round"/><line x1="37.6" y1="52.0" x2="42.8" y2="55.0" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round"/><line x1="64.0" y1="25.6" x2="67.0" y2="30.8" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round"/>
+  <line id="hour" x1="100" y1="88" x2="100" y2="48" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" transform="rotate(304.5 100 88)"/>
+  <line id="minute" x1="100" y1="88" x2="100" y2="30" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" transform="rotate(57.2 100 88)"/>
+  <line id="second" x1="100" y1="100" x2="100" y2="24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" transform="rotate(192 100 88)"/>
+  <circle cx="100" cy="88" r="5" fill="currentColor"/>
+  <text id="date" x="100" y="188" font-size="18" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.7">Wed, Sep 17</text>
+</svg>
+
+</g>
+<g transform="translate(0 384)">
+<rect width="372" height="180" rx="28" fill="#FFFFFF" fill-opacity="0.08"/>
+<rect x="0.5" y="0.5" width="371" height="179" rx="27.5" fill="none" stroke="#FFFFFF" stroke-opacity="0.14"/>
+<svg x="0" y="0" width="372" height="180" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet" color="#3B82F6">
+  <text id="value" x="20" y="96" font-size="52" font-weight="bold" fill="#FFFFFF">2.4 MB/s</text>
+  <text id="label" x="20" y="136" font-size="28" fill="#FFFFFF" fill-opacity="0.6">download</text>
+  <g id="scroll" transform="translate(0.00 0)">
+    <path id="area" d="M 196.0 160 L 196.0 121.6 L 212.0 121.6 L 228.0 121.6 L 244.0 107.4 L 260.0 118.1 L 276.0 75.5 L 292.0 86.1 L 308.0 57.7 L 324.0 64.8 L 340.0 40.0 L 356.0 47.1 L 372.0 71.9 L 388.0 54.2 L 404.0 60.7 L 404.0 160 Z" fill="currentColor" fill-opacity="0.18"/>
+    <polyline id="line" points="212.0,121.6 228.0,121.6 244.0,107.4 260.0,118.1 276.0,75.5 292.0,86.1 308.0,57.7 324.0,64.8 340.0,40.0 356.0,47.1 372.0,71.9 388.0,54.2 404.0,60.7" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle id="dot" cx="404.0" cy="60.7" r="7" fill="currentColor"/>
+  </g>
+</svg>
+
+</g>
+<g transform="translate(384 384)">
+<rect width="180" height="180" rx="28" fill="#FFFFFF" fill-opacity="0.08"/>
+<rect x="0.5" y="0.5" width="179" height="179" rx="27.5" fill="none" stroke="#FFFFFF" stroke-opacity="0.14"/>
+<svg x="0" y="0" width="180" height="180" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet" color="#3B82F6">
+  <circle id="track" cx="100" cy="100" r="78" fill="none" stroke="#FFFFFF" stroke-opacity="0.15" stroke-width="16"/>
+  <circle id="ring" cx="100" cy="100" r="78" fill="none" stroke="#FF9F0A" stroke-width="16" stroke-linecap="round" stroke-dasharray="490.09 490.09" stroke-dashoffset="137.22" transform="rotate(-90 100 100)"/>
+  <text id="value" x="100" y="116" font-size="56" font-weight="bold" text-anchor="middle" fill="#FFFFFF">72</text>
+  <text id="label" x="100" y="146" font-size="26" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.6">cpu %</text>
+</svg>
+
+</g>
+<g transform="translate(576 384)">
+<rect width="180" height="372" rx="28" fill="#FFFFFF" fill-opacity="0.08"/>
+<rect x="0.5" y="0.5" width="179" height="371" rx="27.5" fill="none" stroke="#FFFFFF" stroke-opacity="0.14"/>
+<svg x="0" y="0" width="180" height="372" viewBox="0 0 200 400" preserveAspectRatio="xMidYMid meet" color="#3B82F6">
+  <text id="label" x="100" y="40" font-size="28" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.6">memory</text>
+  <rect id="track" x="60" y="60" width="80" height="240" rx="24" fill="#FFFFFF" fill-opacity="0.15"/>
+  <rect id="fill" x="60" y="195.0" width="80" height="105.0" rx="24" fill="#34C759"/>
+  <text id="value" x="100" y="352" font-size="56" font-weight="bold" text-anchor="middle" fill="#FFFFFF">44%</text>
+  <text id="sub" x="100" y="384" font-size="26" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.6">14.0 of 32 GB</text>
+</svg>
+
+</g>
+<g transform="translate(0 576)">
+<rect width="372" height="180" rx="28" fill="#FFFFFF" fill-opacity="0.08"/>
+<rect x="0.5" y="0.5" width="371" height="179" rx="27.5" fill="none" stroke="#FFFFFF" stroke-opacity="0.14"/>
+<text x="177" y="120" font-size="64" text-anchor="middle">🚀</text><text x="177" y="162" font-size="20" font-weight="500" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.75">Deploy</text>
+</g>
+<rect x="384.5" y="576.5" width="179" height="179" rx="28" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-dasharray="6 6"/>
+</svg>
