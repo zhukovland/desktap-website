@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="372" height="372" viewBox="0 0 372 372" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', Helvetica, Arial, sans-serif">
+<rect id="bg" width="372" height="372" rx="20" fill="#0A0A10"/>
+<g transform="translate(0 0)">
+<rect width="372" height="372" rx="28" fill="#FFFFFF" fill-opacity="0.08"/>
+<rect x="0.5" y="0.5" width="371" height="371" rx="27.5" fill="none" stroke="#FFFFFF" stroke-opacity="0.14"/>
+<svg x="0" y="0" width="372" height="372" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet" color="#FF453A">
+  <circle cx="100" cy="88" r="78" fill="#FFFFFF" fill-opacity="0.06"/>
+  <line x1="100.0" y1="16.0" x2="100.0" y2="26.0" stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="4" stroke-linecap="round"/><line x1="136.0" y1="25.6" x2="133.0" y2="30.8" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round"/><line x1="162.4" y1="52.0" x2="157.2" y2="55.0" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round"/><line x1="172.0" y1="88.0" x2="162.0" y2="88.0" stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="4" stroke-linecap="round"/><line x1="162.4" y1="124.0" x2="157.2" y2="121.0" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round"/><line x1="136.0" y1="150.4" x2="133.0" y2="145.2" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round"/><line x1="100.0" y1="160.0" x2="100.0" y2="150.0" stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="4" stroke-linecap="round"/><line x1="64.0" y1="150.4" x2="67.0" y2="145.2" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round"/><line x1="37.6" y1="124.0" x2="42.8" y2="121.0" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round"/><line x1="28.0" y1="88.0" x2="38.0" y2="88.0" stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="4" stroke-linecap="round"/><line x1="37.6" y1="52.0" x2="42.8" y2="55.0" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round"/><line x1="64.0" y1="25.6" x2="67.0" y2="30.8" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round"/>
+  <line id="hour" x1="100" y1="88" x2="100" y2="48" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" transform="rotate(304.5 100 88)"/>
+  <line id="minute" x1="100" y1="88" x2="100" y2="30" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" transform="rotate(57.2 100 88)"/>
+  <line id="second" x1="100" y1="100" x2="100" y2="24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" transform="rotate(192 100 88)"/>
+  <circle cx="100" cy="88" r="5" fill="currentColor"/>
+  <text id="date" x="100" y="188" font-size="18" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.7">Wed, Sep 17</text>
+</svg>
+
+</g>
+</svg>

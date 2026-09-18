@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="372" height="372" viewBox="0 0 372 372" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', Helvetica, Arial, sans-serif">
+<rect id="bg" width="372" height="372" rx="20" fill="#0A0A10"/>
+<g transform="translate(0 0)">
+<rect width="372" height="372" rx="28" fill="#FFFFFF" fill-opacity="0.08"/>
+<rect x="0.5" y="0.5" width="371" height="371" rx="27.5" fill="none" stroke="#FFFFFF" stroke-opacity="0.14"/>
+<svg x="0" y="0" width="372" height="372" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet" color="#3B82F6">
+  <circle id="track" cx="72" cy="74" r="56" fill="none" stroke="#FFFFFF" stroke-opacity="0.15" stroke-width="12"/>
+  <circle id="ring" cx="72" cy="74" r="56" fill="none" stroke="#34C759" stroke-width="12" stroke-linecap="round" stroke-dasharray="351.86 351.86" stroke-dashoffset="204.08" transform="rotate(-90 72 74)"/>
+  <text id="cpu" x="72" y="82" font-size="26" font-weight="bold" text-anchor="middle" fill="#FFFFFF">42%</text>
+  <text id="cpu-label" x="72" y="100" font-size="14" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.6">cpu</text>
+  <g id="scroll" transform="translate(0.00 0)">
+    <polyline id="spark" points="140.0,86.0 145.3,82.0 150.7,78.0 156.0,66.0 161.3,76.4 166.7,79.6 172.0,74.0 177.3,62.0 182.7,54.0 188.0,68.4 193.3,71.6 198.7,76.4 204.0,76.4" fill="none" stroke="#34C759" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+  </g>
+  <text id="mem-label" x="20" y="148" font-size="16" fill="#FFFFFF" fill-opacity="0.7">memory</text>
+  <text id="mem" x="180" y="148" font-size="16" font-weight="bold" text-anchor="end" fill="#FFFFFF">63%</text>
+  <rect id="mem-track" x="20" y="158" width="160" height="10" rx="5" fill="#FFFFFF" fill-opacity="0.15"/>
+  <rect id="mem-bar" x="20" y="158" width="94.5" height="10" rx="5" fill="#BF5AF2"/>
+</svg>
+
+</g>
+</svg>

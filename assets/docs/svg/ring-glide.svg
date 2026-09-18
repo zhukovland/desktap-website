@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', Helvetica, Arial, sans-serif">
+<rect id="bg" width="180" height="180" rx="20" fill="#0A0A10"/>
+<g transform="translate(0 0)">
+<rect width="180" height="180" rx="28" fill="#FFFFFF" fill-opacity="0.08"/>
+<rect x="0.5" y="0.5" width="179" height="179" rx="27.5" fill="none" stroke="#FFFFFF" stroke-opacity="0.14"/>
+<svg x="0" y="0" width="180" height="180" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet" color="#3B82F6">
+  <circle cx="100" cy="100" r="78" fill="none" stroke="#FFFFFF" stroke-opacity="0.15" stroke-width="16"/>
+  <circle cx="100" cy="100" r="78" fill="none" stroke="#FF9F0A" stroke-width="16" stroke-linecap="round" stroke-dasharray="490.09 490.09" stroke-dashoffset="137.22" transform="rotate(-90 100 100)">
+    <animate attributeName="stroke-dashoffset" values="137.22;318.56;58.81;137.22" keyTimes="0;0.33;0.66;1" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1" dur="7.5s" repeatCount="indefinite"/>
+    <animate attributeName="stroke" values="#FF9F0A;#34C759;#FF453A;#FF9F0A" keyTimes="0;0.33;0.66;1" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1" dur="7.5s" repeatCount="indefinite"/>
+  </circle>
+  <text x="100" y="116" font-size="56" font-weight="bold" text-anchor="middle" fill="#FFFFFF">72<animate attributeName="opacity" values="1;0;0;1" keyTimes="0;0.33;0.66;1" calcMode="discrete" dur="7.5s" repeatCount="indefinite"/></text>
+  <text x="100" y="116" font-size="56" font-weight="bold" text-anchor="middle" fill="#FFFFFF" opacity="0">35<animate attributeName="opacity" values="0;1;0;0" keyTimes="0;0.33;0.66;1" calcMode="discrete" dur="7.5s" repeatCount="indefinite"/></text>
+  <text x="100" y="116" font-size="56" font-weight="bold" text-anchor="middle" fill="#FFFFFF" opacity="0">88<animate attributeName="opacity" values="0;0;1;0" keyTimes="0;0.33;0.66;1" calcMode="discrete" dur="7.5s" repeatCount="indefinite"/></text>
+  <text x="100" y="146" font-size="26" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.6">cpu %</text>
+</svg>
+
+</g>
+</svg>

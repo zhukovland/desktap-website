@@ -1,5 +1,5 @@
 <!-- version: 1.1.1 -->
-<!-- updated: 2026-09-05 -->
+<!-- updated: 2026-09-17 -->
 
 Button Update API
 
@@ -30,6 +30,17 @@ Desktap Agent exposes a local HTTP API that lets your shell scripts dynamically 
   - [Persistent storage](#persistent-storage)
   - [Startup scripts (live widgets)](#startup-scripts-live-widgets)
   - [Process timeout](#process-timeout)
+- [SVG faces (vector widgets)](#svg-faces-vector-widgets)
+  - [A first face](#a-first-face)
+  - [The svg object](#the-svg-object)
+  - [How the face lives on the button](#how-the-face-lives-on-the-button)
+  - [How animation works](#how-animation-works)
+  - [Authoring techniques](#authoring-techniques)
+  - [Supported SVG subset](#supported-svg-subset)
+  - [Orientation and landscapeSource](#orientation-and-landscapesource)
+  - [Validation and feedback](#validation-and-feedback)
+  - [Performance budget](#performance-budget)
+  - [Working with an AI assistant](#working-with-an-ai-assistant)
 - [Reference](#reference)
   - [Environment variables](#environment-variables)
   - [SF Symbols](#sf-symbols)
@@ -44,12 +55,17 @@ Desktap Agent exposes a local HTTP API that lets your shell scripts dynamically 
   - [Deploy finished — notification with actions](#deploy-finished-notification-with-actions)
   - [Disk space alert (threshold notification)](#disk-space-alert-threshold-notification)
   - [Pomodoro Timer (cross-button)](#pomodoro-timer-cross-button)
+  - [CPU ring (1x1 SVG face)](#cpu-ring-1x1-svg-face)
+  - [Memory gauge (1x2 SVG face with a landscape variant)](#memory-gauge-1x2-svg-face-with-a-landscape-variant)
+  - [Network speed with a scrolling sparkline (2x1)](#network-speed-with-a-scrolling-sparkline-2x1)
+  - [System dashboard (2x2 SVG face)](#system-dashboard-2x2-svg-face)
+  - [Analog clock (2x2 SVG face)](#analog-clock-2x2-svg-face)
 - [MCP (Model Context Protocol)](#mcp-model-context-protocol)
 - [Troubleshooting](#troubleshooting)
 
 ## Overview
 
-When Desktap Agent is running, it listens on `http://localhost:9848`. Your shell scripts can send HTTP requests to temporarily change a button's title, icon, emoji, or color — without modifying the saved configuration.
+When Desktap Agent is running, it listens on `http://localhost:9848`. Your shell scripts can send HTTP requests to temporarily change a button's title, icon, emoji, or color — or replace the whole button face with an animated vector drawing (see [SVG faces](#svg-faces-vector-widgets)) — without modifying the saved configuration.
 
 These updates are **runtime-only**: they don't persist across app restarts or reconnections.
 
@@ -150,9 +166,10 @@ Paste this into a button's shell command field. When pressed, the button updates
 | `icon`   | String  | No       | SF Symbol name (e.g. `"checkmark.circle"`)          |
 | `emoji`  | String  | No       | Emoji characters (overrides `icon` if both set). The agent doesn't enforce a length, but **1–3 emoji** are recommended — anything longer gets clipped on the button face |
 | `color`  | String  | No       | Hex color in `#RRGGBB` format (e.g. `"#FF5733"`)   |
-| `reset`  | Boolean | No       | Set to `true` to clear all overrides                |
+| `reset`  | Boolean | No       | Set to `true` to clear all overrides (including an SVG face) |
+| `svg`    | Object  | No       | Replace the whole button face with a vector drawing the phone animates between frames: `{source, landscapeSource, duration, easing, fit, remove}`. See [SVG faces](#svg-faces-vector-widgets) |
 
-**Only these fields are accepted.** Any unknown field returns a `400` error.
+**Only these fields are accepted.** Any unknown field — at the top level or inside `svg` — returns a `400` error.
 
 ### Finding the Button UUID
 
@@ -175,8 +192,9 @@ Open the button editor in the Desktap iOS app — the **Button ID** section show
 **Error (400)** — invalid request body. Possible messages:
 - `"Missing request body"`
 - `"Invalid JSON"` (also returned when `cellId` is not a valid UUID string)
-- `"Unknown field(s): foo, bar. Valid fields: cellId, title, icon, emoji, color, reset."`
+- `"Unknown field(s): foo, bar. Valid fields: cellId, title, icon, emoji, color, reset, svg; inside svg: source, landscapeSource, duration, fit, easing, remove."`
 - `"Invalid color format. Expected #RRGGBB."`
+- `"svg.source rejected: …"` and the other `svg.*` messages listed under [Validation and feedback](#validation-and-feedback)
 
 ```json
 {"status": "error", "message": "Invalid color format. Expected #RRGGBB."}
@@ -461,6 +479,196 @@ trap 'cleanup; exit 0' TERM
 
 > **In-memory state does not survive.** Startup scripts are relaunched from scratch on every device connect (and after an agent restart, on the next connect). For timers and countdowns never rely on an in-memory counter — save the target end-time (epoch seconds) to `$DESKTAP_STORAGE` and compute `remaining = END - NOW` on every iteration.
 
+## SVG faces (vector widgets)
+
+Everything above changes the *plain* face of a button: a title, an icon or emoji, a color. An **SVG face** replaces the whole button surface with a drawing — a ring, a gauge, bars, a sparkline, a clock, a heatmap — and the phone **animates the drawing between the frames you send**. You never render animation yourself: send a frame whenever the data changes, and the button glides from the previous frame to the new one.
+
+![A deck of live widgets drawn as SVG faces: a system dashboard, an analog clock, a network sparkline, a CPU ring, a memory gauge, next to a plain Deploy button](assets/docs/svg/gallery.svg)
+
+All faces above are single frames straight from the generators in the [recipes](#recipe-examples), shown next to a plain button for scale.
+
+Use a plain face when the widget answers *what* or *whether* (a name, a state, a short value, an action). Use an SVG face when it answers *how much* or *how it changes* (a level, a share, progress, a trend, several values at once, or a shape whose geometry carries the meaning — clock hands, a needle, a compass).
+
+### A first face
+
+Paste this into a button's **Shell Command**. It draws a 72 % ring with the value in the middle — the ring color comes from the button's own accent color via `currentColor`:
+
+```bash
+SVG='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <circle id="track" cx="100" cy="100" r="78" fill="none" stroke="#FFFFFF" stroke-opacity="0.15" stroke-width="16"/>
+  <circle id="ring" cx="100" cy="100" r="78" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"
+          stroke-dasharray="490.09 490.09" stroke-dashoffset="137.22" transform="rotate(-90 100 100)"/>
+  <text id="value" x="100" y="116" font-size="56" font-weight="bold" text-anchor="middle" fill="#FFFFFF">72</text>
+  <text id="label" x="100" y="146" font-size="26" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.6">cpu %</text>
+</svg>'
+
+python3 -c 'import json,sys; print(json.dumps({"cellId": sys.argv[1], "svg": {"source": sys.argv[2], "duration": 0.6}}))' "{{CELL_ID}}" "$SVG" \
+  | curl -s -m 5 http://localhost:9848/api/update-button \
+      -H "Authorization: Bearer $DESKTAP_TOKEN" -H "Content-Type: application/json" -d @-
+```
+
+Tap the button: the icon and label disappear and the ring appears. Send the same document again with a different `stroke-dashoffset` and the ring *moves* to the new value over 0.6 s instead of jumping — that is the whole idea. To go back to the plain face send `{"cellId":"…","svg":{"remove":true}}` or `{"cellId":"…","reset":true}`.
+
+> **JSON safety:** an SVG document is full of quotes, so never splice it into JSON with shell string interpolation. Build the body with `python3 … json.dumps` (as above) or `jq -n --arg`, and post it with `curl -d @-`. See [JSON safety with dynamic strings](#json-safety-with-dynamic-strings).
+
+### The svg object
+
+`svg` is an object inside the usual `/api/update-button` body. It can be combined with `title`, `icon`, `emoji` and `color` in the same request. Every field is optional; a field that is absent keeps its current value.
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `source` | String | — | A complete `<svg>` document (UTF-8 text, **≤ 64 KB**). Installs a new frame. Omit it to change only the settings below of the face that is already showing |
+| `landscapeSource` | String | — | The same frame laid out for the *transposed* cell the button gets when the phone is rotated. Needed for rectangular buttons (2×1, 1×2), see [Orientation](#orientation-and-landscapesource). Sent together with `source`; a new `source` without it drops the previous landscape frame |
+| `duration` | Number | `0.4` | Seconds the transition to this frame takes: interpolation when the structure matches the previous frame, cross-fade otherwise. `0` applies the frame instantly. Range `0…10` |
+| `easing` | String | `"easeInOut"` | Timing curve of the glide. `easeInOut` for a value settling on a new state (a ring moving to 72 %); `linear` for continuous motion fed by a stream of frames (a ticker, a spinner, a scrolling chart), where each new frame must pick up the glide at constant speed |
+| `fit` | String | `"contain"` | How the `viewBox` maps onto the button. `contain` keeps the whole drawing visible and letterboxes when the aspect differs; `cover` fills the button and clips; `stretch` fills the button and distorts |
+| `remove` | Boolean | — | `true` removes the face: the button shows its plain title/icon/color again (including any overrides you set earlier). Other fields in the same request still apply |
+
+Settings stick to the face: once you have sent `"easing":"linear"` you do not need to repeat it with every frame — only `source` (and `landscapeSource`) change per frame. A settings-only request (`{"svg":{"duration":1}}`) when no face is installed is ignored.
+
+Values inside `svg` are validated like the other fields: an unknown key returns `400` with `Unknown field(s): svg.foo …`, a `source` without `<svg` or larger than 64 KB returns `400`, and — this is the useful part — the agent **parses the frame with the same parser the phone uses** before forwarding it. A frame the phone could not draw is rejected with `400` and a reason, and a frame that uses unsupported elements is accepted with a `warnings` array (see [Validation and feedback](#validation-and-feedback)). Always read the response of your *first* frame while developing a widget.
+
+### How the face lives on the button
+
+- The SVG face is an overlay like every other runtime update: it is kept in memory on the phone, survives the end of your script, and is cleared by the same events — `reset:true`, the process being *terminated* (Running Scripts, iOS process management, config delivery), saving the button in the editor, disconnect, app restart. See [Overlay persistence](#overlay-persistence).
+- While a face is installed the button's icon, emoji and title are hidden, not lost. `color` still matters: it is the button's accent, and every `currentColor` in your SVG resolves to it. So `{"color":"#FF453A","svg":{"source":…}}` recolors all `currentColor` strokes in one request, and a startup script that paints a ring in `currentColor` follows the color the user picked for the button.
+- The face is drawn over the glass card; the drawing's background is transparent unless you draw one.
+- `200` means the agent forwarded the frame, not that it is on screen: frames for buttons on a page the user is not looking at are stored and drawn the moment that page opens. The phone keeps only the latest frame per hidden button, so a hidden widget costs nothing while it is off screen.
+- Tap, long-press and startup scripts of one button share the same face. Let the startup loop own the drawing; a tap should change *state* (write a file to `$DESKTAP_STORAGE`) and let the loop render it on the next iteration.
+
+### How animation works
+
+The phone does not animate SVG itself — there is no `<animate>`, no CSS. Instead it compares every new frame with the one currently shown:
+
+1. **Structure.** Each frame is reduced to a *structure key*: which elements it has, in which order, their `id`s and kinds, the sequence of path commands (`M`, `L`, `C`, `Z`) in each path, whether each fill and stroke is a color, `none` or `currentColor`, and how many dash lengths each stroke has. **Text content is deliberately not part of the structure.**
+2. **Numbers.** Everything else is a number: coordinates and path points, `rx`/`ry`, colors (as RGBA components), `opacity`, `fill-opacity`, `stroke-opacity`, `stroke-width`, `stroke-dasharray` lengths, `stroke-dashoffset`, `font-size`, text position, and every `transform` (as pivot, translation, rotation, scale and shear rather than a raw matrix).
+3. **Same structure → glide.** If the new frame has the same structure key, the phone interpolates all the numbers from the old frame to the new one over `duration` with the chosen `easing`, redrawing at up to 30 fps while the glide runs and not at all once it is at rest. Text swaps instantly to the new content while the shapes around it keep moving — a label going from `42%` to `43%` does not cross-fade.
+4. **Different structure → cross-fade.** If anything structural changed (an element appeared, a path got one more segment, a stroke went from a color to `none`), the new frame fades in over `duration` on top of the old one.
+5. **A frame arriving mid-glide** does not jump: the glide restarts from wherever the drawing currently is and heads for the new frame. With `easing:"linear"` and a `duration` slightly *longer* than your frame interval this produces motion at constant speed with no stops — the right setting for tickers, spinners and scrolling charts. With `easeInOut` keep `duration` *shorter* than the interval so each value settles before the next one arrives.
+6. **Rotations take the short way.** A hand going from 350° to 10° turns +20°, not −340°, and a needle drawn with `transform="rotate(a cx cy)"` stays rigid and on its axis while it turns: the pivot is constant between frames and only the angle moves.
+
+![The same ring frame sent with three different values: the arc and its color glide from one value to the next, the number swaps instantly](assets/docs/svg/ring-glide.svg)
+
+*Three frames of one ring, nothing but the numbers changed: the arc and its color glide, the label swaps.*
+
+The practical consequence is one rule: **generate every frame from a template with a fixed element structure and change only the numbers and the text.** Give animated elements an `id` so they are matched by name, keep elements in the same order, keep the same number of points in every polyline and the same command letters in every path.
+
+### Authoring techniques
+
+**Rings and progress arcs.** Draw a *full* circle and animate its dash offset — this moves exactly along the circle and keeps the structure fixed. Do not draw arcs with `A` path commands: an arc is converted to a different number of curve segments depending on its angle, so two frames end up with different structures and cross-fade instead of gliding.
+
+```
+C = 2πr                         # circumference
+stroke-dasharray  = "C C"
+stroke-dashoffset = C · (1 − fraction)
+transform         = "rotate(-90 cx cy)"   # start at 12 o'clock
+```
+
+For `r = 78`: `C = 490.09`; 72 % → `stroke-dashoffset = 137.22` (the ring in the first example).
+
+**Bars and gauges.** A `<rect>` whose `width` (horizontal) or `y` and `height` (vertical, growing upwards) change. Keep a fixed `rx` for rounded ends.
+
+**Needles, hands, compasses.** One element with `transform="rotate(angle cx cy)"`; change only `angle`.
+
+**Colors that follow the value.** A color is numbers too, so `stroke="#34C759"` → `stroke="#FF453A"` glides through the intermediate hues. If you want the button's accent, use `currentColor`.
+
+**Fading elements in and out.** Do not add or remove elements between frames (that changes the structure). Keep them and animate `opacity` between `0` and `1`.
+
+**A time series must scroll, not morph.** If you shift the samples by one slot and send the series again, the phone interpolates point *i* from its old value to its new value — every point moves vertically and the chart wobbles like liquid. Instead move the whole chart sideways:
+
+- Keep `N + 1` samples; the newest sits in a slot just *outside* the right edge of the `viewBox`.
+- Wrap the polyline/area/dot in `<g id="scroll" transform="translate(0 0)">`.
+- Per new sample send **two frames**: a *rest* frame with the re-indexed points and `translate(0 0)` with `duration: 0.01` (it looks identical to the end of the previous slide), then a *slide* frame with the same points and `translate(-step 0)`, `easing: "linear"`, and `duration` equal to your loop's **measured** period (sampling + generation + sleep — for example 2.12 s, not 2).
+- A slightly early next frame only snaps the unfinished fraction of the slide, which is invisible; a `duration` shorter than the period leaves a pause at the end of every step and reads as jerky.
+
+![A network sparkline scrolling to the left at constant speed while the value stays put](assets/docs/svg/sparkline-scroll.svg)
+
+*The scroll pattern: the chart moves as a whole, points never change height while moving.*
+
+The [Network sparkline recipe](#network-speed-with-a-scrolling-sparkline-2x1) shows the complete pattern.
+
+**Text.** One `<text>` element is one run — no `tspan`, no wrapping; use several elements for several lines. `x`/`y` is the baseline. `text-anchor` (`start`, `middle`, `end`), `font-size`, `font-weight` (`regular`, `medium`/`500`, `semibold`/`600`, `bold`/`700+`) and `fill` are honored; the font is always the system font.
+
+**Layout and sizes.** Match the `viewBox` aspect to the cell or the drawing is letterboxed. The face is scaled to the button, so text must not end up smaller than the standard button label (11–13 pt on the phone):
+
+| Button size | viewBox | Scale on iPhone | Room for | Minimum font-size |
+|-------------|---------|-----------------|----------|-------------------|
+| 1×1 | `0 0 200 200` | ≈ ×0.42 | one value with a ring, gauge or disc and one short label | 26 (values 56–64) |
+| 2×1 | `0 0 400 200` | ≈ ×0.42 | value + label on the left, sparkline or bars on the right; two values side by side; a ticker | 26 |
+| 1×2 | `0 0 200 400` | ≈ ×0.42 | a vertical gauge or bar with the value below | 26 |
+| 2×2 | `0 0 200 200` | ≈ ×0.88 | rich widgets: ring + value + secondary bar + sparkline, a clock, a 4×4 tile heatmap, five labeled bars | 16 (labels), 22+ (values) |
+
+Pick the size from the content: one number → 1×1; number + trend → 2×1; more than two pieces of information → 2×2. Never squeeze a 2×2 design into a 1×1 — the text becomes unreadable.
+
+**Generators, not inline XML.** Put the drawing code in `$DESKTAP_STORAGE/scripts/` as a small Python script that prints the SVG for given values, and keep the button's script to sampling + `json.dumps` + `curl -d @-`. Long XML in shell quotes is fragile, and the same generator serves the tap script, the startup loop and the landscape variant. Scripts run under **zsh**: an unquoted `$VAR` is *not* word-split, so use `read -r a b c <<< "$LINE"` rather than `set -- $LINE`.
+
+### Supported SVG subset
+
+The phone renders a deliberate subset of SVG 1.1. Anything outside it is either ignored (with a warning from the API) or rejected.
+
+| Category | Supported |
+|----------|-----------|
+| Root | `<svg viewBox="…">` (or `width`/`height` as a fallback). `xmlns` optional |
+| Elements | `g`, `path`, `rect` (with `rx`/`ry`), `circle`, `ellipse`, `line`, `polyline`, `polygon`, `text` |
+| Paths | All `d` commands, absolute and relative: `M L H V C S Q T A Z`. Arcs and quadratic curves are converted to cubics |
+| Paint | `fill`, `stroke`, `none`, `currentColor` (= the button's accent color), `inherit` |
+| Colors | `#rgb`, `#rrggbb`, `#rrggbbaa`, `rgb()`, `rgba()`, common named colors |
+| Stroke | `stroke-width`, `stroke-linecap` (`butt`/`round`/`square`), `stroke-linejoin` (`miter`/`round`/`bevel`), `stroke-dasharray`, `stroke-dashoffset` |
+| Opacity | `opacity` (multiplies down the tree), `fill-opacity`, `stroke-opacity` |
+| Transforms | `transform` on any element, including groups: `translate`, `scale`, `rotate` (with and without a center), `skewX`, `skewY`, `matrix`. Groups are flattened at parse time |
+| Text | one run per `<text>`: `x`, `y`, `text-anchor`, `font-size`, `font-weight`, paint and opacity |
+| Style | presentation attributes and the inline `style="fill:…; stroke:…"` attribute (style wins). Attributes inherit from groups |
+| Units | plain numbers, `px`, `pt` |
+
+**Not supported** — ignored together with their children, reported in `warnings`: `defs`, `linearGradient`, `radialGradient`, `pattern`, `mask`, `clipPath`, `filter`, `symbol`, `marker`, `style` (CSS), `script`. Unknown elements such as `image`, `use` and `tspan` are also ignored (a `tspan`'s characters still count toward its parent `<text>`, but it cannot be positioned). Use flat fills instead of gradients, several `<text>` elements instead of `tspan`, and frames instead of `<animate>`.
+
+### Orientation and landscapeSource
+
+The deck rotates with the device: in landscape the whole grid turns 90°, so every cell is transposed — a wide 2×1 button becomes a tall 1×2 and vice versa; 1×1 and 2×2 stay square. A plain face simply reflows. An SVG frame has a fixed `viewBox`, so a `400×200` drawing letterboxed into a tall cell shrinks to half its size and its text drops below the standard label.
+
+For every **rectangular** widget send `landscapeSource` with each frame: the same data laid out for the transposed shape (`2×1` → a `200×400` frame, `1×2` → a `400×200` frame — "value left, sparkline right" becomes "value on top, sparkline below"). The phone keeps both variants, draws whichever `viewBox` aspect is closer to the cell it is in, and cross-fades on rotation. Each variant follows the fixed-structure rule within itself, so both keep gliding. Square widgets do not need it. If you cannot provide a landscape layout, prefer a square button over a rectangular one.
+
+If `landscapeSource` fails to parse, the agent rejects the request (`400`, message prefixed `landscapeSource:`) and nothing changes on the phone.
+
+### Validation and feedback
+
+The agent validates `svg` before forwarding:
+
+**Error (400)** — the request is rejected, the phone is not touched:
+
+- `Unknown field(s): svg.foo. Valid fields: cellId, title, icon, emoji, color, reset, svg; inside svg: source, landscapeSource, duration, fit, easing, remove.`
+- `svg.source must be an <svg> document.`
+- `svg.source is too large (max 64 KB).`
+- `svg.duration must be within 0...10 seconds.`
+- `svg.source rejected: XML error at line 3, column 41: unescaped '&' or '<' in text or attribute (write &amp; and &lt;)` — malformed XML; the reason names the usual culprits (unclosed tags, unquoted attributes, `&` in text, a document cut short)
+- `svg.source rejected: svg needs a viewBox (or width/height)`
+- `svg.source rejected: The document draws nothing (no supported elements inside <svg>)`
+- `svg.source rejected: path: …` — a `d` attribute the path parser could not read
+- the same messages prefixed with `landscapeSource:` for the landscape frame
+
+**Success with warnings (200)** — the frame was forwarded, but parts of it will not render:
+
+```json
+{"status": "ok", "warnings": ["Ignored unsupported elements and their children: linearGradient, defs. Gradients, masks, clips, filters, CSS and animation are not rendered; use flat fills and drive motion by sending frames."]}
+```
+
+A plain `{"status":"ok"}` means the whole drawing is supported. Check the first frame's response while developing a widget and fix the drawing until the warnings are gone.
+
+### Performance budget
+
+Every frame is parsed on the phone and interpolated at up to 30 fps while a glide is running; a face at rest costs nothing. Keep the whole profile under roughly **10 frames per second in total**:
+
+- 1 frame/s only for things that must tick — clocks, timers, tickers, level meters.
+- 2–5 s for system metrics; send a frame **only when the value changed** (compare with the last one).
+- Prefer a few 2×2 widgets over many 1×1 rings updating every second.
+- Frames every 1–3 s with `duration` 0.4–0.8 s look smooth.
+
+Frames are small (a ring is ~600 bytes, a 2×2 dashboard ~2 KB), so bandwidth is never the limit; the phone's CPU and battery are. On the Mac a frame costs one `python3` plus one `curl`; avoid `top` for sampling (≈ 1.3 CPU-seconds per call) — use `iostat`, `vm_stat`, `sysctl`.
+
+### Working with an AI assistant
+
+If you build widgets through the MCP integration, you do not need to mention SVG at all: the assistant reads the same rules from `get_available_actions` (`widgetFaces` and the `svg` field description) and picks an SVG face whenever the content is a level, a share, progress, a trend or several values. Describe the content — "CPU load with the last minute as a trend", "a countdown ring for the pomodoro" — and check the first frame's API response in its script.
+
 ## Reference
 
 ### Environment variables
@@ -512,6 +720,8 @@ Lowercase hex is accepted: `#aabbcc` is valid.
 There is no per-request rate limiting on the API. The server supports up to **256 simultaneous connections**. In practice, you can send several updates per second without issues — but keep in mind each update travels over the network to the iOS device, so very rapid updates (>10/sec) may queue up or provide no visual benefit.
 
 For monitoring scripts, an interval of 1–10 seconds is a good balance between responsiveness and resource usage.
+
+SVG faces have their own budget — every frame is parsed and animated on the phone — see [Performance budget](#performance-budget).
 
 ### JSON safety with dynamic strings
 
@@ -909,6 +1119,296 @@ This demonstrates the key cross-button patterns:
 - Persistent state in `$DESKTAP_STORAGE` so timers survive restarts
 - Cleanup via `trap cleanup EXIT` + `trap 'cleanup; exit 0' TERM` (SIGTERM is sent before SIGKILL — see [Process timeout](#process-timeout))
 
+### CPU ring (1x1 SVG face)
+
+A ring that fills with CPU load, a big percentage in the middle, a frame every 2 seconds. The ring color follows the load (green → orange → red) and glides between values.
+
+Save the generator once (tap script of any button, or Terminal):
+
+```bash
+mkdir -p "$DESKTAP_STORAGE/scripts"
+cat > "$DESKTAP_STORAGE/scripts/cpu_ring.py" << 'PY'
+import math, sys
+cpu = max(0.0, min(100.0, float(sys.argv[1])))
+color = "#34C759" if cpu < 50 else ("#FF9F0A" if cpu < 80 else "#FF453A")
+r = 78
+circ = 2 * math.pi * r
+offset = circ * (1 - cpu / 100)
+print(f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <circle id="track" cx="100" cy="100" r="{r}" fill="none" stroke="#FFFFFF" stroke-opacity="0.15" stroke-width="16"/>
+  <circle id="ring" cx="100" cy="100" r="{r}" fill="none" stroke="{color}" stroke-width="16" stroke-linecap="round"
+          stroke-dasharray="{circ:.2f} {circ:.2f}" stroke-dashoffset="{offset:.2f}" transform="rotate(-90 100 100)"/>
+  <text id="value" x="100" y="116" font-size="56" font-weight="bold" text-anchor="middle" fill="#FFFFFF">{cpu:.0f}</text>
+  <text id="label" x="100" y="146" font-size="26" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.6">cpu %</text>
+</svg>''')
+PY
+```
+
+Startup script of the button:
+
+```bash
+# CPU ring — a frame every 2 s, only the numbers change between frames
+GEN="$DESKTAP_STORAGE/scripts/cpu_ring.py"
+post() { curl -s -m 5 http://localhost:9848/api/update-button \
+  -H "Authorization: Bearer $DESKTAP_TOKEN" -H "Content-Type: application/json" -d @- >/dev/null; }
+cleanup() { printf '{"cellId":"{{CELL_ID}}","reset":true}' | post; }
+trap cleanup EXIT
+trap 'cleanup; exit 0' TERM
+LAST=""
+while true; do
+  CPU=$(iostat -c 2 -w 1 2>/dev/null | tail -1 | awk '{printf "%.0f", 100-$(NF-3)}'); [ -z "$CPU" ] && CPU=0
+  if [ "$CPU" != "$LAST" ]; then   # send a frame only when the value changed
+    python3 "$GEN" "$CPU" \
+      | python3 -c 'import json,sys; print(json.dumps({"cellId": sys.argv[1], "svg": {"source": sys.stdin.read(), "duration": 0.6}}))' "{{CELL_ID}}" \
+      | post
+    LAST="$CPU"
+  fi
+  sleep 2
+done
+```
+
+The structure never changes — same three elements, same ids — so every frame glides: the dash offset moves along the circle, the stroke color shifts through the intermediate hues, and the number swaps instantly.
+
+### Memory gauge (1x2 SVG face with a landscape variant)
+
+A vertical gauge that fills from the bottom, the percentage and "used of total" below. Because the button is rectangular it sends a second layout for landscape, where the same cell becomes 2×1 and the gauge lies horizontally.
+
+```bash
+mkdir -p "$DESKTAP_STORAGE/scripts"
+cat > "$DESKTAP_STORAGE/scripts/mem_gauge.py" << 'PY'
+import sys
+used, total, mode = float(sys.argv[1]), max(1.0, float(sys.argv[2])), sys.argv[3]
+pct = min(100.0, used / total * 100)
+color = "#34C759" if pct < 50 else ("#FF9F0A" if pct < 80 else "#FF453A")
+sub = f"{used/2**30:.1f} of {total/2**30:.0f} GB"
+if mode == "portrait":   # 1×2 cell, viewBox 200×400: gauge x 60..140, y 60..300, fills upwards
+    h = 240 * pct / 100
+    print(f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 400">
+  <text id="label" x="100" y="40" font-size="28" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.6">memory</text>
+  <rect id="track" x="60" y="60" width="80" height="240" rx="24" fill="#FFFFFF" fill-opacity="0.15"/>
+  <rect id="fill" x="60" y="{300 - h:.1f}" width="80" height="{max(h, 48):.1f}" rx="24" fill="{color}"/>
+  <text id="value" x="100" y="352" font-size="56" font-weight="bold" text-anchor="middle" fill="#FFFFFF">{pct:.0f}%</text>
+  <text id="sub" x="100" y="384" font-size="26" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.6">{sub}</text>
+</svg>''')
+else:                    # the same cell in landscape is 2×1, viewBox 400×200: gauge fills to the right
+    w = 320 * pct / 100
+    print(f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200">
+  <text id="label" x="40" y="50" font-size="26" fill="#FFFFFF" fill-opacity="0.6">memory</text>
+  <rect id="track" x="40" y="70" width="320" height="56" rx="24" fill="#FFFFFF" fill-opacity="0.15"/>
+  <rect id="fill" x="40" y="70" width="{max(w, 48):.1f}" height="56" rx="24" fill="{color}"/>
+  <text id="value" x="40" y="176" font-size="44" font-weight="bold" fill="#FFFFFF">{pct:.0f}%</text>
+  <text id="sub" x="360" y="176" font-size="26" text-anchor="end" fill="#FFFFFF" fill-opacity="0.6">{sub}</text>
+</svg>''')
+PY
+```
+
+Startup script:
+
+```bash
+# Memory gauge — every 5 s, portrait + landscape frame in one request
+GEN="$DESKTAP_STORAGE/scripts/mem_gauge.py"
+post() { curl -s -m 5 http://localhost:9848/api/update-button \
+  -H "Authorization: Bearer $DESKTAP_TOKEN" -H "Content-Type: application/json" -d @- >/dev/null; }
+cleanup() { printf '{"cellId":"{{CELL_ID}}","reset":true}' | post; }
+trap cleanup EXIT
+trap 'cleanup; exit 0' TERM
+TOTAL=$(sysctl -n hw.memsize)
+while true; do
+  PAGE=$(sysctl -n hw.pagesize)
+  USED=$(vm_stat | awk -v p="$PAGE" '/Pages (active|wired down|occupied by compressor)/ {gsub("\\.", "", $NF); s += $NF} END {print s * p}')
+  python3 -c 'import json,subprocess,sys
+gen, cell, used, total = sys.argv[1:5]
+frame = lambda mode: subprocess.check_output(["python3", gen, used, total, mode], text=True)
+print(json.dumps({"cellId": cell, "svg": {"source": frame("portrait"), "landscapeSource": frame("landscape"), "duration": 0.8}}))' \
+    "$GEN" "{{CELL_ID}}" "$USED" "$TOTAL" | post
+  sleep 5
+done
+```
+
+### Network speed with a scrolling sparkline (2x1)
+
+Download speed as a big number with the last 12 samples as a sparkline that *scrolls* to the left — the two-frame `rest` + `slide` pattern from [Authoring techniques](#authoring-techniques). The chart keeps 13 points: the newest lives in a slot just outside the right edge of the viewBox and slides into view.
+
+```bash
+mkdir -p "$DESKTAP_STORAGE/scripts"
+cat > "$DESKTAP_STORAGE/scripts/net_spark.py" << 'PY'
+import sys
+bps, hist, phase = float(sys.argv[1]), sys.argv[2], sys.argv[3]        # phase: rest | slide
+h = [max(0.0, float(v)) for v in hist.split(",") if v.strip()] or [bps]
+h = ([h[0]] * (13 - len(h)) + h)[-13:]                                   # 12 visible slots + 1 entering
+top = max(h) or 1.0
+step = 16.0                                                              # slots 0..11 span x 212..388; slot 12 sits at 404, outside the 400-wide viewBox
+pts = [(212 + i * step, 150 - v / top * 110) for i, v in enumerate(h)]
+line = " ".join(f"{x:.1f},{y:.1f}" for x, y in pts)
+area = f"M {212 - step:.1f} 160 L {212 - step:.1f} {pts[0][1]:.1f} " + " ".join(f"L {x:.1f} {y:.1f}" for x, y in pts) + f" L {pts[-1][0]:.1f} 160 Z"
+shift = -step if phase == "slide" else 0
+human = f"{bps/1048576:.1f} MB/s" if bps >= 1048576 else f"{bps/1024:.0f} KB/s"
+print(f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200">
+  <text id="value" x="20" y="96" font-size="52" font-weight="bold" fill="#FFFFFF">{human}</text>
+  <text id="label" x="20" y="136" font-size="28" fill="#FFFFFF" fill-opacity="0.6">download</text>
+  <g id="scroll" transform="translate({shift:.2f} 0)">
+    <path id="area" d="{area}" fill="currentColor" fill-opacity="0.18"/>
+    <polyline id="line" points="{line}" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle id="dot" cx="{pts[-1][0]:.1f}" cy="{pts[-1][1]:.1f}" r="7" fill="currentColor"/>
+  </g>
+</svg>''')
+PY
+```
+
+Startup script — one sample every 2 s, two frames per sample:
+
+```bash
+# Network sparkline — rest frame (instant) + slide frame (linear, one loop period long)
+GEN="$DESKTAP_STORAGE/scripts/net_spark.py"
+IFACE=en0
+post() { curl -s -m 5 http://localhost:9848/api/update-button \
+  -H "Authorization: Bearer $DESKTAP_TOKEN" -H "Content-Type: application/json" -d @- >/dev/null; }
+frame() {   # $1 = phase, $2 = duration
+  python3 "$GEN" "$BPS" "$HIST" "$1" \
+    | python3 -c 'import json,sys; print(json.dumps({"cellId": sys.argv[1], "svg": {"source": sys.stdin.read(), "duration": float(sys.argv[2]), "easing": "linear"}}))' "{{CELL_ID}}" "$2" \
+    | post
+}
+cleanup() { printf '{"cellId":"{{CELL_ID}}","reset":true}' | post; }
+trap cleanup EXIT
+trap 'cleanup; exit 0' TERM
+HIST=""
+PREV=$(netstat -ibn | awk -v i="$IFACE" '$1==i && $3 ~ /</ {print $7; exit}')
+while true; do
+  sleep 2
+  NOW=$(netstat -ibn | awk -v i="$IFACE" '$1==i && $3 ~ /</ {print $7; exit}')
+  BPS=$(( (NOW - PREV) / 2 )); PREV=$NOW
+  HIST="${HIST:+$HIST,}$BPS"; HIST=$(echo "$HIST" | awk -F, '{s=(NF>13)?NF-12:1; for(i=s;i<=NF;i++) printf "%s%s", $i, (i<NF?",":"")}')
+  frame rest 0.01     # re-indexed points, translate(0 0): looks exactly like the end of the previous slide
+  frame slide 2.15    # translate(-16 0) over the measured loop period (2 s sleep + sampling + two frames ≈ 2.15 s)
+done
+```
+
+Measure the real period of your loop (sleep + sampling + generation) and use it as the slide `duration`: too short leaves a pause at the end of every step, slightly too long is invisible because the next `rest` frame snaps the remaining fraction. This widget is 2×1, so for a phone that rotates add a `landscapeSource` with the value on top and the chart below — the [Memory gauge recipe](#memory-gauge-1x2-svg-face-with-a-landscape-variant) shows how to send both frames in one request.
+
+### System dashboard (2x2 SVG face)
+
+Four things on one button: a CPU ring with the value inside, a memory bar, and the last 12 CPU samples as a sparkline that scrolls. This is the flagship shape for a 2×2 face — several values read together, every frame structurally identical to the previous one.
+
+![System dashboard: CPU ring at 42 %, memory bar at 63 %, scrolling CPU sparkline](assets/docs/svg/system2x2.svg)
+
+Generator — save it once:
+
+```bash
+mkdir -p "$DESKTAP_STORAGE/scripts"
+cat > "$DESKTAP_STORAGE/scripts/system_frame.py" << 'PY'
+# system_frame.py <cpu %> <mem %> <history: up to 13 cpu samples, comma-separated> [rest|slide]
+import math, sys
+cpu = max(0.0, min(100.0, float(sys.argv[1])))
+mem = max(0.0, min(100.0, float(sys.argv[2])))
+hist = [max(0.0, min(100.0, float(v))) for v in sys.argv[3].split(",") if v.strip()] if len(sys.argv) > 3 else []
+hist = ([hist[0]] * (13 - len(hist)) + hist)[-13:] if hist else [cpu] * 13   # 12 visible slots + 1 entering
+phase = sys.argv[4] if len(sys.argv) > 4 else "rest"
+
+circ = 2 * math.pi * 56
+offset = circ * (1 - cpu / 100)
+color = "#34C759" if cpu < 50 else ("#FF9F0A" if cpu < 80 else "#FF453A")
+step = 64 / 12                      # slots 0..11 span x 140..198.7; slot 12 sits at 204, outside the viewBox
+pts = " ".join(f"{140 + i * step:.1f},{110 - v * 0.8:.1f}" for i, v in enumerate(hist))
+shift = -step if phase == "slide" else 0
+bar_w = 150 * mem / 100
+print(f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <circle id="track" cx="72" cy="74" r="56" fill="none" stroke="#FFFFFF" stroke-opacity="0.15" stroke-width="12"/>
+  <circle id="ring" cx="72" cy="74" r="56" fill="none" stroke="{color}" stroke-width="12" stroke-linecap="round"
+          stroke-dasharray="{circ:.2f} {circ:.2f}" stroke-dashoffset="{offset:.2f}" transform="rotate(-90 72 74)"/>
+  <text id="cpu" x="72" y="82" font-size="26" font-weight="bold" text-anchor="middle" fill="#FFFFFF">{cpu:.0f}%</text>
+  <text id="cpu-label" x="72" y="100" font-size="14" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.6">cpu</text>
+  <g id="scroll" transform="translate({shift:.2f} 0)">
+    <polyline id="spark" points="{pts}" fill="none" stroke="{color}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+  </g>
+  <text id="mem-label" x="20" y="148" font-size="16" fill="#FFFFFF" fill-opacity="0.7">memory</text>
+  <text id="mem" x="180" y="148" font-size="16" font-weight="bold" text-anchor="end" fill="#FFFFFF">{mem:.0f}%</text>
+  <rect id="mem-track" x="20" y="158" width="160" height="10" rx="5" fill="#FFFFFF" fill-opacity="0.15"/>
+  <rect id="mem-bar" x="20" y="158" width="{max(bar_w, 10):.1f}" height="10" rx="5" fill="#BF5AF2"/>
+</svg>''')
+PY
+```
+
+Startup script — one sample per loop, two frames per sample (`rest`, then `slide`):
+
+```bash
+# System dashboard — CPU via iostat (cheap), memory via vm_stat, sparkline scrolls one slot per sample
+GEN="$DESKTAP_STORAGE/scripts/system_frame.py"
+post() { curl -s -m 5 http://localhost:9848/api/update-button \
+  -H "Authorization: Bearer $DESKTAP_TOKEN" -H "Content-Type: application/json" -d @- >/dev/null; }
+send() {   # $1 cpu  $2 mem  $3 history  $4 phase  $5 duration
+  python3 "$GEN" "$1" "$2" "$3" "$4" \
+    | python3 -c 'import json,sys; print(json.dumps({"cellId": sys.argv[1], "svg": {"source": sys.stdin.read(), "duration": float(sys.argv[2]), "easing": "linear"}}))' "{{CELL_ID}}" "$5" \
+    | post
+}
+cleanup() { printf '{"cellId":"{{CELL_ID}}","reset":true}' | post; }
+trap cleanup EXIT
+trap 'cleanup; exit 0' TERM
+TOTAL=$(sysctl -n hw.memsize); PAGE=$(sysctl -n hw.pagesize); HIST=""
+while true; do
+  CPU=$(iostat -c 2 -w 1 2>/dev/null | tail -1 | awk '{printf "%.0f", 100-$(NF-3)}'); [ -z "$CPU" ] && CPU=0
+  MEM=$(vm_stat | awk -v t="$TOTAL" -v p="$PAGE" '/Pages (active|wired down|occupied by compressor)/ {gsub("\\.", "", $NF); s += $NF} END {printf "%.0f", s * p / t * 100}')
+  HIST="${HIST:+$HIST,}$CPU"; HIST=$(echo "$HIST" | awk -F, '{s=(NF>13)?NF-12:1; for(i=s;i<=NF;i++) printf "%s%s", $i, (i<NF?",":"")}')
+  send "$CPU" "$MEM" "$HIST" rest 0.01    # re-indexed points at translate(0): identical to the end of the last slide
+  send "$CPU" "$MEM" "$HIST" slide 2.12   # one slot to the left over the measured loop period (1 s sleep + ~1.1 s sampling)
+  sleep 1
+done
+```
+
+Only the ring's dash offset, its color, the memory bar width, the sparkline points and the group translation change between frames; the ring color glides through orange to red as the load rises. `iostat -c 2 -w 1` itself takes about a second, which is why the slide duration is 2.12 s and not 1 s — measure your own loop before choosing the number.
+
+### Analog clock (2x2 SVG face)
+
+Three hands driven by `transform="rotate(angle cx cy)"`, one frame per second. The phone interpolates the *angle* around the fixed pivot, so the hands stay rigid and the second hand takes the short way past 12 o'clock instead of spinning backwards. With `easing: "linear"` and a duration a little longer than one second the second hand sweeps continuously; with the default `easeInOut` and `duration: 1` it ticks like a mechanical watch.
+
+![Analog clock face with hour, minute and second hands and the date below](assets/docs/svg/clock2x2.svg)
+
+```bash
+mkdir -p "$DESKTAP_STORAGE/scripts"
+cat > "$DESKTAP_STORAGE/scripts/clock_face.py" << 'PY'
+# clock_face.py <hour> <minute> <second> <date label>
+import math, sys
+h, m, s, label = int(sys.argv[1]) % 12, int(sys.argv[2]), int(sys.argv[3]), sys.argv[4]
+ha, ma, sa = h * 30 + m * 0.5, m * 6 + s * 0.1, s * 6
+def tick(a):
+    big = a % 90 == 0
+    r1, r2 = 72, 62 if big else 66
+    return (f'<line x1="{100 + r1 * math.sin(math.radians(a)):.1f}" y1="{88 - r1 * math.cos(math.radians(a)):.1f}" '
+            f'x2="{100 + r2 * math.sin(math.radians(a)):.1f}" y2="{88 - r2 * math.cos(math.radians(a)):.1f}" '
+            f'stroke="#FFFFFF" stroke-opacity="{0.9 if big else 0.35}" stroke-width="{4 if big else 2}" stroke-linecap="round"/>')
+ticks = "\n  ".join(tick(a) for a in range(0, 360, 30))
+print(f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <circle cx="100" cy="88" r="78" fill="#FFFFFF" fill-opacity="0.06"/>
+  {ticks}
+  <line id="hour" x1="100" y1="88" x2="100" y2="48" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" transform="rotate({ha:.1f} 100 88)"/>
+  <line id="minute" x1="100" y1="88" x2="100" y2="30" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" transform="rotate({ma:.1f} 100 88)"/>
+  <line id="second" x1="100" y1="100" x2="100" y2="24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" transform="rotate({sa} 100 88)"/>
+  <circle cx="100" cy="88" r="5" fill="currentColor"/>
+  <text id="date" x="100" y="188" font-size="18" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.7">{label}</text>
+</svg>''')
+PY
+```
+
+Startup script:
+
+```bash
+# Analog clock — one frame per second, the second hand sweeps
+GEN="$DESKTAP_STORAGE/scripts/clock_face.py"
+post() { curl -s -m 5 http://localhost:9848/api/update-button \
+  -H "Authorization: Bearer $DESKTAP_TOKEN" -H "Content-Type: application/json" -d @- >/dev/null; }
+cleanup() { printf '{"cellId":"{{CELL_ID}}","reset":true}' | post; }
+trap cleanup EXIT
+trap 'cleanup; exit 0' TERM
+while true; do
+  read -r H M S <<< "$(date '+%H %M %S')"
+  python3 "$GEN" "$H" "$M" "$S" "$(date '+%a, %b %e')" \
+    | python3 -c 'import json,sys; print(json.dumps({"cellId": sys.argv[1], "svg": {"source": sys.stdin.read(), "duration": 1.05, "easing": "linear"}}))' "{{CELL_ID}}" \
+    | post
+  sleep 1
+done
+```
+
+The second hand and the center dot use `currentColor`, so they take whatever accent color the button has — change it with a plain `{"color":"#FF453A"}` update and the hands follow.
+
 ## MCP (Model Context Protocol)
 
 Desktap Agent supports MCP, allowing AI assistants (like Claude) to interact with your deck programmatically — create buttons, update layouts, and execute commands on your Mac.
@@ -977,7 +1477,7 @@ This approval flow ensures you always have full control over what appears on you
 | AppleScript-built request returns `401` | AppleScript can't reference `$DESKTAP_TOKEN` directly — it's a shell variable. Use `do shell script "echo $DESKTAP_TOKEN"` to pull it into an AppleScript variable first. See [Calling the API from AppleScript](#calling-the-api-from-applescript) |
 | Color rejected | Use exactly `#RRGGBB` format (6 hex digits, with `#`) |
 | Script times out | Tap and long-press scripts are killed after 60 s. Move loops and monitors into the **Startup Script** |
-| Unknown field error | Only use: `cellId`, `title`, `icon`, `emoji`, `color`, `reset` |
+| Unknown field error | Only use: `cellId`, `title`, `icon`, `emoji`, `color`, `reset`, `svg` (inside `svg`: `source`, `landscapeSource`, `duration`, `fit`, `easing`, `remove`) |
 | Startup script lost state after reconnect | Startup scripts restart from scratch on every connect. Save state (e.g. timer end-time) to `$DESKTAP_STORAGE` — see the [Focus Timer recipe](#focus-timer-with-a-done-notification) |
 | Startup script shows *Failed* in Running Scripts | It exited non-zero five times in a row. Check its stderr (the agent's Dev Log), fix, then **Restart**. Any config sync from the phone (saving any button, not just this one) also gives a failed script one fresh attempt |
 | Widget stopped updating | The script may have exited with status 0 (not restarted by design) or the device reconnected in the middle of a request. Check Running Scripts; make sure the loop never falls through to `exit 0` |
@@ -991,3 +1491,12 @@ This approval flow ensures you always have full control over what appears on you
 | Button shows a stale value after Stop | The `TERM` handler did not `exit`, so the loop repainted the button after the overlay was cleared. End the handler with `exit 0` — see [Process timeout](#process-timeout) |
 | `python3: command not found` | Modern macOS doesn't bundle `python3`. Install it with `xcode-select --install`, or replace the example with `jq` (`brew install jq`). See [Tooling note](#tooling-note) |
 | Token leaked or committed accidentally | Treat the token like an SSH key — it grants full local code execution via `/api/execute`. Rotate it immediately: see [Rotating the token](#rotating-the-token) |
+| `svg.source rejected: XML error at line …` | The frame is not well-formed XML. The reason names the usual cause: an unescaped `&` or `<` in text (write `&amp;`/`&lt;`), an unclosed tag, an unquoted attribute, a document cut short by a shell quoting problem. Print the generator's output to a file and inspect that line |
+| SVG frame accepted with `warnings` | The listed elements (gradients, `defs`, `image`, `tspan`, CSS…) are not rendered on the phone. Use flat fills, several `<text>` elements instead of `tspan`, and frames instead of `<animate>`. See [Supported SVG subset](#supported-svg-subset) |
+| Face blinks / cross-fades instead of gliding | The two frames have different structures: an element appeared or disappeared, a path changed its command sequence (arcs drawn with `A` do this as the angle changes), a polyline changed its point count, or a paint went from a color to `none`. Keep the structure fixed and change only numbers; drive rings with `stroke-dashoffset`, hide elements with `opacity="0"`. See [How animation works](#how-animation-works) |
+| Sparkline "wobbles" vertically | You shifted the samples and re-sent them, so every point interpolates to its neighbour's value. Scroll the chart instead: `rest` + `slide` frames on a `<g transform="translate(…)">` — see [Authoring techniques](#authoring-techniques) |
+| Scrolling chart pauses at every step | The `slide` duration is shorter than the loop's real period. Measure the period (sleep + sampling + generation) and use it as the duration; slightly too long is invisible |
+| Text on the face is tiny | The `viewBox` does not match the cell aspect (letterboxing), or the design is too dense for the size. Use 200×200 for 1×1/2×2, 400×200 for 2×1, 200×400 for 1×2, and font-size ≥ 26 on 1×1/2×1, ≥ 16 on 2×2. See [Authoring techniques](#authoring-techniques) |
+| Face shrinks when the phone rotates | The button is rectangular and the frame has no `landscapeSource`. Send a second layout for the transposed cell with every frame, or use a square button. See [Orientation and landscapeSource](#orientation-and-landscapesource) |
+| Face stays after the script stopped | Like every overlay it persists until `reset:true`, `svg.remove:true`, termination, a save in the editor or a disconnect. Send `reset:true` from the script's `TERM`/`EXIT` handlers |
+| `svg` settings request does nothing | A request with `duration`/`easing`/`fit` but no `source` only adjusts a face that is already installed; send `source` first |
