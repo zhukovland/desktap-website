@@ -41,6 +41,7 @@ Desktap Agent exposes a local HTTP API that lets your shell scripts dynamically 
   - [Gradients and icons from design tools](#gradients-and-icons-from-design-tools)
   - [Orientation and landscapeSource](#orientation-and-landscapesource)
   - [Validation and feedback](#validation-and-feedback)
+  - [Previewing a face without the phone](#previewing-a-face-without-the-phone)
   - [Performance budget](#performance-budget)
   - [Working with an AI assistant](#working-with-an-ai-assistant)
 - [Reference](#reference)
@@ -63,6 +64,10 @@ Desktap Agent exposes a local HTTP API that lets your shell scripts dynamically 
   - [System dashboard (2x2 SVG face)](#system-dashboard-2x2-svg-face)
   - [Analog clock (2x2 SVG face)](#analog-clock-2x2-svg-face)
 - [MCP (Model Context Protocol)](#mcp-model-context-protocol)
+  - [Setup](#setup)
+  - [The widget skill](#the-widget-skill)
+  - [MCP tools](#mcp-tools)
+  - [Config delivery and approval](#config-delivery-and-approval)
 - [Troubleshooting](#troubleshooting)
 
 ## Overview
@@ -711,6 +716,8 @@ The deck rotates with the device: in landscape the whole grid turns 90°, so eve
 
 For every **rectangular** widget send `landscapeSource` with each frame: the same data laid out for the transposed shape (`2×1` → a `200×400` frame, `1×2` → a `400×200` frame — "value left, sparkline right" becomes "value on top, sparkline below"). The phone keeps both variants, draws whichever `viewBox` aspect is closer to the cell it is in, and cross-fades on rotation. Each variant follows the fixed-structure rule within itself, so both keep gliding. Square widgets do not need it. If you cannot provide a landscape layout, prefer a square button over a rectangular one.
 
+**Where a button lands in landscape** is fixed, whichever way the device is turned: landscape column = the button's portrait `row`, landscape row = (portrait columns − 1) − its portrait `col`. So portrait row 0 becomes the **left** edge and portrait column 0 becomes the **bottom** row — a 4×8 iPhone page turns into 8 wide × 4 tall. This matters when one picture spans many buttons of a page meant for landscape: lay the tiles out by this mapping, or the skyline ends up with the street on top.
+
 If `landscapeSource` fails to parse, the agent rejects the request (`400`, `svg.source rejected: landscapeSource: …`) and nothing changes on the phone. Warnings about the landscape frame carry the same `landscapeSource:` prefix.
 
 ### Validation and feedback
@@ -745,9 +752,31 @@ The agent validates `svg` before forwarding:
 
 Each warning names the element, the attribute and what to write instead. The same complaint is listed once however many elements repeat it, and after 12 attribute warnings the list ends with `…and N more attribute warning(s) not listed` — fix the ones you see and send the frame again.
 
-A plain `{"status":"ok"}` means nothing was ignored. Check the first frame's response while developing a widget and fix the drawing until the warnings are gone. Inside a startup script the response is easy to lose — its standard output is discarded — so while developing, post one frame by hand (Terminal, a tap script, or `run_probe` over MCP) and read the JSON.
+A plain `{"status":"ok"}` means nothing was ignored. Check the first frame's response while developing a widget and fix the drawing until the warnings are gone. Inside a startup script the response is easy to lose — its standard output is discarded — so while developing, post one frame by hand (Terminal, a tap script, or `run_probe` over MCP) and read the JSON. Posting needs a connected phone: without one the agent answers `503` before it reports warnings. An AI assistant has a way that needs no phone at all — see the next section.
 
 The agent and the phone app update independently, and each parses frames with its own copy of the parser. Keep both up to date: a phone app older than the agent may not know syntax the agent already accepts.
+
+### Previewing a face without the phone
+
+An assistant connected over MCP can **look at a face before it delivers it**. The `render_preview` tool draws an SVG document with the same engine the phone uses and returns the picture (PNG) together with every parser warning — nothing is sent to the device, no approval is asked, and the phone does not have to be connected.
+
+| Parameter | Meaning |
+|---|---|
+| `svg` | the complete `<svg>` document (required) |
+| `nextFrame` | a later frame of the same widget — another value, the other end of the scale |
+| `steps` | how many in-between frames to draw between the two, 0–6 (default 3) |
+| `colSpan`, `rowSpan` | the button's size in cells, 1–4; by default it follows the `viewBox` shape (wide → 2×1, tall → 1×2, square → 1×1), so pass both for a 2×2 widget |
+| `fit` | `contain` (default), `cover` or `stretch` — the value you will send with the face |
+| `color` | the button's accent as `#RRGGBB` — what `currentColor` resolves to |
+
+With `nextFrame` the reply says whether the phone will **glide** between the two frames (same structure) or **cross-fade** (the structure differs — usually a mistake), and when they glide the picture becomes a **storyboard**: the first frame, the in-between frames the phone passes through, the last frame. The in-between frames are computed with the engine's own interpolation — rotations by the shortest arc, every other number blended — so the things a still picture hides show up: a hand that turns the long way round, a shape that collapses halfway, a looping element that flies back across the button. Timing is not shown; `duration` and `easing` only change how fast the same frames go by.
+
+A few properties worth knowing:
+
+- The preview button is about **twice the size** the phone shows. Judge text by the minimum sizes in [Authoring techniques](#authoring-techniques), not by eye.
+- Long storyboards wrap into rows (reading order), and the picture never exceeds 2000 px on its long side; when it had to be reduced, the reply says so.
+- A `landscapeSource` is previewed by a separate call with that document as `svg`.
+- An argument of the wrong type is an error, not a silent fallback — `nextFrame` must be the document itself (a string), not the live API's `{ "source": … }` object.
 
 ### Performance budget
 
@@ -763,7 +792,14 @@ Frames are small (a ring is ~600 bytes, a 2×2 dashboard ~2 KB), so bandwidth is
 
 ### Working with an AI assistant
 
-If you build widgets through the MCP integration, you do not need to mention SVG at all: the assistant reads the same rules from `get_available_actions` (`widgetFaces`, with the technical reference in `widgetFaces.svgReference`) and picks an SVG face whenever the content is a level, a share, progress, a trend or several values. Describe the content — "CPU load with the last minute as a trend", "a countdown ring for the pomodoro" — and check the first frame's API response in its script.
+If you build widgets through the [MCP integration](#mcp-model-context-protocol), you do not need to mention SVG at all. Describe what the button should **show**, and the assistant chooses the face:
+
+- a name, an action, a state, or a single number you read as a number — "how much disk space is left" → `412 GB free` — stays a **plain** face: label, icon, color, live text;
+- a level or a share you read at a glance — CPU load, battery, progress, the time left of a timer — a trend, or several values together becomes an **SVG** face. The same disk is a number or a ring depending on the question: "how much is left" is a number, "how full is it" is a level.
+
+Say "CPU load with the last minute as a trend" or "a countdown ring for the pomodoro" rather than "make an SVG widget". If the assistant is unsure it builds the plain face first; ask for the chart or the ring and it upgrades the button in one step.
+
+Before delivering an SVG face the assistant can [preview it](#previewing-a-face-without-the-phone) and fix what it sees — overlapping text, a label outside the button, a needle turning the wrong way — so the first version that reaches your phone has already been looked at. The rules it follows come from the agent itself: a short set of instructions sent when the client connects, the reference in `get_available_actions` (`widgetFaces`, with the technical part in `widgetFaces.svgReference`), and — optionally — [the widget skill](#the-widget-skill).
 
 ## Reference
 
@@ -1575,29 +1611,48 @@ Desktap Agent supports MCP, allowing AI assistants (like Claude) to interact wit
 
 ### Setup
 
-If Claude Desktop is installed, Desktap Agent shows a one-click **Connect to Claude** button in its main window — clicking it writes the MCP entry into Claude's config for you. After the initial connect, the agent automatically keeps the binary path in sync if it changes (e.g. after a rebuild or app move), so you don't need to reconnect manually.
+Open the Desktap Agent window: the **AI Integration** section lists the AI apps found on your Mac, each with a one-click **Connect**. Apps that are not installed are not shown; if none is found, the section says what Desktap works with and links to the downloads.
 
-If you're using a different MCP client (or want to configure Claude Desktop by hand), add this to your MCP configuration:
+| Client | What Connect does |
+|---|---|
+| **Claude Desktop** | adds the `desktap` entry to `~/Library/Application Support/Claude/claude_desktop_config.json`, keeping your other servers and preferences. Restart Claude afterwards. |
+| **Claude Code** | registers the server for every project through Claude Code's own CLI (`claude mcp add-json -s user desktap …`). The same registration serves the CLI, its IDE extensions and the Code tab of the desktop app. A session that is already open picks it up with `/mcp`. |
+| **ChatGPT / Codex** | adds a `[mcp_servers.desktap]` table to `~/.codex/config.toml` — the config shared by the ChatGPT desktop app (which includes Codex), the Codex CLI and the IDE extension. Only that table is touched: comments, ordering and other servers stay as they are, and the original is kept once as `config.toml.before-desktap`. Restart Codex or start a new session afterwards. |
+
+A connected row shows a green check. **Reconnection Required** means the client is registered with another copy of the agent — for instance a path left over after the app was moved; **Reconnect** points it at the running one. A path that no longer exists is repaired by the agent on launch.
+
+The agent never overwrites a config it cannot read or does not fully understand. If `~/.codex/config.toml` defines `mcp_servers` as an inline table or through dotted keys, Desktap shows an error instead and offers **Copy Entry** — a one-line entry to add to your existing definition by hand. A Claude config that is not valid JSON, or a config file without read permission, is likewise left untouched.
+
+For any other MCP client — or to configure one of the above by hand — expand **Connect Other MCP Clients** in the same section and copy the snippet, JSON or TOML, with the path already filled in:
 
 ```json
 {
   "mcpServers": {
     "desktap": {
-      "command": "/path/to/DesktapAgent.app/Contents/MacOS/DesktapAgent",
+      "command": "/Applications/Desktap Agent.app/Contents/MacOS/Desktap Agent",
       "args": ["--mcp"]
     }
   }
 }
 ```
 
-For **Claude Desktop**, the config file is at:
-```
-~/Library/Application Support/Claude/claude_desktop_config.json
+```toml
+[mcp_servers.desktap]
+command = "/Applications/Desktap Agent.app/Contents/MacOS/Desktap Agent"
+args = ["--mcp"]
 ```
 
 The `--mcp` flag launches the agent in stdio mode (no UI). It communicates with the main Desktap Agent process via the same HTTP API on port 9848.
 
-> **Note:** The main Desktap Agent app must be running for MCP to work — the `--mcp` process is just a bridge.
+> **Note:** The main Desktap Agent app must be running for MCP to work — the `--mcp` process is just a bridge. One exception: `render_preview` draws entirely inside the bridge and needs neither the app's connection nor the phone.
+
+When a client connects, the server sends it a short set of **instructions** — look at the deck first, how to choose between a plain face and an SVG face, put live data in a startup script, preview an SVG face before delivering it, let one script draw a group of related buttons. Clients pass them to the model on their own, so they apply without installing anything.
+
+### The widget skill
+
+For Claude Code and Codex the agent can also install a **skill** — a folder of guidance and two script templates that helps the assistant build live widgets well: when a plain button is the better answer, how to keep frames gliding instead of flickering, how to spread one scene across a whole page, how to use an icon exported from a design tool. It matters most with smaller models; the largest ones get most of it from the server's own reference.
+
+The skill is optional and installed only on request: once a client is connected, its row shows **Widget skill — Install**. It is copied to `~/.claude/skills/desktap-widgets` or `~/.codex/skills/desktap-widgets` and from then on follows the agent's version. A skill folder you put there yourself is never replaced silently — the row offers **Update**, and on click your version is moved to the Trash, not deleted; a folder that is a symbolic link is left alone entirely.
 
 ### MCP tools
 
@@ -1608,6 +1663,7 @@ The most useful tools for AI assistants:
 | `get_available_actions`   | Returns the full schema of supported command types, icons, grid sizes, env vars, the runtime API contract, startup-script lifecycle, and the notification endpoint. **Call this first** — its output is the canonical reference and stays in sync with the agent. |
 | `get_profiles`            | List all profiles                                          |
 | `get_profile_detail`      | Read a full profile with pages and buttons (UUIDs included) |
+| `render_preview`          | Draw an SVG face with the phone's engine and return the picture, the parser's warnings and — with a second frame — a storyboard of the glide. See [Previewing a face without the phone](#previewing-a-face-without-the-phone) |
 | `create_full_profile`     | Create a complete profile with pages and buttons in one call |
 | `create_full_page`        | Create a complete page with buttons in one call            |
 | `update_button_by_uuid`   | Modify a single button by its UUID (any field, including `startupScript` and the saved `svgFace`) |
@@ -1618,6 +1674,8 @@ The most useful tools for AI assistants:
 | `run_probe`               | Execute a one-off shell command on the Mac. **Off by default** — enable *Allow probe commands* in the agent window first; every call then asks for approval on the iPhone. While disabled the tool returns `Probe commands are disabled in Agent settings.` |
 
 Every tool that creates or updates a button accepts `svgFace`, `svgFaceLandscape` and `svgFaceFit` — a [face saved in the button](#a-face-saved-in-the-button). Ask the assistant to "draw an icon for this button" or "give the CPU widget a start state" and it will use them.
+
+Tools that only read — `ping`, every `get_*` tool and `render_preview` — are marked read-only, so clients that ask before each tool call (Codex, for one) run them without a prompt. Anything that changes the deck still goes through the approval described below, and `run_probe` through its own.
 
 Lower-level building blocks (`create_profile`, `create_page`, `add_button`, `update_button`, `delete_button`, `delete_page`, `delete_profile`, `add_buttons_to_client`, `add_pages_to_client`, `deliver_to_client`, `ping`) are also registered — `get_available_actions` enumerates and describes all of them at runtime.
 
@@ -1648,6 +1706,10 @@ This approval flow ensures you always have full control over what appears on you
 | Tapping a notification action does nothing | The command runs on the Mac, so the phone must reach the agent: bring Desktap to the foreground and let it reconnect — the action is queued for up to 10 minutes. On the Mac, check the agent log for the command's error |
 | `/api/notify` returns 400 | Only `title` is required; at most 4 actions with unique `id`s; only the documented fields are accepted |
 | Dynamic JSON breaks intermittently | Shell interpolation of values containing quotes/backslashes/non-ASCII produces invalid JSON. Use the `python3 -c "import json; print(json.dumps(...))"` pattern from [JSON safety](#json-safety-with-dynamic-strings) |
+| Codex or ChatGPT does not list any Desktap tools | The agent is older than 1.2.2 — it could not complete Codex's MCP handshake, and Codex dropped the server without an error. Update the agent, then restart Codex |
+| An AI client row says *Reconnection Required* | The client is registered with another copy of the agent (a moved app, a development build). Click **Reconnect** |
+| Claude Code is connected but the open session has no Desktap tools | A running session does not reload its servers: run `/mcp` in it, or start a new session |
+| Codex **Connect** fails with "cannot edit safely" | Your `config.toml` defines `mcp_servers` inline or with dotted keys. Click **Copy Entry** and add the line to that definition yourself; the row turns green when you return to the agent |
 | Overlay stuck after script | Send `reset: true` to clear, or terminate the process from iOS |
 | Cleanup never runs on stop | A bare `trap ... EXIT` does not fire on SIGTERM. Add `trap 'cleanup; exit 0' TERM` so the handler runs when the agent terminates the process |
 | Button shows a stale value after Stop | The `TERM` handler did not `exit`, so the loop repainted the button after the overlay was cleared. End the handler with `exit 0` — see [Process timeout](#process-timeout) |
