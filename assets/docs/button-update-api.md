@@ -1,5 +1,5 @@
-<!-- version: 1.1.1 -->
-<!-- updated: 2026-09-17 -->
+<!-- version: 1.2 -->
+<!-- updated: 2026-09-20 -->
 
 Button Update API
 
@@ -32,6 +32,7 @@ Desktap Agent exposes a local HTTP API that lets your shell scripts dynamically 
   - [Process timeout](#process-timeout)
 - [SVG faces (vector widgets)](#svg-faces-vector-widgets)
   - [A first face](#a-first-face)
+  - [A face saved in the button](#a-face-saved-in-the-button)
   - [The svg object](#the-svg-object)
   - [How the face lives on the button](#how-the-face-lives-on-the-button)
   - [How animation works](#how-animation-works)
@@ -507,9 +508,37 @@ python3 -c 'import json,sys; print(json.dumps({"cellId": sys.argv[1], "svg": {"s
       -H "Authorization: Bearer $DESKTAP_TOKEN" -H "Content-Type: application/json" -d @-
 ```
 
-Tap the button: the icon and label disappear and the ring appears. Send the same document again with a different `stroke-dashoffset` and the ring *moves* to the new value over 0.6 s instead of jumping — that is the whole idea. To go back to the plain face send `{"cellId":"…","svg":{"remove":true}}` or `{"cellId":"…","reset":true}`.
+Tap the button: the icon and label disappear and the ring appears. Send the same document again with a different `stroke-dashoffset` and the ring *moves* to the new value over 0.6 s instead of jumping — that is the whole idea. To take the face off send `{"cellId":"…","svg":{"remove":true}}` or `{"cellId":"…","reset":true}` — the button returns to what is saved in it: its icon and label, or its [saved SVG face](#a-face-saved-in-the-button) if it has one.
 
 > **JSON safety:** an SVG document is full of quotes, so never splice it into JSON with shell string interpolation. Build the body with `python3 … json.dumps` (as above) or `jq -n --arg`, and post it with `curl -d @-`. See [JSON safety with dynamic strings](#json-safety-with-dynamic-strings).
+
+### A face saved in the button
+
+A frame sent through the API is temporary: it lives in the phone's memory and needs a script to put it there. A button can also **keep an SVG face in its own settings** — no script, no API call. It is drawn over the whole button instead of the icon and label, is saved with the profile, and syncs through iCloud like every other button setting.
+
+![Three buttons: a rocket drawn as a saved SVG face; an empty grey ring saved as the start state of a widget; the same ring at 72 % as a live frame](assets/docs/svg/static-face.svg)
+
+**In the app.** Open the button editor and switch **Button Face** from *Icon & Label* to *SVG*:
+
+- **SVG Document** — type or paste the document, or tap **Import from File…** to pick an `.svg` from Files. The file's *content* is copied into the button (up to 64 KB); the file itself is not referenced, so the button looks the same on every device the profile syncs to.
+- **Scaling** — *Fit* (`contain`), *Fill* (`cover`) or *Stretch*, the same three modes as the API's `fit`.
+- **Landscape Variant** — offered for 2×1 and 1×2 buttons only, for the same reason as [`landscapeSource`](#orientation-and-landscapesource).
+- The preview at the top of the editor draws the face with the real renderer as you type. A document that cannot be drawn shows the line and the reason, and **Save** stays disabled; anything the renderer ignores (a gradient, a CSS class, `<use>` — see the [supported subset](#supported-svg-subset)) is listed under the document, so an imported file never just looks wrong without telling you why. Files exported from design tools often need a pass to flatten gradients and inline styles.
+- The **button name** stays: it is not drawn, but VoiceOver reads it and AI tools see it.
+
+`currentColor` resolves to the button's color, so a drawing made with `currentColor` follows the color picker in the editor.
+
+**With a live widget.** Live frames always draw *on top of* the saved face and never change it. That makes the saved face the widget's resting state:
+
+- it is on screen from the moment the app opens, before the startup script has sent anything — instead of an icon that is about to be replaced;
+- when frames stop — `svg.remove`, `reset:true`, a terminated script, a disconnect — the button falls back to the saved face, not to the icon and label;
+- if the saved face has the **same structure** as the frames the script sends (same elements, ids and path commands — see [How animation works](#how-animation-works)), the first live frame *glides* out of it: an empty grey ring fills up to the current value instead of cross-fading from a picture.
+
+The recipe is to save one frame of your own template with neutral numbers. For the ring from [A first face](#a-first-face) that is the same document with `stroke-dashoffset="490.09"` (nothing filled), a grey `stroke`, and `–` for the value.
+
+Do not save a face for anything that changes over time — a saved face is a picture, and keeping it current is what live frames are for.
+
+**Through MCP.** Every tool that creates or updates a button takes three more parameters: `svgFace` (the document), `svgFaceLandscape` and `svgFaceFit`. In update tools an omitted `svgFace` keeps the current face and an empty string removes it (the icon and label come back). The document is parsed before the change is offered to the phone: an invalid one fails the call with the line and the reason, and ignored parts come back as warnings in the tool result. `get_profile_detail` returns the same three fields. See [MCP tools](#mcp-tools).
 
 ### The svg object
 
@@ -522,7 +551,7 @@ Tap the button: the icon and label disappear and the ring appears. Send the same
 | `duration` | Number | `0.4` | Seconds the transition to this frame takes: interpolation when the structure matches the previous frame, cross-fade otherwise. `0` applies the frame instantly. Range `0…10` |
 | `easing` | String | `"easeInOut"` | Timing curve of the glide. `easeInOut` for a value settling on a new state (a ring moving to 72 %); `linear` for continuous motion fed by a stream of frames (a ticker, a spinner, a scrolling chart), where each new frame must pick up the glide at constant speed |
 | `fit` | String | `"contain"` | How the `viewBox` maps onto the button. `contain` keeps the whole drawing visible and letterboxes when the aspect differs; `cover` fills the button and clips; `stretch` fills the button and distorts |
-| `remove` | Boolean | — | `true` removes the face: the button shows its plain title/icon/color again (including any overrides you set earlier). Other fields in the same request still apply |
+| `remove` | Boolean | — | `true` removes the face: the button shows its [saved SVG face](#a-face-saved-in-the-button) if it has one, otherwise its plain title/icon/color again (including any overrides you set earlier). Other fields in the same request still apply |
 
 Settings belong to the face that is currently installed, and that face can disappear at any moment — a `reset` from another script, `svg.remove`, a terminated tap process, a save in the editor. The next frame then starts from the defaults again. So **send `duration`, `easing` and `fit` with every frame** (it costs a few bytes) and do not rely on them sticking. A settings-only request (`{"svg":{"duration":1}}`) adjusts the installed face and is ignored when there is none.
 
@@ -530,7 +559,8 @@ Values inside `svg` are validated like the other fields: an unknown key returns 
 
 ### How the face lives on the button
 
-- The SVG face is an overlay like every other runtime update: it is kept in memory on the phone, survives the end of your script, and is cleared by the same events — `reset:true`, the process being *terminated* (Running Scripts, iOS process management, config delivery), saving the button in the editor, disconnect, app restart. See [Overlay persistence](#overlay-persistence).
+- A face sent through the API is an overlay like every other runtime update: it is kept in memory on the phone, survives the end of your script, and is cleared by the same events — `reset:true`, the process being *terminated* (Running Scripts, iOS process management, config delivery), saving the button in the editor, disconnect, app restart. See [Overlay persistence](#overlay-persistence).
+- When the overlay is cleared the button shows what is saved in it — its [saved SVG face](#a-face-saved-in-the-button) if it has one, otherwise the icon and label.
 - While a face is installed the button's icon, emoji and title are hidden, not lost. `color` still matters: it is the button's accent, and every `currentColor` in your SVG resolves to it. So `{"color":"#FF453A","svg":{"source":…}}` recolors all `currentColor` strokes in one request, and a startup script that paints a ring in `currentColor` follows the color the user picked for the button.
 - The face is drawn over the glass card; the drawing's background is transparent unless you draw one.
 - `200` means the agent forwarded the frame, not that it is on screen: frames for buttons on a page the user is not looking at are stored and drawn the moment that page opens. The phone keeps only the latest frame per hidden button, so a hidden widget costs the phone next to nothing while it is off screen (the script on the Mac keeps running). For a button that *is* on screen, frames are drawn in the order they arrive; if they arrive faster than the phone can show them, only the newest two wait and older ones are dropped — sending faster than the phone draws is wasted.
@@ -1159,7 +1189,7 @@ def post(body):
         pass
     return False
 
-atexit.register(lambda: post({"cellId": CELL, "reset": True}))   # plain face again when the script stops
+atexit.register(lambda: post({"cellId": CELL, "reset": True}))   # back to the saved face (or icon + label) when the script stops
 signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))            # the agent stops scripts with SIGTERM
 
 def run(*cmd):
@@ -1191,7 +1221,18 @@ while True:
     time.sleep(1)
 ```
 
-The structure never changes — same four elements, same ids — so every frame glides: the dash offset moves along the circle, the stroke color shifts through the intermediate hues, and the number swaps instantly. The script sends a frame only when the value changed, repeats it every 30 s in case another script reset the face, and gives the button its plain face back when the agent stops it.
+The structure never changes — same four elements, same ids — so every frame glides: the dash offset moves along the circle, the stroke color shifts through the intermediate hues, and the number swaps instantly. The script sends a frame only when the value changed, repeats it every 30 s in case another script reset the face, and clears its frame when the agent stops it.
+
+**Start state.** Save this document as the button's [SVG face](#a-face-saved-in-the-button) (Button Face → SVG in the editor, or `svgFace` through MCP). It is the same template with nothing filled, so the button shows a ring from the moment the app opens, the first live frame fills it with a glide, and the ring — not an icon — is what remains when the script stops:
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <circle id="track" cx="100" cy="100" r="78" fill="none" stroke="#FFFFFF" stroke-opacity="0.15" stroke-width="16"/>
+  <circle id="ring" cx="100" cy="100" r="78" fill="none" stroke="#8E8E93" stroke-width="16" stroke-linecap="round" stroke-dasharray="490.09 490.09" stroke-dashoffset="490.09" transform="rotate(-90 100 100)"/>
+  <text id="value" x="100" y="116" font-size="56" font-weight="bold" text-anchor="middle" fill="#FFFFFF">–</text>
+  <text id="label" x="100" y="146" font-size="26" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.6">cpu %</text>
+</svg>
+```
 
 ### Memory gauge (1x2 SVG face with a landscape variant)
 A vertical gauge that fills from the bottom, the percentage and "used of total" below. Because the button is rectangular it sends a second layout for landscape, where the same cell becomes 2×1 and the gauge lies horizontally.
@@ -1217,7 +1258,7 @@ def post(body):
         pass
     return False
 
-atexit.register(lambda: post({"cellId": CELL, "reset": True}))   # plain face again when the script stops
+atexit.register(lambda: post({"cellId": CELL, "reset": True}))   # back to the saved face (or icon + label) when the script stops
 signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))            # the agent stops scripts with SIGTERM
 
 def run(*cmd):
@@ -1285,7 +1326,7 @@ def post(body):
         pass
     return False
 
-atexit.register(lambda: post({"cellId": CELL, "reset": True}))   # plain face again when the script stops
+atexit.register(lambda: post({"cellId": CELL, "reset": True}))   # back to the saved face (or icon + label) when the script stops
 signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))            # the agent stops scripts with SIGTERM
 
 def run(*cmd):
@@ -1363,7 +1404,7 @@ def post(body):
         pass
     return False
 
-atexit.register(lambda: post({"cellId": CELL, "reset": True}))   # plain face again when the script stops
+atexit.register(lambda: post({"cellId": CELL, "reset": True}))   # back to the saved face (or icon + label) when the script stops
 signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))            # the agent stops scripts with SIGTERM
 
 def run(*cmd):
@@ -1443,7 +1484,7 @@ def post(body):
         pass
     return False
 
-atexit.register(lambda: post({"cellId": CELL, "reset": True}))   # plain face again when the script stops
+atexit.register(lambda: post({"cellId": CELL, "reset": True}))   # back to the saved face (or icon + label) when the script stops
 signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))            # the agent stops scripts with SIGTERM
 
 def run(*cmd):
@@ -1517,12 +1558,14 @@ The most useful tools for AI assistants:
 | `get_profile_detail`      | Read a full profile with pages and buttons (UUIDs included) |
 | `create_full_profile`     | Create a complete profile with pages and buttons in one call |
 | `create_full_page`        | Create a complete page with buttons in one call            |
-| `update_button_by_uuid`   | Modify a single button by its UUID (any field, including `startupScript`) |
+| `update_button_by_uuid`   | Modify a single button by its UUID (any field, including `startupScript` and the saved `svgFace`) |
 | `update_buttons_by_uuid`  | Batch-modify multiple buttons in one operation             |
 | `get_installed_apps`      | List installed apps (for the `openApp` action)             |
 | `get_active_app`          | Identify the currently focused app                         |
 | `get_available_shortcuts` | List user-defined shortcuts available to bind              |
 | `run_probe`               | Execute a one-off shell command on the Mac. **Off by default** — enable *Allow probe commands* in the agent window first; every call then asks for approval on the iPhone. While disabled the tool returns `Probe commands are disabled in Agent settings.` |
+
+Every tool that creates or updates a button accepts `svgFace`, `svgFaceLandscape` and `svgFaceFit` — a [face saved in the button](#a-face-saved-in-the-button). Ask the assistant to "draw an icon for this button" or "give the CPU widget a start state" and it will use them.
 
 Lower-level building blocks (`create_profile`, `create_page`, `add_button`, `update_button`, `delete_button`, `delete_page`, `delete_profile`, `add_buttons_to_client`, `add_pages_to_client`, `deliver_to_client`, `ping`) are also registered — `get_available_actions` enumerates and describes all of them at runtime.
 

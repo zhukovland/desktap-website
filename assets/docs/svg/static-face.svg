@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="756" height="350" viewBox="0 0 756 350" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', Helvetica, Arial, sans-serif">
+<rect width="756" height="350" rx="20" fill="#0A0A10"/>
+<g transform="translate(24 24)">
+<rect width="220" height="220" rx="26" fill="#FFFFFF" fill-opacity="0.08"/>
+<rect x="0.5" y="0.5" width="219" height="219" rx="25.5" fill="none" stroke="#FFFFFF" stroke-opacity="0.14"/>
+<svg x="0" y="0" width="220" height="220" viewBox="0 0 200 200" color="#BF5AF2">
+  <circle cx="100" cy="100" r="88" fill="currentColor" fill-opacity="0.16"/>
+  <circle cx="46" cy="52" r="4" fill="#FFFFFF" fill-opacity="0.9"/>
+  <circle cx="174" cy="118" r="3" fill="#FFFFFF" fill-opacity="0.7"/>
+  <circle cx="72" cy="30" r="2.5" fill="#FFFFFF" fill-opacity="0.6"/>
+  <circle cx="168" cy="92" r="2.5" fill="#FFFFFF" fill-opacity="0.5"/>
+  <path d="M150 24 L153 33 L162 36 L153 39 L150 48 L147 39 L138 36 L147 33 Z" fill="#FFD60A" transform="translate(32 135) scale(0.8)"/>
+  <g transform="rotate(45 100 100)">
+    <path d="M84 140 C78 164 92 178 100 192 C108 178 122 164 116 140 Z" fill="#FF9F0A"/>
+    <path d="M91 140 C88 156 96 166 100 176 C104 166 112 156 109 140 Z" fill="#FFD60A"/>
+    <path d="M70 104 L42 148 L72 138 Z" fill="#FF453A"/>
+    <path d="M130 104 L158 148 L128 138 Z" fill="#FF453A"/>
+    <path d="M100 26 C130 52 138 94 130 134 L70 134 C62 94 70 52 100 26 Z" fill="#F2F2F7"/>
+    <path d="M100 26 C113 37 122 50 127 66 L73 66 C78 50 87 37 100 26 Z" fill="#FF453A"/>
+    <path d="M112 70 C122 90 124 112 120 134 L130 134 C136 106 133 84 127 66 Z" fill="#000000" fill-opacity="0.10"/>
+    <rect x="80" y="134" width="40" height="10" rx="3" fill="#8E8E93"/>
+    <circle cx="100" cy="94" r="16" fill="#0A84FF" stroke="#C7C7CC" stroke-width="6"/>
+    <path d="M91 90 C93 84 99 82 104 84" fill="none" stroke="#FFFFFF" stroke-opacity="0.8" stroke-width="4" stroke-linecap="round"/>
+  </g>
+</svg>
+<text x="110" y="250" font-size="15" font-weight="600" text-anchor="middle" fill="#FFFFFF">A drawn button</text>
+<text x="110" y="271" font-size="13" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.55">saved face, no script</text>
+</g>
+<g transform="translate(268 24)">
+<rect width="220" height="220" rx="26" fill="#FFFFFF" fill-opacity="0.08"/>
+<rect x="0.5" y="0.5" width="219" height="219" rx="25.5" fill="none" stroke="#FFFFFF" stroke-opacity="0.14"/>
+<svg x="0" y="0" width="220" height="220" viewBox="0 0 200 200" color="#34C759">
+  <circle cx="100" cy="100" r="78" fill="none" stroke="#FFFFFF" stroke-opacity="0.15" stroke-width="16"/>
+  <circle cx="100" cy="100" r="78" fill="none" stroke="#8E8E93" stroke-width="16" stroke-linecap="round" stroke-dasharray="490.09 490.09" stroke-dashoffset="490.09" transform="rotate(-90 100 100)"/>
+  <text x="100" y="116" font-size="56" font-weight="bold" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.6">–</text>
+  <text x="100" y="146" font-size="26" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.6">cpu %</text>
+</svg>
+<text x="110" y="250" font-size="15" font-weight="600" text-anchor="middle" fill="#FFFFFF">Saved face</text>
+<text x="110" y="271" font-size="13" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.55">shown before the first frame</text>
+</g>
+<g transform="translate(512 24)">
+<rect width="220" height="220" rx="26" fill="#FFFFFF" fill-opacity="0.08"/>
+<rect x="0.5" y="0.5" width="219" height="219" rx="25.5" fill="none" stroke="#FFFFFF" stroke-opacity="0.14"/>
+<svg x="0" y="0" width="220" height="220" viewBox="0 0 200 200" color="#34C759">
+  <circle cx="100" cy="100" r="78" fill="none" stroke="#FFFFFF" stroke-opacity="0.15" stroke-width="16"/>
+  <circle cx="100" cy="100" r="78" fill="none" stroke="#34C759" stroke-width="16" stroke-linecap="round" stroke-dasharray="490.09 490.09" stroke-dashoffset="137.22" transform="rotate(-90 100 100)"/>
+  <text x="100" y="116" font-size="56" font-weight="bold" text-anchor="middle" fill="#FFFFFF" fill-opacity="1">72</text>
+  <text x="100" y="146" font-size="26" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.6">cpu %</text>
+</svg>
+<text x="110" y="250" font-size="15" font-weight="600" text-anchor="middle" fill="#FFFFFF">Live frame</text>
+<text x="110" y="271" font-size="13" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.55">sent by the startup script</text>
+</g>
+<path d="M492 134 L506 134 M500 128 L506 134 L500 140" fill="none" stroke="#FFFFFF" stroke-opacity="0.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M268 316 L268 324 L732 324 L732 316" fill="none" stroke="#FFFFFF" stroke-opacity="0.25" stroke-width="1.5"/>
+<text x="500" y="342" font-size="13" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.55">same structure: the ring glides in, and comes back here when frames stop</text>
+</svg>
