@@ -1,5 +1,5 @@
-<!-- version: 1.1.1 -->
-<!-- updated: 2026-09-17 -->
+<!-- version: 1.2 -->
+<!-- updated: 2026-09-20 -->
 
 Button Update API
 
@@ -32,11 +32,13 @@ Desktap Agent exposes a local HTTP API that lets your shell scripts dynamically 
   - [Process timeout](#process-timeout)
 - [SVG faces (vector widgets)](#svg-faces-vector-widgets)
   - [A first face](#a-first-face)
+  - [A face saved in the button](#a-face-saved-in-the-button)
   - [The svg object](#the-svg-object)
   - [How the face lives on the button](#how-the-face-lives-on-the-button)
   - [How animation works](#how-animation-works)
   - [Authoring techniques](#authoring-techniques)
   - [Supported SVG subset](#supported-svg-subset)
+  - [Gradients and icons from design tools](#gradients-and-icons-from-design-tools)
   - [Orientation and landscapeSource](#orientation-and-landscapesource)
   - [Validation and feedback](#validation-and-feedback)
   - [Performance budget](#performance-budget)
@@ -507,9 +509,37 @@ python3 -c 'import json,sys; print(json.dumps({"cellId": sys.argv[1], "svg": {"s
       -H "Authorization: Bearer $DESKTAP_TOKEN" -H "Content-Type: application/json" -d @-
 ```
 
-Tap the button: the icon and label disappear and the ring appears. Send the same document again with a different `stroke-dashoffset` and the ring *moves* to the new value over 0.6 s instead of jumping — that is the whole idea. To go back to the plain face send `{"cellId":"…","svg":{"remove":true}}` or `{"cellId":"…","reset":true}`.
+Tap the button: the icon and label disappear and the ring appears. Send the same document again with a different `stroke-dashoffset` and the ring *moves* to the new value over 0.6 s instead of jumping — that is the whole idea. To take the face off send `{"cellId":"…","svg":{"remove":true}}` or `{"cellId":"…","reset":true}` — the button returns to what is saved in it: its icon and label, or its [saved SVG face](#a-face-saved-in-the-button) if it has one.
 
 > **JSON safety:** an SVG document is full of quotes, so never splice it into JSON with shell string interpolation. Build the body with `python3 … json.dumps` (as above) or `jq -n --arg`, and post it with `curl -d @-`. See [JSON safety with dynamic strings](#json-safety-with-dynamic-strings).
+
+### A face saved in the button
+
+A frame sent through the API is temporary: it lives in the phone's memory and needs a script to put it there. A button can also **keep an SVG face in its own settings** — no script, no API call. It is drawn over the whole button instead of the icon and label, is saved with the profile, and syncs through iCloud like every other button setting.
+
+![Three buttons: a rocket drawn as a saved SVG face; an empty grey ring saved as the start state of a widget; the same ring at 72 % as a live frame](assets/docs/svg/static-face.svg)
+
+**In the app.** Open the button editor and switch **Button Face** from *Icon & Label* to *SVG*:
+
+- **SVG Document** — type or paste the document, or tap **Import from File…** to pick an `.svg` from Files. The file's *content* is copied into the button (up to 64 KB); the file itself is not referenced, so the button looks the same on every device the profile syncs to.
+- **Scaling** — *Fit* (`contain`), *Fill* (`cover`) or *Stretch*, the same three modes as the API's `fit`.
+- **Landscape Variant** — offered for 2×1 and 1×2 buttons only, for the same reason as [`landscapeSource`](#orientation-and-landscapesource).
+- The preview at the top of the editor draws the face with the real renderer as you type. A document that cannot be drawn shows the line and the reason, and **Save** stays disabled; anything the renderer ignores (a drop shadow, a CSS class, `<use>` — see the [supported subset](#supported-svg-subset)) is listed under the document, so an imported file never just looks wrong without telling you why. An icon exported from Figma or another design tool can usually be used as it is — see [Gradients and icons from design tools](#gradients-and-icons-from-design-tools).
+- The **button name** stays: it is not drawn, but VoiceOver reads it and AI tools see it.
+
+`currentColor` resolves to the button's color, so a drawing made with `currentColor` follows the color picker in the editor.
+
+**With a live widget.** Live frames always draw *on top of* the saved face and never change it. That makes the saved face the widget's resting state:
+
+- it is on screen from the moment the app opens, before the startup script has sent anything — instead of an icon that is about to be replaced;
+- when frames stop — `svg.remove`, `reset:true`, a terminated script, a disconnect — the button falls back to the saved face, not to the icon and label;
+- if the saved face has the **same structure** as the frames the script sends (same elements, ids and path commands — see [How animation works](#how-animation-works)), the first live frame *glides* out of it: an empty grey ring fills up to the current value instead of cross-fading from a picture.
+
+The recipe is to save one frame of your own template with neutral numbers. For the ring from [A first face](#a-first-face) that is the same document with `stroke-dashoffset="490.09"` (nothing filled), a grey `stroke`, and `–` for the value.
+
+Do not save a face for anything that changes over time — a saved face is a picture, and keeping it current is what live frames are for.
+
+**Through MCP.** Every tool that creates or updates a button takes three more parameters: `svgFace` (the document), `svgFaceLandscape` and `svgFaceFit`. In update tools an omitted `svgFace` keeps the current face and an empty string removes it (the icon and label come back). The document is parsed before the change is offered to the phone: an invalid one fails the call with the line and the reason, and ignored parts come back as warnings in the tool result. `get_profile_detail` returns the same three fields. See [MCP tools](#mcp-tools).
 
 ### The svg object
 
@@ -522,7 +552,7 @@ Tap the button: the icon and label disappear and the ring appears. Send the same
 | `duration` | Number | `0.4` | Seconds the transition to this frame takes: interpolation when the structure matches the previous frame, cross-fade otherwise. `0` applies the frame instantly. Range `0…10` |
 | `easing` | String | `"easeInOut"` | Timing curve of the glide. `easeInOut` for a value settling on a new state (a ring moving to 72 %); `linear` for continuous motion fed by a stream of frames (a ticker, a spinner, a scrolling chart), where each new frame must pick up the glide at constant speed |
 | `fit` | String | `"contain"` | How the `viewBox` maps onto the button. `contain` keeps the whole drawing visible and letterboxes when the aspect differs; `cover` fills the button and clips; `stretch` fills the button and distorts |
-| `remove` | Boolean | — | `true` removes the face: the button shows its plain title/icon/color again (including any overrides you set earlier). Other fields in the same request still apply |
+| `remove` | Boolean | — | `true` removes the face: the button shows its [saved SVG face](#a-face-saved-in-the-button) if it has one, otherwise its plain title/icon/color again (including any overrides you set earlier). Other fields in the same request still apply |
 
 Settings belong to the face that is currently installed, and that face can disappear at any moment — a `reset` from another script, `svg.remove`, a terminated tap process, a save in the editor. The next frame then starts from the defaults again. So **send `duration`, `easing` and `fit` with every frame** (it costs a few bytes) and do not rely on them sticking. A settings-only request (`{"svg":{"duration":1}}`) adjusts the installed face and is ignored when there is none.
 
@@ -530,10 +560,11 @@ Values inside `svg` are validated like the other fields: an unknown key returns 
 
 ### How the face lives on the button
 
-- The SVG face is an overlay like every other runtime update: it is kept in memory on the phone, survives the end of your script, and is cleared by the same events — `reset:true`, the process being *terminated* (Running Scripts, iOS process management, config delivery), saving the button in the editor, disconnect, app restart. See [Overlay persistence](#overlay-persistence).
+- A face sent through the API is an overlay like every other runtime update: it is kept in memory on the phone, survives the end of your script, and is cleared by the same events — `reset:true`, the process being *terminated* (Running Scripts, iOS process management, config delivery), saving the button in the editor, disconnect, app restart. See [Overlay persistence](#overlay-persistence).
+- When the overlay is cleared the button shows what is saved in it — its [saved SVG face](#a-face-saved-in-the-button) if it has one, otherwise the icon and label.
 - While a face is installed the button's icon, emoji and title are hidden, not lost. `color` still matters: it is the button's accent, and every `currentColor` in your SVG resolves to it. So `{"color":"#FF453A","svg":{"source":…}}` recolors all `currentColor` strokes in one request, and a startup script that paints a ring in `currentColor` follows the color the user picked for the button.
 - The face is drawn over the glass card; the drawing's background is transparent unless you draw one.
-- `200` means the agent forwarded the frame, not that it is on screen: frames for buttons on a page the user is not looking at are stored and drawn the moment that page opens. The phone keeps only the latest frame per hidden button, so a hidden widget costs the phone next to nothing while it is off screen (the script on the Mac keeps running). For a button that *is* on screen, frames are drawn in the order they arrive; if they arrive faster than the phone can show them, only the newest two wait and older ones are dropped — sending faster than the phone draws is wasted.
+- `200` means the agent forwarded the frame, not that it is on screen: frames for buttons on a page the user is not looking at are stored and drawn the moment that page opens. The phone keeps only the latest frame per hidden button, so a hidden widget costs the phone next to nothing while it is off screen (the script on the Mac keeps running). That frame is put on screen **at once, without a glide**: what the button last showed is as old as its absence, and gliding from there would replay the missed seconds as a fast-forward. The frames after it glide as usual. The same happens when the app comes back from the background. For a button that *is* on screen, frames are drawn in the order they arrive; if they arrive faster than the phone can show them, only the newest two wait and older ones are dropped — sending faster than the phone draws is wasted.
 - Tap, long-press and startup scripts of one button share the same face. Let the startup loop own the drawing; a tap should change *state* (write a file to `$DESKTAP_STORAGE`) and let the loop render it on the next iteration.
 
 ### How animation works
@@ -619,9 +650,60 @@ The phone renders a deliberate subset of SVG 1.1. Nothing outside it is dropped 
 | Text | one run per `<text>`: `x`, `y`, `dx`, `dy` (numbers or `em`), `text-anchor`, `dominant-baseline` (`alphabetic`, `middle`/`central`, `hanging`), `font-size`, `font-weight`, paint and opacity |
 | Style | presentation attributes and the inline `style="fill:…; stroke:…"` attribute (style wins). Attributes inherit from groups |
 | Units | plain finite decimal numbers, optionally with `px` or `pt`. Percentages and `em` are not lengths (`%` is accepted for opacity, `em` for `dx`/`dy`); `nan`, `inf` and hex are not numbers |
-| Clipping | nothing is drawn outside the `viewBox`, as with a root `<svg>` in a browser — a sparkline's hidden slot stays hidden |
+| Gradients | `<linearGradient>` and `<radialGradient>` with `<stop offset stop-color stop-opacity>` (`stop-color` may be `currentColor`), used as `fill="url(#id)"` or `stroke="url(#id)"`; a fallback color after `url()` is honored. `gradientUnits` `objectBoundingBox` (default, coordinates `0…1` or `%`) and `userSpaceOnUse`; `gradientTransform` (a non-uniform scale gives an elliptical radial gradient); `href` / `xlink:href` templates. Gradients may be inside `<defs>` or not, before or after the shapes that use them |
+| Fill rule | `fill-rule="evenodd"` — holes in compound paths |
+| Clipping | `clip-path="url(#id)"` with a `<clipPath>` of shapes (`userSpaceOnUse`); nested clips intersect. A `<mask>` is approximated as a clip to the outline of its shapes (reported). Nothing is drawn outside the `viewBox`, as with a root `<svg>` in a browser — a sparkline's hidden slot stays hidden |
 
-**Not supported.** Elements ignored together with their children: `defs`, `linearGradient`, `radialGradient`, `pattern`, `mask`, `clipPath`, `filter`, `symbol`, `marker`, `style` (CSS), `script`; unknown elements such as `image` and `use`. A `tspan` inside `<text>` only contributes its characters — its own position, size and color are ignored. Attributes that are not rendered: `class`, `clip-path`, `mask`, `filter`, `fill-rule="evenodd"` (holes are filled — draw rings as stroked circles), `display`/`visibility` (hide with `opacity="0"`), `transform-origin` (write `rotate(angle cx cy)`), `pathLength` (dash lengths are in user units: a ring of radius r is 2πr long), `letter-spacing`, `textLength`, and gradient paints (`fill="url(#…)"`). An unknown keyword (`text-anchor="center"`, `stroke-linecap="rounded"`) keeps the inherited value. **Every one of these is reported in `warnings`.** Use flat fills instead of gradients, several `<text>` elements instead of `tspan`, and frames instead of `<animate>`.
+**Not supported.** Elements ignored together with their children: `filter` (drop shadows and blurs — the shape is drawn without the effect), `pattern`, `symbol`, `marker`, `style` (CSS), `script`; unknown elements such as `image` and `use`. Shapes inside `<defs>` are templates and are not drawn, as in a browser. A `tspan` inside `<text>` only contributes its characters — its own position, size and color are ignored. Not rendered: `class`, `filter`, soft or partly transparent masks, a radial gradient's focal point (`fx`/`fy`), `spreadMethod` `reflect`/`repeat` (the gradient is padded), a gradient on `<text>` (its first stop is used), `clipPathUnits="objectBoundingBox"`, `display`/`visibility` (hide with `opacity="0"`), `transform-origin` (write `rotate(angle cx cy)`), `pathLength` (dash lengths are in user units: a ring of radius r is 2πr long), `letter-spacing`, `textLength`. An unknown keyword (`text-anchor="center"`, `stroke-linecap="rounded"`) keeps the inherited value. **Every one of these is reported in `warnings`.** Use several `<text>` elements instead of `tspan`, and frames instead of `<animate>`.
+
+### Gradients and icons from design tools
+
+An icon exported from Figma, Sketch or Illustrator is ordinary SVG built from the same few things every time: paths with `fill-rule="evenodd"`, linear and radial gradients collected in a `<defs>` block **at the end of the file**, a `clip-path` wrapped around the artboard, sometimes a mask. All of that is drawn, so such a file works as a [saved face](#a-face-saved-in-the-button) or as a frame without editing:
+
+![An icon exported from a design tool — a gradient tile with an even-odd ring and a radial highlight — drawn as a button](assets/docs/svg/figma-icon.svg)
+
+```xml
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g clip-path="url(#clip0)">
+    <rect width="48" height="48" rx="12" fill="url(#paint0_linear)"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M24 10C16.268 10 … 16 24 16Z" fill="white"/>
+  </g>
+  <defs>
+    <linearGradient id="paint0_linear" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF5F6D"/>
+      <stop offset="1" stop-color="#FFC371"/>
+    </linearGradient>
+    <clipPath id="clip0"><rect width="48" height="48" fill="white"/></clipPath>
+  </defs>
+</svg>
+```
+
+What to expect from an export:
+
+- **Effects are not drawn.** A drop shadow, a blur or a glow is an SVG `filter`; the shape appears without it and the warning says so. Flatten the effect in the design tool if it matters, or draw the shadow as a second, darker shape.
+- **Bitmap fills are not drawn.** An image fill becomes a `<pattern>` with an embedded `<image>`; the shape is left unpainted, with a warning.
+- **Masks are approximated.** "Use as mask" with a solid shape works — the content is clipped to the shape's outline. A mask with a soft edge or partial transparency loses those.
+- **Text** is best converted to outlines on export ("Outline text"): `<text>` is drawn in the system font, not in the font of the design.
+- **`<use>` is not drawn.** Shapes kept in `<defs>` as templates and instanced with `<use>` (Illustrator and Sketch do this for repeated symbols; Figma rarely does) do not appear; the warning names `use`. Expand the instances on export.
+- **Keep it light.** A saved face can be up to 64 KB. Export the icon frame alone, without hidden layers.
+
+**Gradients in live frames.** A gradient glides like every other part of a frame when its *structure* matches between frames: the same kind (linear or radial), the same `gradientUnits`, the same number of stops. Then its coordinates, its `gradientTransform` (a rotation takes the shortest arc), and every stop's offset, color and opacity interpolate — a sheen that sweeps across a tile, a fill that warms from blue to red, the area under a sparkline fading to transparent:
+
+```xml
+<linearGradient id="area" x1="0" y1="40" x2="0" y2="160" gradientUnits="userSpaceOnUse">
+  <stop stop-color="#34C759" stop-opacity="0.5"/>
+  <stop offset="1" stop-color="#34C759" stop-opacity="0"/>
+</linearGradient>
+<path id="fill" d="M20 160 L20 120 L60 90 … L180 160 Z" fill="url(#area)"/>
+```
+
+Keep the ids and the stop count fixed and change only numbers.
+
+> **Strokes: use `userSpaceOnUse`.** The default `gradientUnits="objectBoundingBox"` maps the gradient onto the shape's box — and a straight line has none: a horizontal `<line>`, a level line, a sparkline whose samples all became equal. SVG paints nothing in that case; so that a live widget does not blink out, Desktap paints the gradient's **last stop color** instead and reports it in `warnings`. For any stroke that can become straight, write `gradientUnits="userSpaceOnUse"` with coordinates in the `viewBox`, as in the example above.
+
+**Clips glide too.** The points of a `<clipPath>` are numbers like any others: a clip rectangle whose `width` changes reveals a bar smoothly, and a clip on a group that moves travels with it. Keep the clip's shapes the same between frames and change only their numbers. A rotating gradient (`gradientTransform="rotate(angle cx cy)"`) turns around the center you name, by the shortest arc.
+
+A gradient costs more to draw than a flat color, so on a page full of gliding widgets (see [Performance budget](#performance-budget)) use it on the few shapes where it carries the look.
 
 ### Orientation and landscapeSource
 
@@ -653,8 +735,8 @@ The agent validates `svg` before forwarding:
 {
   "status": "ok",
   "warnings": [
-    "Ignored unsupported elements and their children: defs, linearGradient. Gradients, masks, clips, filters, CSS and animation are not rendered; use flat fills and drive motion by sending frames.",
-    "<rect fill=\"url(#g)\">: gradients and patterns are not supported, the inherited colour is used. Use a flat colour.",
+    "Ignored unsupported elements and their children: filter. Filters (shadows, blurs), patterns, CSS and animation are not rendered; drive motion by sending frames.",
+    "fill=\"url(#pattern0)\": no <linearGradient> or <radialGradient> has this id (patterns and images are not supported); the fallback colour after url(), or nothing, is painted.",
     "<rect width=\"50%\">: not a plain finite number and was ignored (units other than px/pt and percentages are not supported).",
     "<text text-anchor=\"center\">: not supported, the inherited value is kept. Supported: start, middle, end."
   ]
@@ -1159,7 +1241,7 @@ def post(body):
         pass
     return False
 
-atexit.register(lambda: post({"cellId": CELL, "reset": True}))   # plain face again when the script stops
+atexit.register(lambda: post({"cellId": CELL, "reset": True}))   # back to the saved face (or icon + label) when the script stops
 signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))            # the agent stops scripts with SIGTERM
 
 def run(*cmd):
@@ -1191,7 +1273,18 @@ while True:
     time.sleep(1)
 ```
 
-The structure never changes — same four elements, same ids — so every frame glides: the dash offset moves along the circle, the stroke color shifts through the intermediate hues, and the number swaps instantly. The script sends a frame only when the value changed, repeats it every 30 s in case another script reset the face, and gives the button its plain face back when the agent stops it.
+The structure never changes — same four elements, same ids — so every frame glides: the dash offset moves along the circle, the stroke color shifts through the intermediate hues, and the number swaps instantly. The script sends a frame only when the value changed, repeats it every 30 s in case another script reset the face, and clears its frame when the agent stops it.
+
+**Start state.** Save this document as the button's [SVG face](#a-face-saved-in-the-button) (Button Face → SVG in the editor, or `svgFace` through MCP). It is the same template with nothing filled, so the button shows a ring from the moment the app opens, the first live frame fills it with a glide, and the ring — not an icon — is what remains when the script stops:
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <circle id="track" cx="100" cy="100" r="78" fill="none" stroke="#FFFFFF" stroke-opacity="0.15" stroke-width="16"/>
+  <circle id="ring" cx="100" cy="100" r="78" fill="none" stroke="#8E8E93" stroke-width="16" stroke-linecap="round" stroke-dasharray="490.09 490.09" stroke-dashoffset="490.09" transform="rotate(-90 100 100)"/>
+  <text id="value" x="100" y="116" font-size="56" font-weight="bold" text-anchor="middle" fill="#FFFFFF">–</text>
+  <text id="label" x="100" y="146" font-size="26" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.6">cpu %</text>
+</svg>
+```
 
 ### Memory gauge (1x2 SVG face with a landscape variant)
 A vertical gauge that fills from the bottom, the percentage and "used of total" below. Because the button is rectangular it sends a second layout for landscape, where the same cell becomes 2×1 and the gauge lies horizontally.
@@ -1217,7 +1310,7 @@ def post(body):
         pass
     return False
 
-atexit.register(lambda: post({"cellId": CELL, "reset": True}))   # plain face again when the script stops
+atexit.register(lambda: post({"cellId": CELL, "reset": True}))   # back to the saved face (or icon + label) when the script stops
 signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))            # the agent stops scripts with SIGTERM
 
 def run(*cmd):
@@ -1285,7 +1378,7 @@ def post(body):
         pass
     return False
 
-atexit.register(lambda: post({"cellId": CELL, "reset": True}))   # plain face again when the script stops
+atexit.register(lambda: post({"cellId": CELL, "reset": True}))   # back to the saved face (or icon + label) when the script stops
 signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))            # the agent stops scripts with SIGTERM
 
 def run(*cmd):
@@ -1363,7 +1456,7 @@ def post(body):
         pass
     return False
 
-atexit.register(lambda: post({"cellId": CELL, "reset": True}))   # plain face again when the script stops
+atexit.register(lambda: post({"cellId": CELL, "reset": True}))   # back to the saved face (or icon + label) when the script stops
 signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))            # the agent stops scripts with SIGTERM
 
 def run(*cmd):
@@ -1443,7 +1536,7 @@ def post(body):
         pass
     return False
 
-atexit.register(lambda: post({"cellId": CELL, "reset": True}))   # plain face again when the script stops
+atexit.register(lambda: post({"cellId": CELL, "reset": True}))   # back to the saved face (or icon + label) when the script stops
 signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))            # the agent stops scripts with SIGTERM
 
 def run(*cmd):
@@ -1517,12 +1610,14 @@ The most useful tools for AI assistants:
 | `get_profile_detail`      | Read a full profile with pages and buttons (UUIDs included) |
 | `create_full_profile`     | Create a complete profile with pages and buttons in one call |
 | `create_full_page`        | Create a complete page with buttons in one call            |
-| `update_button_by_uuid`   | Modify a single button by its UUID (any field, including `startupScript`) |
+| `update_button_by_uuid`   | Modify a single button by its UUID (any field, including `startupScript` and the saved `svgFace`) |
 | `update_buttons_by_uuid`  | Batch-modify multiple buttons in one operation             |
 | `get_installed_apps`      | List installed apps (for the `openApp` action)             |
 | `get_active_app`          | Identify the currently focused app                         |
 | `get_available_shortcuts` | List user-defined shortcuts available to bind              |
 | `run_probe`               | Execute a one-off shell command on the Mac. **Off by default** — enable *Allow probe commands* in the agent window first; every call then asks for approval on the iPhone. While disabled the tool returns `Probe commands are disabled in Agent settings.` |
+
+Every tool that creates or updates a button accepts `svgFace`, `svgFaceLandscape` and `svgFaceFit` — a [face saved in the button](#a-face-saved-in-the-button). Ask the assistant to "draw an icon for this button" or "give the CPU widget a start state" and it will use them.
 
 Lower-level building blocks (`create_profile`, `create_page`, `add_button`, `update_button`, `delete_button`, `delete_page`, `delete_profile`, `add_buttons_to_client`, `add_pages_to_client`, `deliver_to_client`, `ping`) are also registered — `get_available_actions` enumerates and describes all of them at runtime.
 
@@ -1559,7 +1654,7 @@ This approval flow ensures you always have full control over what appears on you
 | `python3: command not found` | Modern macOS doesn't bundle `python3`. Install it with `xcode-select --install`, or replace the example with `jq` (`brew install jq`). See [Tooling note](#tooling-note) |
 | Token leaked or committed accidentally | Treat the token like an SSH key — it grants full local code execution via `/api/execute`. Rotate it immediately: see [Rotating the token](#rotating-the-token) |
 | `svg.source rejected: XML error at line …` | The frame is not well-formed XML. The reason names the usual cause: an unescaped `&` or `<` in text (write `&amp;`/`&lt;`), an unclosed tag, an unquoted attribute, a document cut short by a shell quoting problem. Print the generator's output to a file and inspect that line |
-| SVG frame accepted with `warnings` | Something in the frame was ignored, and each warning names it: an unsupported element (gradients, `defs`, `image`, CSS…), an unsupported attribute (`class`, `clip-path`, `fill-rule="evenodd"`, `pathLength`…), a `tspan`, or a value the parser could not read (an unknown color, `rotate(45deg)`, `width="50%"`, `text-anchor="center"`). Fix the drawing until the response is a plain `{"status":"ok"}`. See [Supported SVG subset](#supported-svg-subset) |
+| SVG frame accepted with `warnings` | Something in the frame was ignored, and each warning names it: an unsupported element (`filter`, `image`, `use`, CSS…), an unsupported attribute (`class`, `filter`, `pathLength`…), something that is only approximated (a mask, a gradient's focal point, a gradient on a shape without a box), a `tspan`, or a value the parser could not read (an unknown color, `rotate(45deg)`, `width="50%"`, `text-anchor="center"`). Fix the drawing until the response is a plain `{"status":"ok"}`. See [Supported SVG subset](#supported-svg-subset) |
 | Face blinks / cross-fades instead of gliding | The two frames have different structures: an element appeared or disappeared, a path changed its command sequence, a polyline changed its point count, a paint went from a color to `none`, a `<rect>` switched between sharp and rounded (`rx` zero ↔ non-zero), or a text changed its `text-anchor`, `font-weight` or `dominant-baseline`. Keep the structure fixed and change only numbers; drive rings with `stroke-dashoffset`, hide elements with `opacity="0"`. See [How animation works](#how-animation-works) |
 | Sparkline "wobbles" vertically | You shifted the samples and re-sent them, so every point interpolates to its neighbour's value. Scroll the chart instead: `rest` + `slide` frames on a `<g transform="translate(…)">` — see [Authoring techniques](#authoring-techniques) |
 | Scrolling chart pauses at every step | The `slide` duration is shorter than the loop's real period. Measure the period (sleep + sampling + generation) and use it as the duration; slightly too long is invisible |
