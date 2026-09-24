@@ -88,11 +88,13 @@ To use the API you need:
 Once both are running and connected, create a button:
 
 1. Open the **Desktap iOS app** and tap the **edit icon** in the top-right corner of the deck — it looks like a dashed square with a plus inside (SF Symbol `plus.square.dashed`). The grid enters edit mode and existing buttons start wiggling.
-2. Tap an empty cell in the grid to add a new button.
-3. Choose **Shell Command** as the action type and paste your script into the command field. This is the **tap** script: it runs when you press the button and is killed after **60 seconds**.
-4. *(For live widgets)* Scroll down to the **Startup Script** section and paste the loop there. A startup script is started by the agent as soon as your device connects and keeps running — no timeout — until the device disconnects. It can belong to a button of *any* action type. See [Startup scripts (live widgets)](#startup-scripts-live-widgets).
-5. *(Optional)* Set a default title, icon, emoji, and color for the button. Runtime API updates layer on top of these defaults; sending `reset:true` returns the button to exactly what you configured here.
-6. Tap **Save**.
+2. Tap an empty cell in the grid to add a new button. The editor opens on the list of actions.
+3. Choose **Shell Command** (under *Scripts*). Back in the editor, tap the **Command** row, paste your script and tap **Done**. This is the **tap** script: it runs when you press the button and is killed after **60 seconds**.
+4. *(For live widgets)* Tap **Advanced**, then **Write Script** under *Startup Script*, paste the loop and tap **Done**. A startup script is started by the agent as soon as your device connects and keeps running — no timeout — until the device disconnects. It can belong to a button of *any* action type — a button that only shows information uses **No Action** as its action. See [Startup scripts (live widgets)](#startup-scripts-live-widgets).
+5. *(Optional)* Under *Appearance*, set a default name, icon or emoji, and color for the button. Runtime API updates layer on top of these defaults; sending `reset:true` returns the button to exactly what you configured here.
+6. Tap **Add**.
+
+On iOS 26, **Done** and **Add** are the ✓ in the top-right corner of the editor, and **Cancel** is the ✕.
 
 The tap script runs when you tap the button; the startup script is already running. Changes you make via the API appear immediately — no reload needed.
 
@@ -160,7 +162,7 @@ curl -s http://localhost:9848/api/update-button \
   -d "{\"cellId\":\"{{CELL_ID}}\",\"title\":\"Hello!\",\"emoji\":\"👋\",\"color\":\"#30D158\"}"
 ```
 
-Paste this into a button's shell command field. When pressed, the button updates its own title, emoji, and color.
+Paste this as the **Command** of a Shell Command button. When pressed, the button updates its own title, emoji, and color.
 
 ## Endpoint: POST /api/update-button
 
@@ -180,7 +182,7 @@ Paste this into a button's shell command field. When pressed, the button updates
 
 ### Finding the Button UUID
 
-Open the button editor in the Desktap iOS app — the **Button ID** section shows the full UUID in monospaced text and provides a **Copy** button that puts it on the iOS clipboard. Tap it once and you can paste the UUID into another button's script via the system keyboard. You can also fetch the full configuration via `GET /api/config` and look for the `id` field in the cell you want to update.
+Open the button editor in the Desktap iOS app — **Advanced › Button ID** shows the full UUID in monospaced text and provides a **Copy** button that puts it on the iOS clipboard. Tap it once and you can paste the UUID into another button's script via the system keyboard. You can also fetch the full configuration via `GET /api/config` and look for the `id` field in the cell you want to update.
 
 ### Response
 
@@ -348,6 +350,8 @@ For most update-loops (timers, monitors, dashboards), prefer Shell Command anywa
 
 ## Core Concepts
 
+<!-- Anchor used by the iOS app (EditorHelpLinks in the MacroDeck repo): do not rename this heading. -->
+
 ### The `{{CELL_ID}}` placeholder
 
 When a script runs from a Desktap button, the placeholder `{{CELL_ID}}` in your shell command or AppleScript is automatically replaced with that button's UUID. This means you don't need to hard-code UUIDs — your script naturally knows which button triggered it.
@@ -377,7 +381,7 @@ Overlays are cleared in two ways:
 - The script backing this overlay is **terminated** by the agent. This happens when:
   - You tap **Stop Process** in the iOS button editor.
   - A **startup script** is stopped, removed, or replaced (Stop in the agent's *Running Scripts* window, the script edited or cleared, a config delivery that changed it).
-  - A **tap script** is still running and you save the button in the editor.
+  - A **tap script** is still running and you save a change to the button in the editor.
 
 Re-pressing a button whose tap script is still running does **not** start a second copy — the tap is rejected until the first one exits (the button flashes red). Each `(button, slot)` — tap, long-press, startup — holds at most one process.
 
@@ -409,7 +413,7 @@ update_button "{\"cellId\":\"$CELL_ID\",\"reset\":true}"
 
 A script running from one button can update **any other button** on the deck — not just itself. This enables setups where one button controls the appearance of others (dashboards, controllers, status indicators).
 
-To update another button, use its UUID as the `cellId`. You can find button UUIDs via `GET /api/config` or in the button editor in the iOS app. See the [Pomodoro Timer](#pomodoro-timer-cross-button) recipe for a full example.
+To update another button, use its UUID as the `cellId`. You can find button UUIDs via `GET /api/config` or in the button editor in the iOS app (Advanced › Button ID). See the [Pomodoro Timer](#pomodoro-timer-cross-button) recipe for a full example.
 
 ### Persistent storage
 
@@ -436,9 +440,11 @@ Other use cases:
 - Save the last known value when the API is temporarily unavailable
 - Save target end-time (epoch) for timers that survive process restarts
 
+<!-- Anchor used by the iOS app (EditorHelpLinks in the MacroDeck repo): do not rename this heading. -->
+
 ### Startup scripts (live widgets)
 
-Every button has an optional **Startup Script** (button editor → *Startup Script* section). It is a shell script the **agent launches automatically when your device connects** and keeps running, with no timeout, until the device disconnects. It applies to every button on every page of the **active profile** — the page does not have to be visible. Switching profiles stops the scripts of the previous profile and starts those of the new one. This is the mechanism for live widgets: instead of tapping a button to "start" a monitor, the widget is simply live whenever your phone is paired.
+Every button has an optional **Startup Script** (button editor → *Advanced* › *Startup Script*). It is a shell script the **agent launches automatically when your device connects** and keeps running, with no timeout, until the device disconnects. It applies to every button on every page of the **active profile** — the page does not have to be visible. Switching profiles stops the scripts of the previous profile and starts those of the new one. This is the mechanism for live widgets: instead of tapping a button to "start" a monitor, the widget is simply live whenever your phone is paired.
 
 A typical startup script is a loop:
 
@@ -463,8 +469,8 @@ done
 Lifecycle:
 
 - **Connect** → all startup scripts start (in parallel). **Disconnect** → all are killed (`SIGTERM`, then `SIGKILL` after 2 s — clean up in a `TERM` trap that ends with `exit`, see [Process timeout](#process-timeout)).
-- **Saving the button** in the editor always restarts its startup script and clears the button's overlay, whether or not the script changed. A change made via MCP restarts only the scripts that changed; **clearing** the field stops the script.
-- **Exit 0** means "done" — the script is not restarted. **Non-zero exit** or an external kill is treated as a failure: the agent restarts it with backoff (5, 10, 20, 40 s, then every 60 s) and **never gives up**: after five failures in a row the script is shown as *Failed* (the button gets a warning badge), but it is still retried every 60 s. A script that ran for at least a minute before failing gets its attempt counter reset. The agent's *Running Scripts* window shows each script's state with **Stop** and **Restart**; the button editor has a **Restart Startup Script** button. A *Failed* script also gets one fresh attempt on the next config sync from the phone (any save in the editor).
+- **Saving a changed button** in the editor restarts its startup script and clears the button's overlay, even when the script itself did not change. **Save with no changes** just closes the editor and restarts nothing — to restart on purpose, use *Advanced* › **Restart Startup Script**. A change made via MCP restarts only the scripts that changed; **clearing** the field stops the script.
+- **Exit 0** means "done" — the script is not restarted. **Non-zero exit** or an external kill is treated as a failure: the agent restarts it with backoff (5, 10, 20, 40 s, then every 60 s) and **never gives up**: after five failures in a row the script is shown as *Failed* (the button gets a warning badge), but it is still retried every 60 s. A script that ran for at least a minute before failing gets its attempt counter reset. The agent's *Running Scripts* window shows each script's state with **Stop** and **Restart**; the button editor has **Restart Startup Script** under *Advanced*. A *Failed* script also gets one fresh attempt on the next config sync from the phone (any saved change in the editor).
 - The tap script stays free for **interaction** and has its own 60-second timeout. Recommended split: the startup script *renders* (read state → `update-button` → sleep), the tap script *changes state* (write a file to `$DESKTAP_STORAGE`, then exit) — the loop picks it up on its next tick. Do not have both update the same button's overlay, or they will overwrite each other.
 - Startup scripts start from scratch on every connect, so persist anything that must survive — for timers, the target end-time — in `$DESKTAP_STORAGE`.
 
@@ -485,6 +491,8 @@ trap 'cleanup; exit 0' TERM
 > **Why `exit` matters.** zsh does not stop the script after a trapped `SIGTERM` — it runs the handler and then *continues the loop* until `SIGKILL` arrives 2 seconds later. Meanwhile the agent has already told the device to clear the overlay. A loop that keeps going can repaint the button with a stale value in that window, and nothing clears it afterwards. `exit` in the handler closes the window; the `EXIT` trap still fires, so cleanup runs exactly once on either path.
 
 > **In-memory state does not survive.** Startup scripts are relaunched from scratch on every device connect (and after an agent restart, on the next connect). For timers and countdowns never rely on an in-memory counter — save the target end-time (epoch seconds) to `$DESKTAP_STORAGE` and compute `remaining = END - NOW` on every iteration.
+
+<!-- Anchor used by the iOS app (EditorHelpLinks in the MacroDeck repo): do not rename this heading. -->
 
 ## SVG faces (vector widgets)
 
@@ -524,13 +532,14 @@ A frame sent through the API is temporary: it lives in the phone's memory and ne
 
 ![Three buttons: a rocket drawn as a saved SVG face; an empty grey ring saved as the start state of a widget; the same ring at 72 % as a live frame](assets/docs/svg/static-face.svg)
 
-**In the app.** Open the button editor and switch **Button Face** from *Icon & Label* to *SVG*:
+**In the app.** Open the button editor and go to **Icon › SVG Drawing**:
 
-- **SVG Document** — type or paste the document, or tap **Import from File…** to pick an `.svg` from Files. The file's *content* is copied into the button (up to 64 KB); the file itself is not referenced, so the button looks the same on every device the profile syncs to.
+- **SVG Document** — type the document, tap **Paste**, or tap **Import from File…** to pick an `.svg` from Files; replacing a document you already have asks first. The file's *content* is copied into the button (up to 64 KB); the file itself is not referenced, so the button looks the same on every device the profile syncs to.
 - **Scaling** — *Fit* (`contain`), *Fill* (`cover`) or *Stretch*, the same three modes as the API's `fit`.
 - **Landscape Variant** — offered for 2×1 and 1×2 buttons only, for the same reason as [`landscapeSource`](#orientation-and-landscapesource).
-- The preview at the top of the editor draws the face with the real renderer as you type. A document that cannot be drawn shows the line and the reason, and **Save** stays disabled; anything the renderer ignores (a drop shadow, a CSS class, `<use>` — see the [supported subset](#supported-svg-subset)) is listed under the document, so an imported file never just looks wrong without telling you why. An icon exported from Figma or another design tool can usually be used as it is — see [Gradients and icons from design tools](#gradients-and-icons-from-design-tools).
+- The preview at the top of the screen draws the face with the real renderer. A document that cannot be drawn shows the line and the reason, and **Save** stays disabled; anything the renderer ignores (a drop shadow, a CSS class, `<use>` — see the [supported subset](#supported-svg-subset)) is listed under the document, so an imported file never just looks wrong without telling you why. An icon exported from Figma or another design tool can usually be used as it is — see [Gradients and icons from design tools](#gradients-and-icons-from-design-tools).
 - The **button name** stays: it is not drawn, but VoiceOver reads it and AI tools see it.
+- The **icon** stays too and can still be changed on the Icon screen: the button shows it when the drawing is removed or cannot be drawn. **Remove SVG Drawing** turns the drawing off.
 
 `currentColor` resolves to the button's color, so a drawing made with `currentColor` follows the color picker in the editor.
 
@@ -559,13 +568,13 @@ Do not save a face for anything that changes over time — a saved face is a pic
 | `fit` | String | `"contain"` | How the `viewBox` maps onto the button. `contain` keeps the whole drawing visible and letterboxes when the aspect differs; `cover` fills the button and clips; `stretch` fills the button and distorts |
 | `remove` | Boolean | — | `true` removes the face: the button shows its [saved SVG face](#a-face-saved-in-the-button) if it has one, otherwise its plain title/icon/color again (including any overrides you set earlier). Other fields in the same request still apply |
 
-Settings belong to the face that is currently installed, and that face can disappear at any moment — a `reset` from another script, `svg.remove`, a terminated tap process, a save in the editor. The next frame then starts from the defaults again. So **send `duration`, `easing` and `fit` with every frame** (it costs a few bytes) and do not rely on them sticking. A settings-only request (`{"svg":{"duration":1}}`) adjusts the installed face and is ignored when there is none.
+Settings belong to the face that is currently installed, and that face can disappear at any moment — a `reset` from another script, `svg.remove`, a terminated tap process, a saved change in the editor. The next frame then starts from the defaults again. So **send `duration`, `easing` and `fit` with every frame** (it costs a few bytes) and do not rely on them sticking. A settings-only request (`{"svg":{"duration":1}}`) adjusts the installed face and is ignored when there is none.
 
 Values inside `svg` are validated like the other fields: an unknown key returns `400` with `Unknown field(s): svg.foo …`, a `source` without `<svg` or larger than 64 KB returns `400`, and — this is the useful part — the agent **parses the frame with the same parser the phone uses** before forwarding it. A frame the phone could not draw is rejected with `400` and a reason, and a frame in which *anything* was ignored — an unsupported element, an unsupported attribute, a value the parser could not read — is accepted with a `warnings` array that names each case (see [Validation and feedback](#validation-and-feedback)). Always read the response of your *first* frame while developing a widget.
 
 ### How the face lives on the button
 
-- A face sent through the API is an overlay like every other runtime update: it is kept in memory on the phone, survives the end of your script, and is cleared by the same events — `reset:true`, the process being *terminated* (Running Scripts, iOS process management, config delivery), saving the button in the editor, disconnect, app restart. See [Overlay persistence](#overlay-persistence).
+- A face sent through the API is an overlay like every other runtime update: it is kept in memory on the phone, survives the end of your script, and is cleared by the same events — `reset:true`, the process being *terminated* (Running Scripts, iOS process management, config delivery), saving a change to the button in the editor, disconnect, app restart. See [Overlay persistence](#overlay-persistence).
 - When the overlay is cleared the button shows what is saved in it — its [saved SVG face](#a-face-saved-in-the-button) if it has one, otherwise the icon and label.
 - While a face is installed the button's icon, emoji and title are hidden, not lost. `color` still matters: it is the button's accent, and every `currentColor` in your SVG resolves to it. So `{"color":"#FF453A","svg":{"source":…}}` recolors all `currentColor` strokes in one request, and a startup script that paints a ring in `currentColor` follows the color the user picked for the button.
 - The face is drawn over the glass card; the drawing's background is transparent unless you draw one.
@@ -802,6 +811,8 @@ Say "CPU load with the last minute as a trend" or "a countdown ring for the pomo
 Before delivering an SVG face the assistant can [preview it](#previewing-a-face-without-the-phone) and fix what it sees — overlapping text, a label outside the button, a needle turning the wrong way — so the first version that reaches your phone has already been looked at. The rules it follows come from the agent itself: a short set of instructions sent when the client connects, the reference in `get_available_actions` (`widgetFaces`, with the technical part in `widgetFaces.svgReference`), and — optionally — [the widget skill](#the-widget-skill).
 
 ## Reference
+
+<!-- Anchor used by the iOS app (EditorHelpLinks in the MacroDeck repo): do not rename this heading. -->
 
 ### Environment variables
 
@@ -1137,7 +1148,7 @@ The script saves the **target end-time** (epoch seconds) to `$DESKTAP_STORAGE` a
 
 **Setup:**
 1. Create two buttons side by side
-2. Copy the timer display button's UUID (from the button editor)
+2. Copy the timer display button's UUID (button editor → Advanced › Button ID)
 3. Paste the script below into the **control button's Startup Script**
 4. Replace `TIMER_BUTTON` with the display button's UUID
 5. Keep the control button's tap script empty or use it to delete the state file (stop)
@@ -1311,7 +1322,7 @@ while True:
 
 The structure never changes — same four elements, same ids — so every frame glides: the dash offset moves along the circle, the stroke color shifts through the intermediate hues, and the number swaps instantly. The script sends a frame only when the value changed, repeats it every 30 s in case another script reset the face, and clears its frame when the agent stops it.
 
-**Start state.** Save this document as the button's [SVG face](#a-face-saved-in-the-button) (Button Face → SVG in the editor, or `svgFace` through MCP). It is the same template with nothing filled, so the button shows a ring from the moment the app opens, the first live frame fills it with a glide, and the ring — not an icon — is what remains when the script stops:
+**Start state.** Save this document as the button's [SVG face](#a-face-saved-in-the-button) (Icon › SVG Drawing in the editor, or `svgFace` through MCP). It is the same template with nothing filled, so the button shows a ring from the moment the app opens, the first live frame fills it with a glide, and the ring — not an icon — is what remains when the script stops:
 
 ```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
@@ -1722,5 +1733,5 @@ This approval flow ensures you always have full control over what appears on you
 | Scrolling chart pauses at every step | The `slide` duration is shorter than the loop's real period. Measure the period (sleep + sampling + generation) and use it as the duration; slightly too long is invisible |
 | Text on the face is tiny | The `viewBox` does not match the cell aspect (letterboxing), or the design is too dense for the size. Use 200×200 for 1×1/2×2, 400×200 for 2×1, 200×400 for 1×2, and font-size ≥ 26 on 1×1/2×1, ≥ 16 on 2×2. See [Authoring techniques](#authoring-techniques) |
 | Face shrinks when the phone rotates | The button is rectangular and the frame has no `landscapeSource`. Send a second layout for the transposed cell with every frame, or use a square button. See [Orientation and landscapeSource](#orientation-and-landscapesource) |
-| Face stays after the script stopped | Like every overlay it persists until `reset:true`, `svg.remove:true`, termination, a save in the editor or a disconnect. Send `reset:true` from the script's `TERM`/`EXIT` handlers |
+| Face stays after the script stopped | Like every overlay it persists until `reset:true`, `svg.remove:true`, termination, a saved change in the editor or a disconnect. Send `reset:true` from the script's `TERM`/`EXIT` handlers |
 | `svg` settings request does nothing | A request with `duration`/`easing`/`fit` but no `source` only adjusts a face that is already installed; send `source` first |
