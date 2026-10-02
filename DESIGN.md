@@ -157,14 +157,82 @@ A subtle noise overlay covers the entire page via `body::before`:
 
 ---
 
+## Docs
+
+The documentation is one shell, `docs.html` + `assets/docs/docs.js`, that loads `assets/docs/pages/<slug>.md` for `docs?p=<slug>` and renders it with marked. Same tokens, fonts and black canvas as the landing; the extra tokens are `--warn: #FBBF24` and `--phone-screen: #0D0D0D`.
+
+### Layout
+
+| Width | Columns |
+|-------|---------|
+| ≥ 1200px | page list (232px) · content (≤ 760px) · "On this page" rail (200px, H2 + H3, sticky) |
+| 900–1199px | page list · content; "On this page" is a closed dropdown above the content |
+| < 900px | content only, 24px gutter (16px ≤ 640px). A sticky sub-bar under the site nav, "☰ Pages · <page title>" with ‹ › for prev/next, opens one slide-in panel from the left: the page list with the current page expanded to its H2s and H3s |
+
+- **Page list:** five groups (Start, Learn, Build, Look up, AI) as mono uppercase labels; the current page has the accent-subtle fill with a 2px accent bar and lists its H2s under it.
+- **Page header:** eyebrow = the page's group (mono, accent, 24px rule), the H1, then an "Updated <date>" pill from the page's `<!-- updated: … -->` line.
+- **Prev / next:** two cards at the end of every page, in manifest order.
+- **Headings:** a `#` link appears on hover for every H2/H3 (hidden on touch).
+- Nothing scrolls sideways except code blocks and tables, which fade at the right edge while more is hidden.
+
+### Callouts (GitHub-alert syntax)
+
+| Markdown | Look | Use |
+|----------|------|-----|
+| `> [!NOTE]` | neutral rule, info icon | context |
+| `> [!TIP]` | accent rule and label | an optional better way |
+| `> [!WARNING]` | amber rule and label | real risk only |
+| `> [!SEE]` | green rule, eye icon, label "What you'll see" | the moment the reader checks success |
+| `> [!STEP] 2 · Title` | card with a numbered circle; consecutive steps are joined by a thin accent line | numbered setup steps |
+
+Text on the marker line becomes the title (`> [!TIP] A faster way`). In step cards and see-boxes:
+- an image standing on its own line (or at the start or end of a paragraph) moves into a picture column: right of the text in a step card, left of it in a see-box; it stacks under the text ≤ 640px. If any image in the box is wider than 280px (`width` attribute), all stay in the text flow at full width;
+- a paragraph starting with "Done when" gets a green check (steps);
+- a line starting with "Not seeing it?" becomes the box's small footer line (see-boxes), also when it follows another line of the same paragraph.
+
+### Code blocks
+
+- **Header tab** from the fence's info string: ```` ```zsh title="Startup Script" ````. Known titles get an icon and a hint: Startup Script (Advanced › Startup Script), Shell Command (Tap action), Terminal (On your Mac), SVG Drawing (Icon › SVG Drawing), Body (JSON), AppleScript (Tap action). Without a title the header shows the language (zsh, JSON, SVG, AppleScript); a `text` fence has no header and its Copy floats over the corner.
+- **Copy** is always visible in the header and copies the whole block, folded parts included.
+- **Helpers block:** the lines from `# ── Desktap helpers (the same in every recipe) ──` to `# ── end of helpers ──` fold into their first line with a "show N lines" pill.
+- **Long code:** more than 30 visible lines (not counting a folded helpers block) folds to 20 lines with a fade and "Show all N lines". Flag `open` in the info string turns this off; a block inside `<details>` never folds. Flag `primary` gives the block the accent glow.
+- **Highlighting** (no library): comments gray `#7C7C86`, strings mint `#A7D9BC`, variables, numbers and tags light blue `#93C5FD`, keywords bold white, JSON keys `#E4E4E7`, attributes `#A0A0A8`. Languages: zsh/sh/bash, json, svg/xml/html, applescript.
+- **Chips:** `{{CELL_ID}}`, `{{DESKTAP_TOKEN}}`, `$DESKTAP_TOKEN` and `$DESKTAP_STORAGE` get a blue underlined chip with a tooltip, in code blocks and in inline code (not in headings).
+
+### Other blocks
+
+- **Tables** sit in a rounded frame and scroll inside it. Wrap one in `<div class="stack-table">` (blank lines around the table) to turn each row into a card ≤ 480px, labelled with the column names.
+- **Inline code** up to 24 characters never breaks; longer code wraps anywhere.
+- **`<details><summary>…</summary>`** is a bordered box with an accent ▸; use it for the full script of a recipe and for optional depth.
+- **Link cards:** `<div class="link-cards">` around a list whose items start with a link ("- [SVG faces](?p=svg-faces) — draw it.") turns them into a grid of clickable cards; the dash after the link is dropped.
+- **Recipe cards:** `<div class="recipe-cards" data-set="widgets"></div>` (or `alerts`) is filled from `pages.json` `recipes`: thumbnail on the `--phone-screen` patch, title, summary, tags (size first), and "On <page> →" when the recipe lives on another page. A recipe with no button (a Terminal command) shows its command in a mono pill (`thumbText`) instead of a face. 2 columns from ~640px of content width, 1 below; at 480px or less each card puts its face in a 104px column on the left, so a set of nine stays short. No animation on cards.
+- **Images:** `<img src="assets/docs/img/<slug>/<name>.png" width=".." height=".." alt="..">`; `docs.js` adds lazy loading and warns in the console when `width`/`height` is missing.
+
+### Diagrams
+
+`<div class="dt-mount" data-diagram="NAME" data-mode="MODE">One sentence.</div>` shows the sentence in a dashed placeholder (min-height 320px) until `assets/docs/js/diagrams/NAME.js` loads, which happens when the mount comes within 600px of the viewport. The module draws a `figure.dt-diagram` card from `dt-chrome.js`: eyebrow (mono, accent, 20px rule), title (display 600, 1.125rem), one-line lede, mono pill controls, legend, and a caption that states the rule in bold first. It reads `prefers-reduced-motion` itself (no autoplay, a static storyboard) and pauses off screen and in hidden tabs. A module that fails to load leaves the sentence in place.
+
+### Status colors
+
+| Color | Means |
+|-------|-------|
+| Accent `#3B82F6` | glide, normal, links, tips |
+| Amber `#FBBF24` | cross-fade, warning |
+| Green `#34D399` | success: see-boxes, "Done when", Copied |
+| Phone colors (`#34C759`, `#FF9F0A`, `#FF453A`) | only inside drawn phone content, on `--phone-screen` |
+
+---
+
 ## File Structure
 
 ```
 ├── index.html          — Landing page (all sections)
 ├── privacy.html        — Privacy Policy (legal layout)
 ├── terms.html          — Terms of Use (legal layout)
+├── docs.html           — Docs shell (loads assets/docs/pages/<slug>.md)
 └── assets/
-    ├── style.css       — Complete stylesheet (~1050 lines)
+    ├── docs/           — docs.js, pages.json, pages/*.md, js/ (diagrams), img/
+    ├── style.css       — Complete stylesheet (~3100 lines; docs part at "Docs")
     ├── screenshot.png  — iPhone app screenshot (1206×2622, Retina)
     ├── icon.png        — App icon (256×256)
     └── favicon.ico     — Favicon
