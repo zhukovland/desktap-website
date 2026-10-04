@@ -54,7 +54,7 @@ Write your own messages to stderr (`print -u2 "No network"`): that is the error 
 
 To name the kind of problem as well, a tap script reports it right before `exit 1`, and its toast then shows your words ([Script API › From a tap script](?p=api#from-a-tap-script)). A startup script reports a failure it survives, such as a network that is down ([Live widgets › Report what went wrong](?p=live-widgets#report-what-went-wrong)).
 
-<!-- Anchor used by the iOS app (EditorHelpLinks in the MacroDeck repo, the code editor's Variables › Learn More…): do not rename this heading. -->
+<!-- Anchor used by the iOS app (EditorHelpLinks: the Learn More… link in the code editor's Variables menu). Keep this heading text. -->
 ## Environment variables
 
 Every script a button runs gets the same small environment, which the agent builds from scratch. The code editor's ⋯ › **Variables** menu lists the three entries you write in scripts.

@@ -419,7 +419,7 @@ How it works:
 
 When Claude Code waits for you, a hook turns the button red and names the project. A tap or your next prompt clears it.
 
-<img src="assets/docs/img/recipes-alerts/claude-needs-input.png" width="160" height="160" alt="A red button face: Needs input in large white letters, and the project folder MacroDeck below">
+<img src="assets/docs/img/recipes-alerts/claude-needs-input.png" width="160" height="160" alt="A red button face: Needs input in large white letters, and the project folder my-app below">
 
 **Where it goes**
 
