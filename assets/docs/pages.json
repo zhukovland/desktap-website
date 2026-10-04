@@ -1,0 +1,411 @@
+{
+  "_comment": "Docs manifest read by assets/docs/docs.js. pages: sidebar and prev/next order. legacy: old single-page anchors (docs#<old>) -> new ?p= URLs; keep forever, the app's older builds open them. recipes: cards for <div class=\"recipe-cards\" data-set=\"widgets|alerts\">.",
+  "groups": [
+    "Start",
+    "Learn",
+    "Build",
+    "Look up",
+    "AI"
+  ],
+  "pages": [
+    {
+      "slug": "start",
+      "file": "assets/docs/pages/start.md",
+      "title": "Get started",
+      "group": "Start",
+      "description": "Install Desktap Agent, pair your iPhone or iPad and make a first button that runs a script on your Mac and changes its own look.",
+      "summary": "Install the agent, pair the phone and make a button that changes itself."
+    },
+    {
+      "slug": "live-widgets",
+      "file": "assets/docs/pages/live-widgets.md",
+      "title": "Live widgets",
+      "group": "Learn",
+      "description": "Keep a Desktap button current with a startup script: a plain live widget, where errors show, Button IDs, the live look and how often to update.",
+      "summary": "Startup scripts that keep a button current: values, colors, errors and Button IDs."
+    },
+    {
+      "slug": "svg-faces",
+      "file": "assets/docs/pages/svg-faces.md",
+      "title": "SVG faces",
+      "group": "Learn",
+      "description": "Draw a Desktap button in SVG and make it glide: a first face that moves, a start state, sizes and the turned phone, checks and icons from design tools.",
+      "summary": "Draw a button in SVG and make it glide from one frame to the next."
+    },
+    {
+      "slug": "button-logic",
+      "file": "assets/docs/pages/button-logic.md",
+      "title": "Button logic",
+      "group": "Learn",
+      "description": "Give a Desktap button logic: taps change state and a startup script draws it. Switches, timers, counters, several buttons and long press.",
+      "summary": "Taps change state, the loop draws it: switches, timers, counters and long press."
+    },
+    {
+      "slug": "notifications",
+      "file": "assets/docs/pages/notifications.md",
+      "title": "Notifications",
+      "group": "Learn",
+      "description": "Send notifications from a script to the phone and the Mac, with action buttons, and send them only when something changes.",
+      "summary": "Alerts with action buttons, sent once when something changes."
+    },
+    {
+      "slug": "scenes-and-sound",
+      "file": "assets/docs/pages/scenes-and-sound.md",
+      "title": "Scenes and sound",
+      "group": "Learn",
+      "description": "One loop that draws a scene across many Desktap buttons, widgets that move with the music, and motion that never stops.",
+      "summary": "One loop for many buttons, music levels and motion that never stops."
+    },
+    {
+      "slug": "recipes-widgets",
+      "file": "assets/docs/pages/recipes-widgets.md",
+      "title": "Recipes: live widgets",
+      "group": "Build",
+      "description": "Copyable live widgets for Desktap, plain and drawn: each with its full zsh script, where it goes and what to change.",
+      "summary": "Copyable live widgets, plain and drawn, each with a full zsh script."
+    },
+    {
+      "slug": "recipes-alerts",
+      "file": "assets/docs/pages/recipes-alerts.md",
+      "title": "Recipes: timers, alerts and triggers",
+      "group": "Build",
+      "description": "Copyable Desktap recipes that keep state, send notifications or react to programs on your Mac: timers, long jobs and hooks.",
+      "summary": "Timers, long jobs and hooks: recipes that remember, notify and react."
+    },
+    {
+      "slug": "from-your-mac",
+      "file": "assets/docs/pages/from-your-mac.md",
+      "title": "Working from your Mac",
+      "group": "Build",
+      "description": "Move code to the phone, test a script in Terminal, drive Desktap buttons from hooks and cron, and use the agent’s windows on the Mac.",
+      "summary": "Test scripts in Terminal, drive buttons from hooks and cron, use the agent’s windows."
+    },
+    {
+      "slug": "scripts",
+      "file": "assets/docs/pages/scripts.md",
+      "title": "How scripts run",
+      "group": "Look up",
+      "description": "Reference: how Desktap Agent runs button scripts. Environment variables, lifecycle, time limits and stopping, permissions, zsh and AppleScript.",
+      "summary": "Environment, lifecycle, time limits, permissions, zsh and AppleScript."
+    },
+    {
+      "slug": "api",
+      "file": "assets/docs/pages/api.md",
+      "title": "Script API",
+      "group": "Look up",
+      "description": "Reference for the Desktap Agent API that button scripts call: endpoints, fields, answers, errors and limits.",
+      "summary": "Endpoints, fields, answers, errors and limits of the agent’s API."
+    },
+    {
+      "slug": "svg-reference",
+      "file": "assets/docs/pages/svg-reference.md",
+      "title": "SVG reference",
+      "group": "Look up",
+      "description": "Reference for Desktap SVG faces: supported SVG, what is not drawn, what glides and what cross-fades, errors and warnings, sizes.",
+      "summary": "Supported SVG, what is not drawn, what glides, errors and sizes."
+    },
+    {
+      "slug": "troubleshooting",
+      "file": "assets/docs/pages/troubleshooting.md",
+      "title": "Troubleshooting",
+      "group": "Look up",
+      "description": "Find what you see or the exact error text and fix it: buttons, startup scripts, the API, SVG faces, notifications and AI apps.",
+      "summary": "What you see or the exact error text, its cause and the fix."
+    },
+    {
+      "slug": "ai",
+      "file": "assets/docs/pages/ai.md",
+      "title": "Use with an AI app",
+      "group": "AI",
+      "description": "Connect Claude Desktop, Claude Code or Codex to Desktap, review its changes on the phone and install the widget skill.",
+      "summary": "Connect an AI app, review its changes on the phone, add the widget skill."
+    }
+  ],
+  "legacy": {
+    "table-of-contents": "?p=start",
+    "overview": "?p=start",
+    "getting-started": "?p=start#your-first-button",
+    "quick-start": "?p=start#your-first-button",
+    "security-model": "?p=scripts#the-token",
+    "rotating-the-token": "?p=scripts#the-token",
+    "tooling-note": "?p=scripts#tools-every-mac-has",
+    "authentication": "?p=start#the-curl-line-explained",
+    "endpoint-post-apiupdate-button": "?p=api#post-apiupdate-button",
+    "request-body": "?p=api#post-apiupdate-button",
+    "finding-the-button-uuid": "?p=live-widgets#finding-a-buttons-id",
+    "get-apiconfig": "?p=live-widgets#finding-a-buttons-id",
+    "response": "?p=api#answers",
+    "endpoint-post-apinotify": "?p=api#post-apinotify",
+    "notification-fields": "?p=api#post-apinotify",
+    "notify-responses": "?p=api#post-apinotify",
+    "action-buttons": "?p=notifications#action-buttons",
+    "targets-phone-mac-or-both": "?p=notifications#where-it-arrives",
+    "what-tapping-does": "?p=notifications#what-the-person-sees",
+    "calling-the-api-from-applescript": "?p=scripts#using-applescript",
+    "core-concepts": "?p=live-widgets",
+    "the-cell_id-placeholder": "?p=live-widgets#the-cell_id-placeholder",
+    "partial-updates": "?p=live-widgets#the-live-look",
+    "overlay-persistence": "?p=scripts#what-brings-back-the-saved-look",
+    "how-the-face-lives-on-the-button": "?p=scripts#what-brings-back-the-saved-look",
+    "cross-button-updates": "?p=button-logic#one-script-several-buttons",
+    "persistent-storage": "?p=button-logic#remembering-things",
+    "startup-scripts-live-widgets": "?p=live-widgets#startup-scripts",
+    "process-timeout": "?p=scripts#time-limits-and-stopping",
+    "svg-faces-vector-widgets": "?p=svg-faces",
+    "a-first-face": "?p=svg-faces#a-first-face-that-moves",
+    "a-face-saved-in-the-button": "?p=svg-faces#give-it-a-start-state",
+    "the-svg-object": "?p=api#the-svg-object",
+    "how-animation-works": "?p=svg-faces#frames-that-glide",
+    "authoring-techniques": "?p=svg-faces#drawing-techniques",
+    "supported-svg-subset": "?p=svg-reference#supported-svg",
+    "gradients-and-icons-from-design-tools": "?p=svg-faces#icons-from-design-tools",
+    "orientation-and-landscapesource": "?p=svg-faces#sizes-and-the-turned-phone",
+    "validation-and-feedback": "?p=svg-reference#errors-and-warnings",
+    "previewing-a-face-without-the-phone": "?p=svg-faces#check-a-face-before-it-goes-live",
+    "performance-budget": "?p=svg-faces#cost-on-the-phone",
+    "working-with-an-ai-assistant": "?p=ai#asking-for-widgets",
+    "reference": "?p=scripts",
+    "environment-variables": "?p=scripts#environment-variables",
+    "sf-symbols": "?p=api#icons-and-emoji",
+    "color-format": "?p=api#fields",
+    "performance-and-limits": "?p=api#limits",
+    "json-safety-with-dynamic-strings": "?p=scripts#text-in-json",
+    "other-endpoints": "?p=api#endpoints",
+    "get-apistatus": "?p=api#get-apistatus",
+    "recipe-examples": "?p=recipes-widgets",
+    "live-cpu-usage-monitor": "?p=svg-faces#your-first-live-svg-widget-the-cpu-ring",
+    "cpu-ring-1x1-svg-face": "?p=svg-faces#your-first-live-svg-widget-the-cpu-ring",
+    "live-bitcoin-price": "?p=recipes-widgets#a-number-from-the-web",
+    "focus-timer-with-a-done-notification": "?p=button-logic#a-focus-timer-on-one-button",
+    "deploy-finished-notification-with-actions": "?p=recipes-alerts#long-job-with-a-report",
+    "disk-space-alert-threshold-notification": "?p=notifications#your-first-notification-low-disk-space",
+    "pomodoro-timer-cross-button": "?p=recipes-alerts#pomodoro-on-two-buttons",
+    "memory-gauge-1x2-svg-face-with-a-landscape-variant": "?p=recipes-widgets#memory-gauge",
+    "network-speed-with-a-scrolling-sparkline-2x1": "?p=recipes-widgets#network-speed",
+    "system-dashboard-2x2-svg-face": "?p=recipes-widgets#system-dashboard",
+    "analog-clock-2x2-svg-face": "?p=recipes-widgets#analog-clock",
+    "mcp-model-context-protocol": "?p=ai",
+    "setup": "?p=ai#connect-your-ai-app",
+    "the-widget-skill": "?p=ai#the-widget-skill",
+    "mcp-tools": "?p=ai#tools-the-assistant-gets",
+    "config-delivery-and-approval": "?p=ai#reviewing-a-change-on-the-phone",
+    "troubleshooting": "?p=troubleshooting"
+  },
+  "recipes": [
+    {
+      "id": "free-disk-space",
+      "set": "widgets",
+      "page": "live-widgets",
+      "anchor": "your-first-live-widget-free-disk-space",
+      "title": "Free disk space",
+      "summary": "Shows the free space on your Mac's startup disk as the button's title, checked every 10 seconds.",
+      "size": "1x1",
+      "tags": [
+        "plain face",
+        "startup script"
+      ],
+      "thumb": "free-disk-space"
+    },
+    {
+      "id": "a-number-from-the-web",
+      "set": "widgets",
+      "page": "recipes-widgets",
+      "anchor": "a-number-from-the-web",
+      "title": "A number from the web",
+      "summary": "Puts a price, a temperature or any other number from a web API in the button's title, and refreshes it once a minute.",
+      "size": "1x1",
+      "tags": [
+        "plain face",
+        "curl",
+        "jq"
+      ],
+      "thumb": "a-number-from-the-web"
+    },
+    {
+      "id": "dark-mode-switch",
+      "set": "widgets",
+      "page": "button-logic",
+      "anchor": "a-switch-that-shows-its-state-dark-mode",
+      "title": "Dark Mode switch",
+      "summary": "A tap switches the Mac between light and dark; the button shows the mode, even when you change it in System Settings.",
+      "size": "1x1",
+      "tags": [
+        "plain face",
+        "tap + startup script"
+      ],
+      "thumb": "dark-mode-switch"
+    },
+    {
+      "id": "cpu-ring",
+      "set": "widgets",
+      "page": "svg-faces",
+      "anchor": "your-first-live-svg-widget-the-cpu-ring",
+      "title": "CPU ring",
+      "summary": "Fills a ring with the CPU load, green, orange from 50% and red from 80%, and glides to each new value.",
+      "size": "1x1",
+      "tags": [
+        "SVG face",
+        "iostat"
+      ],
+      "thumb": "cpu-ring"
+    },
+    {
+      "id": "memory-gauge",
+      "set": "widgets",
+      "page": "recipes-widgets",
+      "anchor": "memory-gauge",
+      "title": "Memory gauge",
+      "summary": "Shows the memory in use as a tall gauge, with the percentage and gigabytes below. The gauge lies on its side when the phone turns.",
+      "size": "1x2",
+      "tags": [
+        "SVG face",
+        "landscape",
+        "vm_stat"
+      ],
+      "thumb": "memory-gauge"
+    },
+    {
+      "id": "network-speed",
+      "set": "widgets",
+      "page": "recipes-widgets",
+      "anchor": "network-speed",
+      "title": "Network speed",
+      "summary": "Tracks the download speed: the number in large type and a chart of about the last 22 seconds that scrolls left without stopping.",
+      "size": "2x1",
+      "tags": [
+        "SVG face",
+        "landscape",
+        "netstat"
+      ],
+      "thumb": "network-speed"
+    },
+    {
+      "id": "system-dashboard",
+      "set": "widgets",
+      "page": "recipes-widgets",
+      "anchor": "system-dashboard",
+      "title": "System dashboard",
+      "summary": "Fits three readings onto one Large button: CPU load as a ring, memory as a bar and a chart of CPU load over about 22 seconds.",
+      "size": "2x2",
+      "tags": [
+        "SVG face",
+        "iostat",
+        "vm_stat"
+      ],
+      "thumb": "system-dashboard"
+    },
+    {
+      "id": "analog-clock",
+      "set": "widgets",
+      "page": "recipes-widgets",
+      "anchor": "analog-clock",
+      "title": "Analog clock",
+      "summary": "Draws a clock with hour and minute hands, a second hand that sweeps without stopping, and the date below.",
+      "size": "2x2",
+      "tags": [
+        "SVG face",
+        "rotate"
+      ],
+      "thumb": "analog-clock"
+    },
+    {
+      "id": "music-spectrum",
+      "set": "widgets",
+      "page": "scenes-and-sound",
+      "anchor": "music-spectrum",
+      "title": "Music spectrum",
+      "summary": "Twenty bars follow the sound your Mac plays, about 11 frames a second, and rest while the button is off screen.",
+      "size": "1x1",
+      "tags": [
+        "SVG face",
+        "audio levels"
+      ],
+      "thumb": "music-spectrum"
+    },
+    {
+      "id": "focus-timer",
+      "set": "alerts",
+      "page": "button-logic",
+      "anchor": "a-focus-timer-on-one-button",
+      "title": "Focus timer",
+      "summary": "Tap to start 25 minutes or cancel; the button counts down and carries on after a reconnect. A long press adds 5 minutes.",
+      "size": "1x1",
+      "tags": [
+        "plain face",
+        "storage",
+        "long press"
+      ],
+      "thumb": "focus-timer"
+    },
+    {
+      "id": "low-disk-alert",
+      "set": "alerts",
+      "page": "notifications",
+      "anchor": "your-first-notification-low-disk-space",
+      "title": "Low disk space alert",
+      "summary": "Shows the free space on the startup disk and warns your phone and Mac once when it drops below 10 GB.",
+      "size": "1x1",
+      "tags": [
+        "plain face",
+        "notification"
+      ],
+      "thumb": "low-disk-alert"
+    },
+    {
+      "id": "pomodoro-on-two-buttons",
+      "set": "alerts",
+      "page": "recipes-alerts",
+      "anchor": "pomodoro-on-two-buttons",
+      "title": "Pomodoro on two buttons",
+      "summary": "Start/Stop on one button, a countdown ring on the next: 25 minutes of work, a 5-minute break, a notification in between.",
+      "size": "1x1",
+      "tags": [
+        "two buttons",
+        "SVG face",
+        "notification"
+      ],
+      "thumb": "pomodoro-on-two-buttons"
+    },
+    {
+      "id": "long-job-with-a-report",
+      "set": "alerts",
+      "page": "recipes-alerts",
+      "anchor": "long-job-with-a-report",
+      "title": "Long job with a report",
+      "summary": "Tap to start a deploy that may take ten minutes. The button counts the time, and a notification reports the result.",
+      "size": "1x1",
+      "tags": [
+        "plain face",
+        "notification"
+      ],
+      "thumb": "long-job-with-a-report"
+    },
+    {
+      "id": "claude-code-needs-input",
+      "set": "alerts",
+      "page": "recipes-alerts",
+      "anchor": "claude-code-needs-input",
+      "title": "Claude Code needs input",
+      "summary": "When Claude Code waits for you, a hook turns the button red and names the project. A tap or your next prompt clears it.",
+      "size": "1x1",
+      "tags": [
+        "SVG face",
+        "hook"
+      ],
+      "thumb": "claude-code-needs-input"
+    },
+    {
+      "id": "tell-me-when-a-command-finishes",
+      "set": "alerts",
+      "page": "recipes-alerts",
+      "anchor": "tell-me-when-a-command-finishes",
+      "title": "Tell me when a command finishes",
+      "summary": "Put tellme in front of a long Terminal command. When it ends, your phone and your Mac show its result and how long it took.",
+      "tags": [
+        "Terminal",
+        "notification"
+      ],
+      "thumbText": "$ tellme make build"
+    }
+  ]
+}
