@@ -1,4 +1,4 @@
-<!-- updated: 2026-10-02 -->
+<!-- updated: 2026-10-05 -->
 # How scripts run
 
 The rules behind every script a button runs on your Mac: how it starts, what it gets, how long it may run, how it stops and what macOS asks for. The learning pages teach the patterns; this page is where you look them up.
@@ -359,7 +359,7 @@ macOS asks once for each permission, in the name of **Desktap Agent** and with t
 | When a script… | macOS asks for | Notes |
 |---|---|---|
 | controls an app with AppleScript (`osascript`, `tell application "Music"`) | Automation, once for each app: System Events, Finder, Music… | if refused, the script fails and the phone reads "Automation access needed": **Open Settings on Mac** in **Errors** opens System Settings › Privacy & Security › Automation, where you allow it again |
-| presses keys through System Events | Accessibility | Desktap Agent asks for it in its first-launch setup |
+| presses keys through System Events | Accessibility | Desktap Agent asks for it in its first-launch **Setup**, or from **Permissions** in the agent window |
 | takes a screenshot with `screencapture` | Screen Recording | System Settings › Privacy & Security › Screen & System Audio Recording |
 | reads calendars or reminders, opens the Downloads folder, uses Bluetooth | access to that | the Gallery's widgets ask the same way |
 | follows what the Mac plays | System Audio Recording, at the first `GET /api/audio/levels` and never otherwise | [Scenes and sound › Music levels](?p=scenes-and-sound#music-levels) |

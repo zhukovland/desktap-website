@@ -1,4 +1,4 @@
-<!-- updated: 2026-10-02 -->
+<!-- updated: 2026-10-05 -->
 # Button logic
 
 Most buttons with logic follow one pattern: a tap changes something, and a startup script notices and draws. This page puts that pattern to work, from a switch that shows its state to a timer that spans two buttons. You need no AI app for any of it: every script is plain zsh that you paste into a button on your iPhone or iPad.
@@ -101,7 +101,7 @@ The loop sends a new look at once, and the same look again every 30 s in case so
 > [!STEP] 3 · Name it and add it
 > Under **Appearance**, type a **Name** such as "Dark Mode": the button shows it while the phone is not connected. Tap **Add**. Done when you see the button read **Light** or **Dark**.
 
-The agent's Setup already let **Desktap Agent** control **System Events**, so the first tap switches the Mac. If that access was turned off later, every tap flashes red with the toast "Automation access needed": tap **Details**, then **Open Settings on Mac**, and turn on **System Events** under **Desktap Agent**.
+If you allowed Automation in the agent's Setup, **Desktap Agent** can already control **System Events**, so the first tap switches the Mac. If that access was turned off later, every tap flashes red with the toast "Automation access needed": tap **Details**, then **Open Settings on Mac**, and turn on **System Events** under **Desktap Agent**.
 
 > [!SEE]
 > Tap the button. The Mac switches, and within 2 s the button follows: **Dark** with a moon, **Light** with a sun. Not seeing it? → [Troubleshooting › Permissions](?p=troubleshooting#permissions)
