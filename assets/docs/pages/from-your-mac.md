@@ -193,7 +193,7 @@ A sidebar on the left lists its sections. An orange dot next to one means someth
 | **Overview** | Banners, only when something needs you, such as [When live widgets don't start](#when-live-widgets-dont-start) or **Update Available**. Then four tiles; click one to open its section. |
 | **AI Assistants** | Connect an AI app ([Use with an AI app](?p=ai)) |
 | **Devices** | **Trusted Devices**: your paired phones; **Remove** one, or **Remove All**. With none, the steps to pair one. |
-| **Security** | Keychain and pairing-key problems; otherwise "Nothing here needs your attention." |
+| **Security** | Keychain and pairing-key problems, and the **Allow AI to Run Commands** switch ([Use with an AI app › Commands on your Mac](?p=ai#commands-on-your-mac)) |
 | **Permissions** | **Accessibility**, **Automation**, **Notifications** and **System Audio Recording**: what each lets buttons do, its state and how to turn it on |
 | **Scripts** | What your buttons run on this Mac: [the list described next](#the-running-scripts-window) |
 | **General** | **Launch at Login**, **Check for Updates…** and the agent's version |

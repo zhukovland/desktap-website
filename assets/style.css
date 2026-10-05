@@ -1746,7 +1746,7 @@ img { display: block; max-width: 100%; }
 .shot-pair img { margin: 0; }
 
 /* A ring drawn over one spot of a screenshot: <picture class="shot-ring" style="--x:..;--y:..;--d:..">.
-   --x, --y: the center and --d: the diameter, as a share of the picture's width. */
+   --x, --y: the center, --d: the diameter. --x and --d are shares of the picture's width, --y is a share of its height. */
 .shot-ring { position: relative; display: block; width: fit-content; max-width: 100%; }
 .shot-ring::after {
   content: '';

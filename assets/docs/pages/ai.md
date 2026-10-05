@@ -88,7 +88,7 @@ When the AI app connects, the agent gives the assistant a short set of rules; th
 
 ### Commands on your Mac
 
-**Allow AI to Run Commands**, the switch under **Security** in the agent window, starts off. The card “What AI can and can’t do without you” on **AI Assistants** links to it: “Turn AI commands on or off in Security”. The switch's caption reads: "AI tools can run Terminal commands on your Mac. You approve each one on your iPhone or iPad." While it is off, the assistant is told "Probes are off: the user can turn on “Allow AI to Run Commands” in the Desktap Agent window."
+**Allow AI to Run Commands**, the switch under **Security** in the agent window, starts off. The card “What AI can and can’t do without you” on **AI Assistants** links to it: “Turn AI commands on or off in Security”. The switch's caption reads: "AI tools can run Terminal commands on your Mac. You approve each one on your iPhone or iPad." While it is off, the assistant is told "Probes are off: the user can turn on “Allow AI to Run Commands” in Security in the Desktap Agent window."
 
 With the switch on, each command shows on the phone first: "The AI wants to run a command on MacBook Pro", the whole command, and the assistant's reason under "In the AI's words:". You have 35 seconds to tap **Allow** or **Deny**. Meanwhile the agent's window and menu show "AI wants to run a command".
 

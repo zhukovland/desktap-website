@@ -37,11 +37,11 @@ You need a Mac with macOS 15 or later and your iPhone or iPad with Desktap, on t
 >
 > Setup then reads "iPhone “…” is connected" (or iPad) and "Its buttons now control this Mac.". Once paired, the phone reconnects by itself. A Mac serves one phone at a time. After five wrong codes, the Mac blocks pairing until you click **Allow Pairing**, in Setup or, later, in the agent window (**Overview** or **Devices**). To pair later, skip this step. While Setup is open, a request from the phone brings it back to this step; after Setup, the agent window comes forward on **Devices** with the **Pairing Request**.
 >
-> Left, the phone's code field; right, the Mac's **Pairing Request** in the agent window, where it appears when you pair after Setup.
+> The phone's code field, and the Mac's **Pairing Request** in the agent window, where it appears when you pair after Setup.
 >
 > <div class="shot-pair">
 > <img src="assets/docs/img/start/pairing-phone.png" width="200" height="435" alt="The phone asks for the code shown on your Mac: six empty boxes, “Code expires in 1:19” and Cancel, with the number keypad below.">
-> <img src="assets/docs/img/start/pairing-mac.png" width="420" height="309" alt="The Desktap Agent window on Devices with a Pairing Request over it: “Enter this code on your iPhone”, the code 482 915, a 4:40 countdown and Cancel.">
+> <img src="assets/docs/img/start/pairing-mac.png" width="420" height="309" alt="The Desktap Agent window on Devices with a Pairing Request over it: “Enter this code on your iPhone”, the code 482 915 and Cancel.">
 > </div>
 >
 > Then finish Setup. **Connect an AI app** is optional: click **Connect** in a card, or **Skip** (**Continue** when no AI app is found on this Mac; [Use with an AI app](?p=ai)). **You're all set** shows what you did, with **Launch at Login**, a switch that starts the agent when you log in. It is on when the agent runs from Applications; turn it off if you would rather not. Click **Open Desktap Agent**: the agent window opens on **Overview**.

@@ -163,6 +163,8 @@ A fixed script leaves **Not working now** after a minute without failing; a fini
 
 A tap that fails makes its button flash red and shake, and a toast, a short note at the bottom of the screen, says what went wrong: the start of the error text, and **Details** to open the list on that tap.
 
+<img src="assets/docs/img/live-widgets/tap-toast.png" width="280" height="608" alt="The deck after a failed tap: a toast at the bottom with an orange magnifier, “Not found”, “zsh:1: command not found: nosuchtool” and Details.">
+
 A startup script's state also shows in **Advanced › Status** (Running, Restarting, Failed or Not Running, with the error under it) and on the Mac under **Scripts** in the agent window, which names it by its first comment. So start every script with a comment of up to 60 characters after `#!/bin/zsh` ([Working from your Mac › The Running Scripts window](?p=from-your-mac#the-running-scripts-window)).
 
 <img src="assets/docs/img/live-widgets/running-scripts.png" width="760" height="524" alt="The agent window on Scripts: the running startup script “Free disk space: GB left, checked every 10 s” with its Startup badge, uptime, Restart and Stop, and a failed startup script, “Weather in Lisbon, every 15 min”, opened to show “Exit code 3: no answer from the weather service”.">
@@ -323,8 +325,6 @@ post "{\"cellId\":\"$cell\",\"reset\":true}"      # back to the saved look
 > Tap the button. It shows Up with ✅ on green (or Down with ❌ on red) for 3 seconds, then goes back to "Site".
 >
 > A red flash and a toast instead? **Details** opens its row in **Errors** ([When a widget doesn't work](#when-a-widget-doesnt-work)).
->
-> <img src="assets/docs/img/live-widgets/tap-toast.png" width="280" height="608" alt="The deck after a failed tap: a toast at the bottom with an orange magnifier, “Not found”, “zsh:1: command not found: nosuchtool” and Details.">
 
 While a tap script runs, the button pulses and further taps are ignored. On a button that also has a startup script, let the startup script do all the drawing; the tap only changes what the loop reads ([Button logic › Taps change state, the loop draws](?p=button-logic#taps-change-state-the-loop-draws)).
 
