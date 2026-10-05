@@ -483,7 +483,7 @@ Without an AI app, nothing shows you the glide itself before the phone does. The
 
 **On the phone.** Copy a frame on the Mac with `zsh ring.zsh --frame 42 | jq -r .svg.source | pbcopy`, then paste it into **Icon › SVG Drawing › SVG Document**. The phone draws it, and the line under the document reads "The SVG is fully supported." or "Some parts of this SVG are not supported and will not be drawn:", followed by a line for each part. On a Wide or Tall button, ⟲ (**Show Landscape**) shows it turned; **Cancel** discards everything.
 
-<!-- SCREENSHOT svg-drawing-check: iPhone 17 Pro, iOS 26, English, dark. Icon › SVG Drawing with the CPU ring start state pasted: preview at the top, the SVG Document row, the check line "The SVG is fully supported." with Learn More…, Scaling Fit. Turn off Settings › Security › Hide Code While Recording or Mirroring first. -->
+<img src="assets/docs/img/svg-faces/drawing-check.png" width="280" height="608" alt="Icon › SVG Drawing with the CPU ring’s start state pasted: the preview of an empty gray ring with a dash and “cpu %”, the SVG Document row, Paste and Import from File…, the green check “The SVG is fully supported.” with Learn More…, Scaling “Fit” and Remove SVG Drawing.">
 
 **From Terminal.** With the phone connected, pipe a frame to the agent through its socket ([Working from your Mac › Send one update by hand](?p=from-your-mac#send-one-update-by-hand)). `--frame` uses a made-up Button ID, so the phone shows nothing, but the agent checks the frame as it checks a live one:
 

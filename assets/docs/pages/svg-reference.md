@@ -41,7 +41,7 @@ Desktap on your iPhone or iPad draws a subset of SVG 1.1. Whatever falls outside
 
 Most of what Desktap leaves out is named in the answer's `warnings`, and under the document in **Icon › SVG Drawing**. A few attributes are ignored without a word ([Ignored without a warning](#ignored-without-a-warning)), so check those by eye.
 
-<!-- SCREENSHOT svg-reference-check-warnings: iPhone 17 Pro, iOS 26, English, dark. Icon › SVG Drawing with the frame from Errors and warnings › Warnings pasted as the document: the preview, then under the document the line "Some parts of this SVG are not supported and will not be drawn:" with its four warnings. Turn off Settings › Security › Hide Code While Recording or Mirroring first. -->
+<img src="assets/docs/img/svg-reference/check-warnings.png" width="280" height="608" alt="Icon › SVG Drawing with the warnings frame pasted: the preview shows only the word “CPU”, and under the SVG Document row an orange line, “Some parts of this SVG are not supported and will not be drawn:”, lists four warnings: the filter element, a rect filter, a rect width=&quot;50%&quot; and a text-anchor=&quot;center&quot;.">
 
 | In the frame | What you get | Write instead |
 |---|---|---|

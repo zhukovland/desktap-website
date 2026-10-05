@@ -85,7 +85,10 @@ A button that doesn't work keeps its look: Desktap draws nothing on it. The ⚠ 
 
 </div>
 
-<!-- SCREENSHOT ts-deck-problems: the deck with the banner "1 problem on this deck" and Review, and the toast "A deck problem is blocking this button" with Review after a tap on that button; next to it the Problems list Review opens, one row: "It overlaps another button, so it doesn't run." with Show Button and Delete. iPhone 17 Pro, English, dark, iOS 26. -->
+<div class="shot-pair">
+<img src="assets/docs/img/troubleshooting/deck-problems-1.png" width="240" height="521" alt="The deck with the banner “1 problem on this deck” and Review, two overlapping buttons, Notes and Mail, and at the bottom the toast “A deck problem is blocking this button” with Review.">
+<img src="assets/docs/img/troubleshooting/deck-problems-2.png" width="240" height="521" alt="The Problems list with one row: Mail, Default › Main · row 2, column 2, “It overlaps another button, so it doesn’t run.”, Show Code, Show Button and Delete.">
+</div>
 
 ## Errors from the agent
 
