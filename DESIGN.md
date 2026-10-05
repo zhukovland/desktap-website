@@ -226,10 +226,12 @@ Text on the marker line becomes the title (`> [!TIP] A faster way`). In step car
 ## File Structure
 
 ```
-├── index.html          — Landing page (all sections)
+├── index.html          — Holding page: one screen, "Coming soon" (noindex)
+├── next/index.html     — The full landing, reworked here (noindex, absolute paths, nothing links to it)
 ├── privacy.html        — Privacy Policy (legal layout)
 ├── terms.html          — Terms of Use (legal layout)
 ├── docs.html           — Docs shell (loads assets/docs/pages/<slug>.md)
+├── og-card.html        — Source of the social previews: assets/og-image.jpg, assets/og-soon.jpg (?label=Coming%20soon)
 └── assets/
     ├── docs/           — docs.js, pages.json, pages/*.md, js/ (diagrams), img/
     ├── style.css       — Complete stylesheet (~3100 lines; docs part at "Docs")
