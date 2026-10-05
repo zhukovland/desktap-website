@@ -207,16 +207,16 @@ The tiles read, for example, "Connected · 12 min", "1 app connected", "All gran
 | Row | What it shows |
 |---|---|
 | **Pairing new devices** | **Allowed**: a new device still needs your click on this Mac and the code. **Blocked** after several incorrect codes, with **Allow Pairing**; trusted devices still connect. **Paused** while another user's session is active, **Unavailable** while a Keychain problem in the banner lasts, **Unreachable** when port 9847 can't take new connections from phones (the caption says why). |
-| **Trusted devices** | How many devices this Mac trusts, or **None**. **Manage** opens **Devices**, where removing a device cuts it off at once. |
-| **This Mac's fingerprint** | Four groups of characters, such as `3f2a 91c0 7b11 04de`. Desktap on your iPhone or iPad shows the same one under this Mac in **Paired Macs**; if you don't see it there, update the app. |
-| **Local API** | **This agent** when it serves button scripts and AI tools of this macOS account. **Another agent** or **Stopped** when they can't reach it, with the reason from [When live widgets don't start](#when-live-widgets-dont-start). |
+| **Trusted devices** | How many devices this Mac trusts, or **None**; **Can’t read** while the banner reports a Keychain problem. **Manage** opens **Devices**, where removing a device cuts it off at once. |
+| **This Mac's fingerprint** | Four groups of characters, such as `3f2a 91c0 7b11 04de`. Desktap on your iPhone or iPad shows the same one under this Mac in **Paired Macs**; if you don't see it there, update the app. **Not available**, with "The pairing key can’t be read from Keychain.", goes with the Keychain banner on top. |
+| **Local API** | Who serves the local API of this macOS account: **This agent**, **Another agent** or **Stopped**. The caption reads "Serves button scripts and AI tools of this macOS account." when all works, and "The agent is opening its local API: live widgets and AI tools wait for it." while it starts. Otherwise it turns orange with the line **Overview** shows ([When live widgets don't start](#when-live-widgets-dont-start)), even next to **This agent**, or with "Button scripts and AI tools can’t reach the agent right now." |
 | **Allow AI to Run Commands** | The switch, off at first: AI tools can run Terminal commands on your Mac, and you approve each one on your iPhone or iPad ([Use with an AI app › Commands on your Mac](?p=ai#commands-on-your-mac)) |
 
 While the agent reads its pairing key and trusted devices from Keychain, the rows read **Loading…**. The banners on top:
 
 | Banner | What to do |
 |---|---|
-| "Can't read the pairing key from Keychain (status …)." or "Can't access the trusted devices in Keychain (status …)." | Click **Retry**. Until it's fixed, new devices can't pair. If the saved item is damaged, the banner also offers **Reset Pairing Key** or **Remove All Paired Devices…**; after either, every device has to pair with this Mac again. |
+| "Can't read the pairing key from Keychain (status …)." or "Can't access the trusted devices in Keychain (status …)." | Click **Retry**. Until it's fixed, no iPhone or iPad can connect to this Mac, paired ones included. If the saved item is damaged, the banner also offers **Reset Pairing Key** or **Remove All Paired Devices…**; after either, every device has to pair with this Mac again. |
 | "Couldn't finish resetting this Mac's pairing key (status …). New devices can't pair until it's done." | Click **Retry**. |
 | "Couldn't save the pairing to Keychain (status …).", "Couldn't remove … (status …)." | Click **Dismiss** and try again. |
 | "This Mac's pairing key was reset. Pair your devices again." | Pair each iPhone or iPad again ([Get started › Pair your iPhone or iPad](?p=start#pair-your-iphone-or-ipad)), then click **Dismiss**. |
