@@ -1,4 +1,4 @@
-<!-- updated: 2026-10-02 -->
+<!-- updated: 2026-10-05 -->
 # Get started
 
 A Desktap button can run a script on your Mac, and the script can change how the button looks. That is how you build live widgets: buttons that keep themselves current, like a CPU ring, a timer or a build status.
@@ -11,34 +11,41 @@ You need a Mac with macOS 15 or later and your iPhone or iPad with Desktap, on t
 
 ### Install Desktap Agent on your Mac
 
-> [!STEP] 1 · Download and grant two permissions
+> [!STEP] 1 · Download Desktap Agent and allow what it needs
 >
-> Download Desktap Agent from [desktap.app/download](https://desktap.app/download), drag it to **Applications** and open it. Its **Setup** opens on **Welcome to Desktap**: click **Get Started**. Then it asks for two permissions:
+> Download Desktap Agent from [desktap.app/download](https://desktap.app/download), drag it to **Applications** and open it. Its **Setup** opens on **Welcome to Desktap**: click **Get Started**. If the agent runs from Downloads or the disk image, **Welcome** also offers **Move to Applications**: click it, so the agent updates and AI apps find it.
 >
-> - **Turn On Accessibility**: click **Grant Access**, then **Open System Settings** in the window that opens, turn on Desktap Agent and click **Continue**.
-> - **Turn On Automation**: click **Check Access**, allow it when macOS asks, and click **Continue**. If you refused, click **Open System Settings**, turn on System Events for Desktap Agent, then click **Retry**.
+> **Allow what buttons need** lists three permissions. Click **Allow** on each and answer macOS:
 >
-> At **All Set!** click **Done**: the agent window opens on **Overview**. The agent lives in the menu bar, not in the Dock. Its menu holds **Show Agent Window** (⌘O), **Settings…** (⌘,) and **Quit Desktap** (⌘Q). Allow notifications when it asks.
+> - **Accessibility** lets buttons press keys, type text and run system actions. After macOS has asked, **Open System Settings** opens its page: turn on Desktap Agent there, and the card changes by itself.
+> - **Automation** lets buttons control other apps. Allow it when macOS asks. If you refused, click **Open System Settings** and, under Automation, turn on System Events for Desktap Agent.
+> - **Notifications** lets buttons show notifications on this Mac. Allow them when macOS asks. Notifications on your iPhone or iPad don't need it.
 >
-> <!-- SCREENSHOT start-menu-bar: the Mac menu bar with the Desktap Agent icon (3×2 grid) and its open menu: status line, Show Agent Window ⌘O, Settings… ⌘, and Quit Desktap ⌘Q (take it with a Release build: Debug adds Dev Log and Reset Setup) -->
+> You can skip any of them: until all three read **Allowed**, the button at the bottom reads **Skip**, and the agent window's **Permissions** shows what is missing.
 >
-> Done when a small grid icon appears in the menu bar.
+> Done when each card reads **Allowed** and the bottom button reads **Continue**. Click it: Setup goes on to **Connect your iPhone or iPad**, the next step.
 
 ### Pair your iPhone or iPad
 
-> [!STEP] 2 · Pair with a 6-digit code
+> [!STEP] 2 · Pair with a 6-digit code, then finish Setup
 >
-> Open Desktap and allow local network access when iOS asks. A sheet lists the Macs it finds. The connection badge in the middle of the top bar opens this sheet again.
+> Setup's **Connect your iPhone or iPad** lists what to do and waits for the phone. Open Desktap on the phone and allow local network access when iOS asks. A sheet lists the Macs it finds. The connection badge in the middle of the top bar opens this sheet again. No Desktap on the phone yet? **Get it at desktap.app** is in the same window.
 >
 > 1. Tap your Mac. The phone says "Confirm on your Mac".
-> 2. On the Mac, the agent window comes forward with a **Pairing Request**: click **Show Code** within 60 seconds.
+> 2. On the Mac, a **Pairing Request** appears in the Setup window: click **Show Code** within 60 seconds.
 > 3. Type the code on the phone within 90 seconds.
 >
-> Once paired, the phone reconnects by itself. A Mac serves one phone at a time. After five wrong codes, the Mac blocks pairing until you click **Allow Pairing** in the agent window (**Overview** or **Devices**).
+> Setup then reads "iPhone “…” is connected" (or iPad) and "Its buttons now control this Mac.". Once paired, the phone reconnects by itself. A Mac serves one phone at a time. After five wrong codes, the Mac blocks pairing until you click **Allow Pairing**, in Setup or, later, in the agent window (**Overview** or **Devices**). To pair later, skip this step: the agent window then comes forward with the **Pairing Request**.
 >
-> <!-- SCREENSHOT start-pairing: side by side, the phone's "Enter the code shown on your Mac" sheet with "Code expires in" and the Mac's agent window showing the 6-digit code ("Enter this code on your iPhone") -->
+> <!-- SCREENSHOT start-pairing: side by side, the phone's "Enter the code shown on your Mac" sheet with "Code expires in" and the Mac's Setup window on "Connect your iPhone or iPad" showing the 6-digit code ("Enter this code on your iPhone") -->
 >
-> Done when the badge shows your Mac's name.
+> Then finish Setup. **Connect an AI app** is optional: click **Connect** in a card, or **Skip** ([Use with an AI app](?p=ai)). **You're all set** shows what you did, with **Launch at Login**, a switch that starts the agent when you log in. It is on; turn it off if you would rather not. Click **Open Desktap Agent**: the agent window opens on **Overview**.
+>
+> The agent lives in the menu bar, not in the Dock. Its menu holds **Show Agent Window** (⌘O), **Settings…** (⌘,) and **Quit Desktap** (⌘Q). Can't see the icon on a full menu bar? It can hide behind the camera: open Desktap Agent from Applications again, and its window comes back.
+>
+> <!-- SCREENSHOT start-menu-bar: the Mac menu bar after Setup with the Desktap Agent icon (3×2 grid) and its open menu: status line, Show Agent Window ⌘O, Settings… ⌘, and Quit Desktap ⌘Q (take it with a Release build: Debug adds Dev Log and Reset Setup) -->
+>
+> Done when the badge on the phone shows your Mac's name and a small grid icon is in the menu bar.
 
 ## Your first button
 

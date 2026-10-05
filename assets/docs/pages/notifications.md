@@ -1,4 +1,4 @@
-<!-- updated: 2026-10-02 -->
+<!-- updated: 2026-10-05 -->
 # Notifications
 
 A script can show a notification on your iPhone or iPad, on your Mac, or on both. Like any system notification, it has a title, a subtitle, a body and a sound, but no pictures or HTML. It can carry up to four action buttons, and each can run a command on the Mac when you tap it.
@@ -310,7 +310,7 @@ A tap opens the button's page, where the value is. A sensitive notification can 
 - Notifications reach the phone over its connection to the agent, with no push service in between. With no phone connected, the agent keeps up to 20 notifications for 12 hours and sends them when the phone connects. They are lost if the agent quits.
 - While Desktap is on screen, or for about 30 s after you leave it, a notification shows at once. Later it may not show: iOS has suspended Desktap. It then appears only when you open Desktap, as a new one without the time it was sent, or never if iOS or you close Desktap first.
 - Banners appear even while Desktap is on screen. The notifications of one button are grouped, and tapping one opens that button's page, so always send `cellId`.
-- The phone asks for permission when the first notification arrives (Settings › Notifications › Desktap). The agent asks when it starts (System Settings › Notifications › Desktap Agent).
+- The phone asks for permission when the first notification arrives (Settings › Notifications › Desktap). The agent asks on the **Permissions** step of its **Setup** (System Settings › Notifications › Desktap Agent).
 
 The answer says what happened, and adds `reason` when the phone may not show it now:
 
