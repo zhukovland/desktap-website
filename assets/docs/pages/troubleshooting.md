@@ -1,4 +1,4 @@
-<!-- updated: 2026-10-02 -->
+<!-- updated: 2026-10-05 -->
 # Troubleshooting
 
 Find what you see in the first column of a table: the exact text of an error, or what the button does. The row says why it happens and what to do, and links to the page with the details.
@@ -30,7 +30,7 @@ Your iPhone or iPad finds the Mac on the same Wi-Fi and pairs with it once, with
 
 | What you see | Why | What to do |
 |---|---|---|
-| "Make sure Desktap Agent is running on your Mac" | The phone finds no agent on this network: Desktap Agent is not running, its **Setup** is not finished, or the Mac is on another Wi-Fi. | Open Desktap Agent from Applications and finish **Setup**; its icon then appears in the menu bar. Put the phone and the Mac on the same Wi-Fi. [Get started › Install Desktap Agent on your Mac](?p=start#install-desktap-agent-on-your-mac) |
+| "Make sure Desktap Agent is running on your Mac" | The phone finds no agent on this network: Desktap Agent is not running, its **Setup** has not reached **Connect your iPhone or iPad**, or the Mac is on another Wi-Fi. | Open Desktap Agent from Applications and go on in **Setup** to **Connect your iPhone or iPad**. Put the phone and the Mac on the same Wi-Fi. [Get started › Install Desktap Agent on your Mac](?p=start#install-desktap-agent-on-your-mac) |
 | "Can't find your Mac? Turn on Local Network for Desktap in Settings." | Desktap has no permission to use the local network, so it can't see the Mac. | Tap **Open Settings** and turn on **Local Network**. [Get started › Pair your iPhone or iPad](?p=start#pair-your-iphone-or-ipad) |
 | "Too many incorrect codes." or "Pairing is blocked on this Mac…" | Three wrong codes end one pairing request. Five wrong codes since the last successful pairing block pairing on the Mac. | Tap **Try Again** and pair with the new code. If pairing is blocked, first click **Allow Pairing** on **Overview** or **Devices** in the agent window (**Show Agent Window** in the menu-bar icon's menu), then pair again. [Get started › Pair your iPhone or iPad](?p=start#pair-your-iphone-or-ipad) |
 | "“Mac” is in use by another device. Desktap will connect when it's free." | The Mac serves one phone at a time, and the one used most recently wins. | Close Desktap on the other iPhone or iPad. This one connects as soon as the Mac is free. [Working from your Mac › When live widgets don't start](?p=from-your-mac#when-live-widgets-dont-start) |

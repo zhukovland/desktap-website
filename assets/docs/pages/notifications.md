@@ -310,7 +310,7 @@ A tap opens the button's page, where the value is. A sensitive notification can 
 - Notifications reach the phone over its connection to the agent, with no push service in between. With no phone connected, the agent keeps up to 20 notifications for 12 hours and sends them when the phone connects. They are lost if the agent quits.
 - While Desktap is on screen, or for about 30 s after you leave it, a notification shows at once. Later it may not show: iOS has suspended Desktap. It then appears only when you open Desktap, as a new one without the time it was sent, or never if iOS or you close Desktap first.
 - Banners appear even while Desktap is on screen. The notifications of one button are grouped, and tapping one opens that button's page, so always send `cellId`.
-- The phone asks for permission when the first notification arrives (Settings › Notifications › Desktap). The agent asks on the **Permissions** step of its **Setup** (System Settings › Notifications › Desktap Agent).
+- The phone asks for permission when the first notification arrives (Settings › Notifications › Desktap). The agent asks only when you click **Allow** at **Notifications**, on the **Permissions** step of its **Setup** or under **Permissions** in the agent window (System Settings › Notifications › Desktap Agent). If nobody did, a notification for the Mac is not shown and the answer says `"mac":"denied"`.
 
 The answer says what happened, and adds `reason` when the phone may not show it now:
 
@@ -325,7 +325,7 @@ The answer says what happened, and adds `reason` when the phone may not show it 
 | `"phone":"queued"` | no phone connected: the agent keeps it for 12 hours |
 | `"reason":"background"` | sent while Desktap was not on screen: it may not show now |
 | `"mac":"shown"` | on the Mac's screen |
-| `"mac":"denied"` | notifications are not allowed for Desktap Agent: **Open System Settings** under **Permissions › Notifications** in the agent window opens the page to allow them |
+| `"mac":"denied"` | notifications are not allowed for Desktap Agent: **Permissions › Notifications** in the agent window has **Allow** until macOS has been asked, then **Open System Settings**, which opens the page to allow them |
 
 After `call notify` the answer is in `$answer`: `[[ $answer == *'"phone":"queued"'* ]]` tells you the phone was away, and `[[ $answer == *'"reason":"background"'* ]]` that it may not show the notification now. A 400 names what is wrong with the body; every message is listed in [Script API › Notification errors](?p=api#notification-errors).
 
