@@ -1,4 +1,4 @@
-<!-- updated: 2026-10-02 -->
+<!-- updated: 2026-10-05 -->
 # Working from your Mac
 
 You build a button on your iPhone or iPad, but you test it, debug it and connect it to other programs on the Mac. This page shows how to move code between the two, try a script in Terminal before it goes on a button, send an update by hand and let other programs change a button. It ends with a tour of Desktap Agent: its menu and its windows.
@@ -193,12 +193,34 @@ A sidebar on the left lists its sections. An orange dot next to one means someth
 | **Overview** | Banners, only when something needs you, such as [When live widgets don't start](#when-live-widgets-dont-start) or **Update Available**. Then four tiles; click one to open its section. |
 | **AI Assistants** | Connect an AI app ([Use with an AI app](?p=ai)) |
 | **Devices** | **Trusted Devices**: your paired phones; **Remove** one, or **Remove All**. With none, the steps to pair one. |
-| **Security** | Keychain and pairing-key problems, and the **Allow AI to Run Commands** switch ([Use with an AI app › Commands on your Mac](?p=ai#commands-on-your-mac)) |
+| **Security** | How Desktap protects this Mac, pairing and the local API right now, Keychain problems, and the **Allow AI to Run Commands** switch: [Security](#security) |
 | **Permissions** | **Accessibility**, **Automation**, **Notifications** and **System Audio Recording**: what each lets buttons do, its state and how to turn it on |
-| **Scripts** | What your buttons run on this Mac: [the list described next](#the-running-scripts-window) |
+| **Scripts** | What your buttons run on this Mac: [the list described below](#the-running-scripts-window) |
 | **General** | **Launch at Login**, **Check for Updates…** and the agent's version |
 
 The tiles read, for example, "Connected · 12 min", "1 app connected", "All granted" and "2 scripts running", with **Stop All**. An AI app counts as connected when it is set up to start this agent, open or not. With no phone connected, the phone tile names the Mac to choose in Desktap.
+
+### Security
+
+**Security** opens with a banner only when something needs you, then **How Desktap protects this Mac** in four points: **Encrypted**, **Only your devices**, **Everything goes through your Accept**, and **Websites, other accounts and sandboxed apps are kept out**. Under them, **Right now** shows the state at this moment and changes while the section is open:
+
+| Row | What it shows |
+|---|---|
+| **Pairing new devices** | **Allowed**: a new device still needs your click on this Mac and the code. **Blocked** after several incorrect codes, with **Allow Pairing**; trusted devices still connect. **Paused** while another user's session is active, **Unavailable** while a Keychain problem in the banner lasts, **Unreachable** when port 9847 can't take new connections from phones (the caption says why). |
+| **Trusted devices** | How many devices this Mac trusts, or **None**. **Manage** opens **Devices**, where removing a device cuts it off at once. |
+| **This Mac's fingerprint** | Four groups of characters, such as `3f2a 91c0 7b11 04de`. Desktap on your iPhone or iPad shows the same one under this Mac in **Paired Macs**; if you don't see it there, update the app. |
+| **Local API** | **This agent** when it serves button scripts and AI tools of this macOS account. **Another agent** or **Stopped** when they can't reach it, with the reason from [When live widgets don't start](#when-live-widgets-dont-start). |
+| **Allow AI to Run Commands** | The switch, off at first: AI tools can run Terminal commands on your Mac, and you approve each one on your iPhone or iPad ([Use with an AI app › Commands on your Mac](?p=ai#commands-on-your-mac)) |
+
+While the agent reads its pairing key and trusted devices from Keychain, the rows read **Loading…**. The banners on top:
+
+| Banner | What to do |
+|---|---|
+| "Can't read the pairing key from Keychain (status …)." or "Can't access the trusted devices in Keychain (status …)." | Click **Retry**. Until it's fixed, new devices can't pair. If the saved item is damaged, the banner also offers **Reset Pairing Key** or **Remove All Paired Devices…**; after either, every device has to pair with this Mac again. |
+| "Couldn't finish resetting this Mac's pairing key (status …). New devices can't pair until it's done." | Click **Retry**. |
+| "Couldn't save the pairing to Keychain (status …).", "Couldn't remove … (status …)." | Click **Dismiss** and try again. |
+| "This Mac's pairing key was reset. Pair your devices again." | Pair each iPhone or iPad again ([Get started › Pair your iPhone or iPad](?p=start#pair-your-iphone-or-ipad)), then click **Dismiss**. |
+| "The Desktap app on the connected iPhone or iPad keeps its deck where any app on your Macs can change it. Update the app." | Update Desktap on that iPhone or iPad. |
 
 ### The Running Scripts window
 
