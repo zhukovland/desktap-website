@@ -20,7 +20,7 @@ Every start is a fresh start: the script's variables begin empty. The agent may 
 
 <div class="dt-mount" data-diagram="script-lifecycle" data-mode="short">How the agent starts, restarts and stops a startup script, and how the phone lists it in each state.</div>
 
-<!-- SCREENSHOT lw-advanced: the Advanced screen of a button with a saved, running startup script: the Startup Script row showing "#!/bin/zsh", Status "Running" with its green dot, Restart Startup Script, Remove Startup Script, the footer "Runs on the Mac for as long as this device is connected…", and the Button ID section below. iPhone 17 Pro, English, dark, iOS 26; turn off Settings › Security › Hide Code While Recording or Mirroring first. -->
+<img src="assets/docs/img/live-widgets/advanced.png" width="280" height="608" alt="The Advanced screen of a button with a running startup script: its first line “#!/bin/zsh”, Status “Running” with a green dot, Restart Startup Script and Remove Startup Script, and below them Button ID.">
 
 ## Your first live widget: free disk space
 
@@ -87,7 +87,7 @@ Put it on a button:
 > [!SEE]
 > Within a second the button shows your free space, such as "412 GB free", with a drive icon. **Advanced › Status** reads **Running**.
 >
-> <!-- SCREENSHOT lw-disk: the free disk button on the deck reading "412 GB free" with the internaldrive.fill icon, next to ordinary buttons. iPhone 17 Pro, English, dark, iOS 26. -->
+> <img src="assets/docs/img/live-widgets/disk.png" width="280" height="608" alt="The deck with the first button reading “412 GB free” with a blue drive icon, next to Lock Screen, Screenshot and Mute Mic.">
 >
 > Not seeing it? → [When a widget doesn't work](#when-a-widget-doesnt-work)
 
@@ -132,7 +132,10 @@ When the agent stops a script, the phone brings back the saved look by itself, e
 
 Nothing is drawn on a widget that doesn't work: it keeps what it showed last. The ⚠ count next to your Mac's name at the top of the deck says how many buttons don't work, as in **⚠ 2** (outside edit mode). Tap it to open **Errors**, the list that says why.
 
-<!-- SCREENSHOT lw-errors: left, the deck's top bar with "⚠ 2" in orange right of the Mac's name; right, the Errors list it opens: Not working now with "Script crashed" ("Disk · Startup script", "Default › Main", `Exit code 3`, "The agent will restart it shortly.", Show Button, Restart Script), and Not running with "Script finished" ("Logs · Startup script", "It won't run again until you restart it."). iPhone 17 Pro, English, dark, iOS 26; Hide Code While Recording or Mirroring off, or the error text is hidden; made-up test scripts only. -->
+<div class="shot-pair">
+<img src="assets/docs/img/live-widgets/errors-1.png" width="240" height="521" alt="The deck with an orange “⚠ 2” in the top bar, to the right of the Mac’s name.">
+<img src="assets/docs/img/live-widgets/errors-2.png" width="240" height="521" alt="The Errors list: under Not working now, “Script crashed” for Disk · Startup script, with “Exit code 3”, “The agent will restart it shortly.”, Show Button and Restart Script; under Not running, “Script finished” for Logs · Startup script.">
+</div>
 
 | The count | What it means |
 |---|---|
@@ -162,7 +165,7 @@ A tap that fails makes its button flash red and shake, and a toast, a short note
 
 A startup script's state also shows in **Advanced › Status** (Running, Restarting, Failed or Not Running, with the error under it) and on the Mac under **Scripts** in the agent window, which names it by its first comment. So start every script with a comment of up to 60 characters after `#!/bin/zsh` ([Working from your Mac › The Running Scripts window](?p=from-your-mac#the-running-scripts-window)).
 
-<!-- SCREENSHOT lw-running-scripts: the Desktap Agent window on Scripts, with the row "Free disk space: GB left, checked every 10 s" (Startup badge, uptime, Restart, Stop) and a Failed row opened to show "Exit code 3". English, dark. -->
+<img src="assets/docs/img/live-widgets/running-scripts.png" width="760" height="524" alt="The agent window on Scripts: the running startup script “Free disk space: GB left, checked every 10 s” with its Startup badge, uptime, Restart and Stop, and a failed startup script, “Weather in Lisbon, every 15 min”, opened to show “Exit code 3: no answer from the weather service”.">
 
 Make the error worth reading: before `exit 1`, print the reason to stderr on one short line, as in `print -u2 "No network"`. The helpers already print every 400 with the agent's reason. More symptoms and fixes: [Troubleshooting › A button or widget doesn't work](?p=troubleshooting#a-button-or-widget-doesnt-work).
 
@@ -225,7 +228,7 @@ It is a plain text replacement, so it works inside any string: `"$DESKTAP_STORAG
 
 Open the button's editor and tap **Advanced**. Under **Button ID**, tap **Copy** (it turns into **Copied**), then paste the ID where you need it, for example into another button's script. The footer says what it is for: "This button's scripts see it as {{CELL_ID}}. Copy it when one script draws several buttons."
 
-<!-- SCREENSHOT lw-button-id: Advanced › Button ID with the ID in monospace and the Copy button just turned into "Copied", with the footer below. iPhone 17 Pro, English, dark, iOS 26. -->
+<img src="assets/docs/img/live-widgets/button-id.png" width="280" height="608" alt="The Advanced screen: under Button ID the ID in monospace and, in place of Copy, the green word “Copied”, with the footer line below.">
 
 There are three more ways:
 
@@ -321,7 +324,7 @@ post "{\"cellId\":\"$cell\",\"reset\":true}"      # back to the saved look
 >
 > A red flash and a toast instead? **Details** opens its row in **Errors** ([When a widget doesn't work](#when-a-widget-doesnt-work)).
 >
-> <!-- SCREENSHOT lw-tap-toast: the deck right after a failed tap of a Shell Command whose only line is `nosuchtool`: the button shaking, and the toast at the bottom with the orange symbol, "Not found", "zsh:1: command not found: nosuchtool" and Details. iPhone 17 Pro, English, dark, iOS 26; Hide Code While Recording or Mirroring off, or the error text is left out; a made-up test button. -->
+> <img src="assets/docs/img/live-widgets/tap-toast.png" width="280" height="608" alt="The deck after a failed tap: a toast at the bottom with an orange magnifier, “Not found”, “zsh:1: command not found: nosuchtool” and Details.">
 
 While a tap script runs, the button pulses and further taps are ignored. On a button that also has a startup script, let the startup script do all the drawing; the tap only changes what the loop reads ([Button logic › Taps change state, the loop draws](?p=button-logic#taps-change-state-the-loop-draws)).
 

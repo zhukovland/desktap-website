@@ -91,8 +91,6 @@ Put it on a button as in Live widgets: **No Action** as the tap, a **Name** such
 >
 > Not seeing it? → [Troubleshooting › Notifications](?p=troubleshooting#notifications)
 
-<!-- SCREENSHOT S3: the "Disk space low" notification (its title, its body and the Storage Settings button, nothing else), once as a banner on the iPhone lock screen (expanded, so the button shows) and once on the Mac in Notification Center. iPhone 17 Pro, English, dark, iOS 26; macOS in English. -->
-
 What is new compared with the widget:
 
 - `warn` builds the body with `jq -n --arg`, because `df` wrote the number, not you ([How scripts run › Text in JSON](?p=scripts#text-in-json)). `call notify` sends it and prints the agent's message to stderr if the body is wrong.
@@ -265,7 +263,7 @@ These do not count: an **AppleScript** or **Run Shortcut** button, a background 
 > [!SEE]
 > When an action from another program asks first, the phone shows **Run on your Mac?** with the full command, **Run on Mac** and **Cancel**. The Mac shows **Run this from a notification?** with **Cancel** and **Run**.
 
-<!-- SCREENSHOT notifications-run-sheet: the phone's "Run on your Mac?" sheet for a notification action sent by a program on the Mac: the sentence "The notification action “…” will run on <Mac>:", the command, "Only run it if you expected this notification and recognize this command.", Run on Mac and Cancel. iPhone 17 Pro, English, dark, iOS 26. -->
+<img src="assets/docs/img/notifications/run-sheet.png" width="280" height="608" alt="The phone’s “Run on your Mac?” sheet: “The notification action “Open Log” will run on MacBook Pro:”, the notification “Backup finished”, the command “open -a Console /tmp/desktap-demo/backup.log”, “Only run it if you expected this notification and recognize this command.”, and the buttons Run on Mac and Cancel.">
 
 ### What a tap does
 

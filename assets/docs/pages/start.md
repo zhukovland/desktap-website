@@ -37,13 +37,16 @@ You need a Mac with macOS 15 or later and your iPhone or iPad with Desktap, on t
 >
 > Setup then reads "iPhone “…” is connected" (or iPad) and "Its buttons now control this Mac.". Once paired, the phone reconnects by itself. A Mac serves one phone at a time. After five wrong codes, the Mac blocks pairing until you click **Allow Pairing**, in Setup or, later, in the agent window (**Overview** or **Devices**). To pair later, skip this step. While Setup is open, a request from the phone brings it back to this step; after Setup, the agent window comes forward on **Devices** with the **Pairing Request**.
 >
-> <!-- SCREENSHOT start-pairing: side by side, the phone's "Enter the code shown on your Mac" sheet with "Code expires in" and the Mac's Setup window on "Connect your iPhone or iPad" showing the 6-digit code ("Enter this code on your iPhone") -->
+> Left, the phone's code field; right, the Mac's **Pairing Request** in the agent window, where it appears when you pair after Setup.
+>
+> <div class="shot-pair">
+> <img src="assets/docs/img/start/pairing-phone.png" width="200" height="435" alt="The phone asks for the code shown on your Mac: six empty boxes, “Code expires in 1:19” and Cancel, with the number keypad below.">
+> <img src="assets/docs/img/start/pairing-mac.png" width="420" height="309" alt="The Desktap Agent window on Devices with a Pairing Request over it: “Enter this code on your iPhone”, the code 482 915, a 4:40 countdown and Cancel.">
+> </div>
 >
 > Then finish Setup. **Connect an AI app** is optional: click **Connect** in a card, or **Skip** (**Continue** when no AI app is found on this Mac; [Use with an AI app](?p=ai)). **You're all set** shows what you did, with **Launch at Login**, a switch that starts the agent when you log in. It is on when the agent runs from Applications; turn it off if you would rather not. Click **Open Desktap Agent**: the agent window opens on **Overview**.
 >
 > The agent lives in the menu bar, not in the Dock. Its menu holds **Show Agent Window** (⌘O), **Settings…** (⌘,) and **Quit Desktap** (⌘Q). Can't see the icon on a full menu bar? It can hide behind the camera: open Desktap Agent from Applications again, and its window comes back.
->
-> <!-- SCREENSHOT start-menu-bar: the Mac menu bar after Setup with the Desktap Agent icon (3×2 grid) and its open menu: status line, Show Agent Window ⌘O, Settings… ⌘, and Quit Desktap ⌘Q (take it with a Release build: Debug adds Dev Log and Reset Setup) -->
 >
 > Done when the badge on the phone shows your Mac's name and a small grid icon is in the menu bar.
 
@@ -83,7 +86,7 @@ Pasted code runs as it is; only an AI app's changes wait for review.
 >
 > Tap the edit button at the top right: a dashed square with a plus, between the Gallery icon and the page name. On an empty page, **Create a Button**, under **Open Gallery**, opens **New Button** directly.
 >
-> <!-- SCREENSHOT start-edit-button: the deck's top bar on iPhone, the edit button (dashed square with a plus) ringed, Gallery icon to its left and the page name to its right -->
+> <picture class="shot-ring" style="--x:78.6%;--y:8.5%;--d:9%"><img src="assets/docs/img/start/edit-button.png" width="280" height="608" alt="The deck on iPhone. In the top bar, between the Gallery icon and the page name “Main”, the edit button, a dashed square with a plus, is ringed in blue. Below it, four buttons (Lock Screen, Screenshot, Mute Mic, Spotlight), two more (Previous, Next) and free spots."></picture>
 >
 > Done when the buttons wiggle and free spots show a **+**.
 
@@ -91,7 +94,7 @@ Pasted code runs as it is; only an AI app's changes wait for review.
 >
 > Tap a free spot. In **New Button**, scroll past **Ready-Made Widgets** to **Scripts** and tap **Shell Command**. Tap **Command**, paste the script (touch and hold, **Paste**) and tap **Done**. On iOS 26 and later, the editor shows **Add**, **Save** and **Done** as a ✓ and **Cancel** as an ✕.
 >
-> <!-- SCREENSHOT start-new-button: the New Button catalog scrolled so that Scripts › Shell Command ("A Terminal command, up to 60 s") is visible -->
+> <img src="assets/docs/img/start/new-button.png" width="280" height="472" alt="The New Button list: Launch App, Key Combination, System Action, Open URL, Run Shortcut, Text Snippet and Switch Page, and under Scripts, AppleScript and Shell Command (“A Terminal command, up to 60 s”).">
 >
 > Done when the **Command** row shows the script's first comment.
 
@@ -99,7 +102,7 @@ Pasted code runs as it is; only an AI app's changes wait for review.
 >
 > Under **Appearance**, type "Hello" as the **Name**: a Shell Command gets no automatic name. Tap **Add**. The first time, a **Drag & Drop** tip appears: tap **Got it**.
 >
-> <!-- SCREENSHOT start-name-add: the editor form with Tap › Type Shell Command, the Command row showing the comment, Appearance › Name "Hello", and the ✓ at the top right -->
+> <img src="assets/docs/img/start/name-add.png" width="280" height="608" alt="The New Button editor for a Shell Command: Tap › Type “Shell Command”, the Command row reading “Hello button: greet…”, Appearance › Name “Hello”, and the ✓ at the top right.">
 >
 > Done when the new button sits in the grid.
 
@@ -111,7 +114,7 @@ Pasted code runs as it is; only an AI app's changes wait for review.
 > The button shows "Hello!" and 👋, tinted green, while its border pulses. After 3 seconds it looks as before.
 > Not seeing it? → [If nothing happens](#if-nothing-happens)
 >
-> <!-- SCREENSHOT start-hello: the deck with the new button tinted green, "Hello!" and 👋, its border pulsing (take it within the 3 seconds) -->
+> <img src="assets/docs/img/start/hello.png" width="280" height="608" alt="The deck with the new button in the second row: a waving hand and “Hello!”, tinted green, with a green border.">
 
 ## What just happened
 
@@ -169,7 +172,7 @@ You need a script only when no type does the job.
 
 Tap a type to set it up. **Launch App** opens the list of apps on your Mac, with a search field: tap one, and the button takes the app's name and icon.
 
-<!-- SCREENSHOT start-launch-app: the Launch App list on iPhone, "Search apps" at the top, rows with app icons and names -->
+<img src="assets/docs/img/start/launch-app.png" width="280" height="608" alt="The Launch App list on iPhone: “Search apps” at the top, then App Store, Calculator, Calendar, FaceTime, Mail and more, each with its icon.">
 
 You can't swipe to another page: tap the page name at the top right or a **Switch Page** button. A page can also open itself when you switch to its app on the Mac.
 

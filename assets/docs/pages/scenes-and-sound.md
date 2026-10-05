@@ -198,7 +198,7 @@ done
 > [!SEE]
 > Within a second, two lines span all four buttons and the texts slide from right to left, vanishing for a moment into each gap. A text that leaves on the left returns on the right, updated. Not seeing it? → [Troubleshooting](?p=troubleshooting#nothing-changes-on-the-button)
 
-<!-- SCREENSHOT scenes-ticker-phone: iPhone 17 Pro, English, dark, iOS 26: a deck page with the ticker running across one row of four buttons, a text crossing a gap. -->
+<img src="assets/docs/img/scenes-and-sound/ticker-phone.png" width="280" height="608" alt="A deck page with the ticker across one row of four buttons: two blue lines run through all four, and the texts “14:05”, “Load 2.31” and “412 GB” slide across the gaps between the buttons.">
 
 **Make it yours**
 
@@ -444,8 +444,6 @@ ok 1 31 34 1 12 18 25 31 36 34 29 26 22 20 18 16 15 13 11 10 8 6 4 2
 - **A refusal is silent:** `state` stays `ok`, and the bars stay flat while music plays. In the agent window, **Permissions** lists **System Audio Recording** without a button: it reads **Not asked yet** before the first request, **Asked** after it, and **Granted** once sound has come through. If it stays at **Asked** while music plays and the widget is on screen, turn on Desktap Agent in System Settings › Privacy & Security › Screen & System Audio Recording, under **System Audio Recording Only**.
 - **Title and artist** are not in the line. Ask the player with `osascript`, and only while it is running: a plain `tell application "Music"` launches it.
 
-<!-- SCREENSHOT scenes-audio-prompt: the macOS prompt on the Mac that asks to let Desktap Agent record system audio, with the line "Desktap listens to the sound your Mac plays…". -->
-
 ### Music spectrum
 
 Twenty bars follow the sound your Mac plays at about 11 frames a second, and rest while the button is off screen.
@@ -613,7 +611,7 @@ The Gallery's **Unusual** collection holds three whole-page scenes built this wa
 
 On the Free plan, only the first two pages of each profile open: a scene on a later page stays still.
 
-<!-- SCREENSHOT scenes-gallery-unusual: iPhone 17 Pro, English, dark, iOS 26: the Gallery with the Unusual collection showing Mac Town, Visualizer and Aquarium. -->
+<img src="assets/docs/img/scenes-and-sound/gallery-unusual.png" width="280" height="608" alt="The Gallery on its Unusual collection: the Mac Town card, a neon city built from app buildings, then the Visualizer card, a grid of colored bars, and the top of a fish tank below.">
 
 ## Next
 

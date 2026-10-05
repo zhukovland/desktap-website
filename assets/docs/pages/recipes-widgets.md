@@ -57,7 +57,7 @@ When you change a drawing, change its numbers, colors and texts as you like, but
 
 Puts a number from a web API in the button's title once a minute, and tells the phone why when the API fails.
 
-<!-- SCREENSHOT recipes-widgets-web-number: iPhone 17 Pro, iOS 26, English, dark. A Normal button in Orange showing the bitcoinsign.circle.fill symbol and the title "€74,985", next to an ordinary button for scale. Turn off Settings › Security › Hide Code While Recording or Mirroring first. -->
+<img src="assets/docs/img/recipes-widgets/web-number.png" width="280" height="608" alt="The deck with the first button showing an orange bitcoin symbol and “€74,985”, next to Lock Screen, Screenshot and Mute Mic.">
 
 **Where it goes**
 
@@ -185,7 +185,7 @@ If an answer holds no number, the button keeps the last number it showed, and th
 
 The next answer with a number clears the report, and the row moves to **Earlier**. To see it, set `pick='.bitcoin.usd'` and save: within seconds ⚠ 1 appears. Put `.bitcoin.eur` back and save.
 
-<!-- SCREENSHOT recipes-widgets-web-number-error: iPhone 17 Pro, iOS 26, English (the list is always dark). Errors, opened from ⚠ 1, with one row under Not working now: "Button set up wrong", "Bitcoin · Reported by the script", "Default › Main", "The answer has no number at .bitcoin.usd", "Something in the button's settings is missing or wrong. Edit the button.", Show Button and Restart Script. Use a test button named Bitcoin with pick='.bitcoin.usd'. Turn off Settings › Security › Hide Code While Recording or Mirroring first. -->
+<img src="assets/docs/img/recipes-widgets/web-number-error.png" width="280" height="608" alt="The Errors list opened from ⚠ 1: under Not working now, “Button set up wrong” for Bitcoin · Reported by the script, with “The answer has no number at .bitcoin.usd”, Show Button and Restart Script.">
 
 **Make it yours**
 

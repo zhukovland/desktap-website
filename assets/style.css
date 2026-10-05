@@ -1735,6 +1735,33 @@ img { display: block; max-width: 100%; }
 /* A picture on its own line (an HTML block, not inside a paragraph) */
 .docs-content > img { margin: 6px 0 20px; }
 
+/* Two screens side by side; they wrap under each other when the column is narrow */
+.shot-pair {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px 20px;
+  margin: 6px 0 20px;
+}
+.shot-pair img { margin: 0; }
+
+/* A ring drawn over one spot of a screenshot: <picture class="shot-ring" style="--x:..;--y:..;--d:..">.
+   --x, --y: the center and --d: the diameter, as a share of the picture's width. */
+.shot-ring { position: relative; display: block; width: fit-content; max-width: 100%; }
+.shot-ring::after {
+  content: '';
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--d);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px var(--accent-glow);
+  pointer-events: none;
+}
+
 .docs-content blockquote {
   margin: 20px 0 24px;
   padding: 14px 18px;
@@ -1898,7 +1925,7 @@ img { display: block; max-width: 100%; }
 .callout-see .callout-media { order: -1; }
 
 .callout-see .callout-media img {
-  max-width: 168px;
+  max-width: 220px;
   background: var(--phone-screen);
   border-radius: 14px;
 }

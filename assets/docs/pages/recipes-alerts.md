@@ -252,7 +252,10 @@ Tap to start a deploy that may take ten minutes. The button counts the time, and
 > [!WARNING]
 > A tap script is stopped after 60 seconds, as the note under **Command** says: "Runs for up to 60 seconds. Put loops and live updates in the Startup Script." A deploy run from a tap would be cut off halfway, with no report. Here the tap only asks for a run; the startup script, with no time limit, does the job.
 
-<!-- SCREENSHOT recipes-alerts-deploy: three moments of the Deploy button on iPhone 17 Pro, English, dark, iOS 26: running ("Deploy" / "1:23", hourglass, blue), finished ("Done", green check), and the notification banner "Deploy finished" / "It took 3 min 12 s." expanded with Open Log and Roll Back -->
+<div class="shot-pair">
+<img src="assets/docs/img/recipes-alerts/deploy-1.png" width="240" height="521" alt="The deck while the deploy runs: the first button reads “Deploy 1:23”, with a blue hourglass.">
+<img src="assets/docs/img/recipes-alerts/deploy-2.png" width="240" height="521" alt="The deck when the deploy has finished: the first button reads “Done”, with a green check.">
+</div>
 
 **Where it goes**
 
@@ -614,8 +617,6 @@ tellme() {
   return $rc
 }
 ```
-
-<!-- SCREENSHOT recipes-alerts-tellme: the Mac notification banner "Failed (exit 2): make" with the body "make build · 3 min 12 s" and the Show Terminal button on hover -->
 
 > [!SEE]
 > The notification reads "Finished: make" or "Failed (exit 2): make", with the command and its duration. Its **Show Terminal** button brings your terminal to the front.

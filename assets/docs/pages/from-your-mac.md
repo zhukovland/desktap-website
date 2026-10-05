@@ -184,7 +184,7 @@ Desktap Agent runs in the menu bar, with no Dock icon. Its icon is a 3×2 grid, 
 
 ### The agent window
 
-<!-- SCREENSHOT from-your-mac-agent-window: the Desktap Agent window (English, macOS dark) on Overview: the sidebar Overview, AI Assistants, Devices, Security, Permissions, Scripts, General, and the four tiles: the phone "Connected · 12 min", AI Assistants "1 app connected", Permissions "All granted", Scripts "2 scripts running" with Stop All -->
+<img src="assets/docs/img/from-your-mac/agent-window.png" width="760" height="524" alt="The Desktap Agent window on Overview: a sidebar with Overview, AI Assistants, Devices, Security, Permissions, Scripts and General, and four tiles: iPhone “Connected · 12 min”, AI Assistants “1 app connected”, Permissions “All granted” and Scripts “2 scripts running” with Stop All.">
 
 A sidebar on the left lists its sections. An orange dot next to one means something there needs you, such as a permission that is off. A phone that asks to pair brings the window forward on **Devices**.
 
@@ -202,7 +202,7 @@ The tiles read, for example, "Connected · 12 min", "1 app connected", "All gran
 
 ### The Running Scripts window
 
-<!-- SCREENSHOT from-your-mac-running-scripts: the agent window on Scripts (English, macOS dark), Open in Separate Window and Stop All at the top, with a running startup script (Startup badge, uptime, Restart, Stop), one row expanded to show Shell Command, and a Failed startup script with its error expanded; use made-up test scripts, not real ones -->
+<img src="assets/docs/img/from-your-mac/running-scripts.png" width="760" height="640" alt="The agent window on Scripts, with Open in Separate Window and Stop All at the top: a running script, a running startup script (Startup badge, uptime, Restart, Stop) opened to show its Shell Command, and a failed startup script with “Exit code 1: icalBuddy: no calendar named &quot;Work&quot;”.">
 
 Choose **Scripts** in the agent window's sidebar. It lists every shell script the agent is running (tap, long press and startup scripts) and every startup script that is not running right now. **Open in Separate Window** shows the same list in a window of its own, **Running Scripts**.
 

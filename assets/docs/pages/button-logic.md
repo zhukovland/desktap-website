@@ -106,7 +106,10 @@ If you allowed Automation in the agent's Setup, **Desktap Agent** can already co
 > [!SEE]
 > Tap the button. The Mac switches, and within 2 s the button follows: **Dark** with a moon, **Light** with a sun. Not seeing it? → [Troubleshooting › Permissions](?p=troubleshooting#permissions)
 
-<!-- SCREENSHOT button-logic-dark-switch: the deck with this button reading "Dark" (indigo, moon icon) next to the same button reading "Light" (orange, sun icon); iPhone 17 Pro, dark appearance, iOS 26 -->
+<div class="shot-pair">
+<img src="assets/docs/img/button-logic/dark-switch-1.png" width="240" height="521" alt="The deck with the first button reading “Dark”, with a moon.">
+<img src="assets/docs/img/button-logic/dark-switch-2.png" width="240" height="521" alt="The same button after the Mac switched, reading “Light”, with a sun.">
+</div>
 
 > [!TIP]
 > A button that switches one way only needs no script: the **System Action** type has **Dark Mode** and **Light Mode**.
@@ -266,7 +269,7 @@ Put the first script in **Command** and the second in **Advanced › Startup Scr
 > [!SEE]
 > Tap the button: within a second it starts counting down from 25 minutes. Tap again and it reads **Focus**.
 
-<!-- SCREENSHOT button-logic-focus: the focus button counting down (red, timer icon, title such as "24:59"); iPhone 17 Pro, dark appearance, iOS 26 -->
+<img src="assets/docs/img/button-logic/focus.png" width="280" height="608" alt="The deck with the first button counting down: a red timer icon and “24:59”.">
 
 ### Why it survives a reconnect
 
@@ -327,7 +330,7 @@ Here the focus timer moves its countdown to a second button, and the button you 
 2. Tap the new button to open it, tap **Advanced**, and under **Button ID** tap **Copy**. It turns into **Copied**.
 3. Open the timer, the button you tap. In **Advanced › Startup Script**, replace the script with the one below and paste the ID in place of `PASTE-THE-COUNTDOWN-BUTTON-ID`. Tap **Done**, then **Save**.
 
-<!-- SCREENSHOT button-logic-button-id: Advanced screen of a button, the Button ID section with the ID in monospace, the Copy button and its footer "This button's scripts see it as {{CELL_ID}}. Copy it when one script draws several buttons." with its Learn More… link; iPhone 17 Pro, dark appearance, iOS 26 -->
+<img src="assets/docs/img/button-logic/button-id.png" width="280" height="608" alt="The Advanced screen of the countdown button: Startup Script with “Write Script”, then Button ID, a long ID in monospace with Copy, and the footer “This button’s scripts see it as {{CELL_ID}}. Copy it when one script draws several buttons.” with Learn More…">
 
 <!-- verified 2026-10-01, agent 1.2.3 (build 8), harness -->
 ```zsh title="Startup Script"
@@ -431,7 +434,10 @@ This long press gives a running focus session 5 more minutes. Like the tap, it o
 - While a long-press **Shell Command** runs, **Stop Process** appears in the **Long Press** section of the editor.
 - Use the long press for a second, less common action, or for one that stops, discards or deletes. Keep the main action on the tap: a switch should flip when you tap it.
 
-<!-- SCREENSHOT button-logic-long-press: the focus button on the deck with the small long-press triangle in its top-right corner, and the editor's Long Press section with a Shell Command; iPhone 17 Pro, dark appearance, iOS 26 -->
+<div class="shot-pair">
+<img src="assets/docs/img/button-logic/long-press-1.png" width="240" height="521" alt="The focus button on the deck with a small triangle in its top-right corner, the mark of a long press.">
+<img src="assets/docs/img/button-logic/long-press-2.png" width="240" height="429" alt="The editor of the focus button, scrolled to Appearance and Long Press: Type “Shell Command”, Command “Focus timer: 5 more…” and Remove Long Press.">
+</div>
 
 ## Next
 

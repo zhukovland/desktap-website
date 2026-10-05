@@ -1,4 +1,4 @@
-<!-- updated: 2026-10-02 -->
+<!-- updated: 2026-10-05 -->
 # Use with an AI app
 
 Desktap Agent is also an MCP server. MCP, the Model Context Protocol, is how AI apps such as Claude and ChatGPT use tools on your Mac. Connect one, and you can describe a button instead of building it: "a page of Figma shortcuts", "show CPU load as a ring".
@@ -13,7 +13,7 @@ The assistant in that app looks at your deck, writes the buttons and their scrip
 >
 > Only apps the agent finds get a card: install one and switch back to the agent. With none installed, the section names the apps Desktap works with and links to their downloads.
 >
-> <!-- SCREENSHOT ai-assistants: the Desktap Agent window (English, macOS dark) on AI Assistants: the header "Describe a button instead of building it"; the Claude Desktop card connected (Open Claude, a green check on "MCP server connected", Try it with Copy); the Claude Code card connected (a green check on "MCP server connected", "Widget skill installed" with its Install link); the ChatGPT / Codex card not connected (Connect, "Widget skill installed" reading "Connect first"); the collapsed "Connect Other MCP Clients" row; the card "What AI can and can’t do without you"; the "Allow AI to Run Commands" switch, off -->
+> <img src="assets/docs/img/ai/assistants.png" width="760" height="1180" alt="The Desktap Agent window on AI Assistants: the header “Describe a button instead of building it”; the Claude Desktop card with “MCP server connected” and a Try it prompt with Copy; the Claude Code card, connected, with “Widget skill installed” not yet checked (Install); the ChatGPT / Codex card, not connected (Connect); a Connect Other MCP Clients row; and “What AI can and can’t do without you”, ending in the link “Turn AI commands on or off in Security”.">
 
 > [!STEP] 2 · Click Connect
 >
@@ -74,7 +74,7 @@ Reading never changes anything, and every change to your deck waits for you.
 | Write tap scripts, startup scripts and SVG faces for those buttons | Nothing more: you read them on the same card |
 | Check its drawings, see whether a startup script runs, see what a live widget drew | Nothing |
 | Restart a startup script that is already on your deck | Nothing: it reruns the script saved on that button |
-| Run one command on your Mac to look something up | **Allow AI to Run Commands** in the agent window, then **Allow** on the phone for each command |
+| Run one command on your Mac to look something up | **Allow AI to Run Commands** under **Security** in the agent window, then **Allow** on the phone for each command |
 
 It can't press your buttons, so it never runs a tap action or a long press, and it can't delete anything. You delete on the phone: the ✕ on a button in edit mode, **Delete Page** or **Delete Profile** at the bottom of the page or profile editor.
 
@@ -88,7 +88,7 @@ When the AI app connects, the agent gives the assistant a short set of rules; th
 
 ### Commands on your Mac
 
-**Allow AI to Run Commands**, the switch at the bottom of **AI Assistants**, starts off. Its caption reads: "AI tools can run Terminal commands on your Mac. You approve each one on your iPhone or iPad." While it is off, the assistant is told "Probes are off: the user can turn on “Allow AI to Run Commands” in the Desktap Agent window."
+**Allow AI to Run Commands**, the switch under **Security** in the agent window, starts off. The card “What AI can and can’t do without you” on **AI Assistants** links to it: “Turn AI commands on or off in Security”. The switch's caption reads: "AI tools can run Terminal commands on your Mac. You approve each one on your iPhone or iPad." While it is off, the assistant is told "Probes are off: the user can turn on “Allow AI to Run Commands” in the Desktap Agent window."
 
 With the switch on, each command shows on the phone first: "The AI wants to run a command on MacBook Pro", the whole command, and the assistant's reason under "In the AI's words:". You have 35 seconds to tap **Allow** or **Deny**. Meanwhile the agent's window and menu show "AI wants to run a command".
 
@@ -98,7 +98,7 @@ An allowed command runs like a button script, for 15 seconds at most. As the car
 
 Every change from an AI app arrives on the phone as a review card, shown above everything else, even the editor and Settings. If the app lock is on, it first asks you to unlock: "Unlock to see what it changes."
 
-<!-- SCREENSHOT ai-review-card (S2): the review card on iPhone 17 Pro (English, dark, iOS 26) for an AI change that adds a 1×1 CPU ring: title "The AI wants to add the button “CPU”", "From MacBook Pro · page “Main”", "In the AI's words:" with a one-line description, the button row with its NEW badge and the line "In the background: runs on your Mac while this iPhone is connected" with "Show code (N lines)" collapsed, the summary "1 script will run in the background on your Mac" and "Nothing changes until you tap Accept.", and the footer with Accept (its ring half filled), Decide Later and Reject. Before recording, turn off Settings › Security › Hide Code While Recording or Mirroring. -->
+<img src="assets/docs/img/ai/review-card.png" width="280" height="608" alt="The review card on the iPhone: “The AI wants to add the button “CPU””, from MacBook Pro, page “Main”, the AI’s words, a CPU row marked NEW with “In the background: runs on your Mac while this iPhone is connected” and Show code (201 lines), “1 script will run in the background on your Mac”, and at the bottom Accept, Decide Later and Reject.">
 
 | On the card | What it tells you |
 |---|---|

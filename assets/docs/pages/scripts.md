@@ -301,7 +301,7 @@ Three places show the error, no AI app needed:
 - **Advanced › Status** in the button editor, with the same error under it.
 - **Scripts** in the agent window on the Mac (menu-bar icon › **Show Agent Window**, then **Scripts** in the sidebar): the chevron on a Failed row shows the error. **Open in Separate Window** shows the same list as the **Running Scripts** window ([Working from your Mac › The Running Scripts window](?p=from-your-mac#the-running-scripts-window)).
 
-<!-- SCREENSHOT scripts-running-window: the Desktap Agent window on Scripts (sidebar visible; Open in Separate Window and Stop All at the top) with one running startup script (Startup badge, uptime, Restart and Stop) and one Failed row expanded by its chevron, showing the error. -->
+<img src="assets/docs/img/scripts/running-window.png" width="760" height="524" alt="The agent window on Scripts: the running startup script “Unread mail on the Mail button, every 30 s” with its Startup badge, uptime, Restart and Stop, and a failed startup script, “Is the NAS up? Ping every 5 s”, opened to show “Exit code 68: ping: cannot resolve nas.local: Unknown host”.">
 
 A script starts over from attempt 0 after **Restart Script** in **Errors** or **Restart Startup Script** in **Advanced**, **Restart** under **Scripts** on the Mac, **Save** with changes, a reconnect, a profile switch or the agent's next start. A Stopped script stays stopped until one of these. A Failed one also gets a fresh attempt when any startup script of the active profile changes; saving a button that changes no startup script does nothing.
 
