@@ -295,6 +295,32 @@ img { display: block; max-width: 100%; }
   transform: translateY(-2px);
 }
 
+/* An app that is not out yet: a quiet note next to the buttons, not a button (no link, no badge look) */
+.soon-note {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 8px;
+  color: var(--text-secondary);
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  letter-spacing: -0.01em;
+}
+
+.soon-tag {
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  color: var(--text-primary);
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 /* Hero phone visual */
 .hero-visual {
   display: flex;
