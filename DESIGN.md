@@ -72,8 +72,8 @@ Each blob is an ellipse with a 4-stop radial gradient (0.3 → 0.15 → 0.04 →
 
 1. **Nav** — Fixed top, blurred black backdrop (`rgba(0,0,0,0.6)` + `backdrop-filter: blur(24px)`), 56px height. Logo left, links + CTA button right. Logo uses SF Pro Display 600.
 
-2. **Hero** — Full viewport height, vertically centered. Two-column grid: left column has badge + h1 + subtitle + action buttons; right column has phone screenshot with floating tags. On mobile (≤1024px) collapses to single column, centered.
-   On `/next/` (`.hero-duo`, the right column 1.2× the left) the picture is the deck on an iPad (landscape) and an iPhone, `assets/deck-ipad.webp` and `assets/deck-iphone.webp`: renders of the app in Apple's product bezels, transparent around the devices. Apple's rules for showing its devices apply (App Store Marketing Guidelines): whole, upright and unchanged — no shadow, reflection or highlight on them; nothing over them (no floating tags); no motion but a fade (the pair fades in, it doesn't rise like the text; no tilt on hover); at least 200 px on screen. So: side by side and bottom-aligned at their real relative size (the iPhone 76% of the iPad's height), a still accent aura behind. ≤1024px: the pair under the text, up to 760px wide. ≤520px: one under the other — the iPad full width, the iPhone at the same scale and never under 200 px tall. A new render replaces both files at the same size (iPad 1400×1073, iPhone 540×1102) and `assets/og-image.jpg` after them ("Social preview card").
+2. **Hero** — Full viewport height, vertically centered. Two-column grid (`.hero-duo`, the right column 1.2× the left): left column has h1 + subtitle + action buttons; right column has the picture. On mobile (≤1024px) collapses to single column, centered.
+   The picture is the deck on an iPad (landscape) and an iPhone, `assets/deck-ipad.webp` and `assets/deck-iphone.webp`: renders of the app in Apple's product bezels, transparent around the devices. Apple's rules for showing its devices apply (App Store Marketing Guidelines): whole, upright and unchanged — no shadow, reflection or highlight on them; nothing over them (no floating tags); no motion but a fade (the pair fades in, it doesn't rise like the text; no tilt on hover); at least 200 px on screen. So: side by side and bottom-aligned at their real relative size (the iPhone 76% of the iPad's height), a still accent aura behind. ≤1024px: the pair under the text, up to 760px wide. ≤520px: one under the other — the iPad full width, the iPhone at the same scale and never under 200 px tall. A new render replaces both files at the same size (iPad 1400×1073, iPhone 540×1102) and `assets/og-image.jpg` after them ("Social preview card").
 
 3. **Marquee** — Horizontal auto-scrolling ticker strip. SF Mono uppercase items separated by small blue diamond glyphs. Bordered top and bottom. 30s infinite linear scroll, seamless loop via duplicated items.
 
@@ -129,7 +129,7 @@ All buttons: SF Pro Text weight 500, 0.9375rem, padding 14px 28px, border-radius
 
 | Element | Type | Duration | Easing | Details |
 |---------|------|----------|--------|---------|
-| Hero elements | Staggered fadeUp | 0.7s each | cubic-bezier(0.16,1,0.3,1) | Badge→h1→subtitle→buttons→visual, delays 0.1–0.6s |
+| Hero elements | Staggered fadeUp | 0.7s each | cubic-bezier(0.16,1,0.3,1) | h1→subtitle→buttons, delays 0.25–0.5s; then the devices fade in (opacity only, 1s, delay 0.6s) |
 | Scroll reveals | fadeUp on intersect | 0.8s | cubic-bezier(0.16,1,0.3,1) | IntersectionObserver, threshold 0.08, -60px rootMargin |
 | Bento cards | Staggered reveal | +100ms each | same | Children delayed 0–500ms |
 | Terminal lines | Sequential reveal | 0.3s each | default | Delays 0.3–3.2s, triggered on scroll into view |
@@ -137,7 +137,6 @@ All buttons: SF Pro Text weight 500, 0.9375rem, padding 14px 28px, border-radius
 | Live widgets on `/next/` | Button faces, drawn by `face-player.js` | as a script would send them | linear or easeInOut | A page of eight buttons on a patch of phone screen (`.ww-deck`, 4×3, gap a tenth of a column): Now Playing (Large, a gradient per track, level bars, progress), Claude Code needing input, a CI build, BTC price with a scrolling chart (Wide), weather, CPU ring, Pomodoro, GitHub stars. Only SVG the phone draws (shapes, gradients, text; no images or filters); made-up data. They come alive when the section is on screen and stop off screen; with Reduce Motion one still frame. Before the script loads: empty glass buttons. Under the deck, "Browse the widget recipes" links to `/docs?p=recipes-widgets`. |
 | Cosmos blobs | Continuous drift | ~20–25s cycle | sine/cosine | Position, size wobble, rotation |
 | Green badge dot | Pulse | 2s infinite | ease-in-out | Opacity 1→0.4 |
-| Floating tags | Vertical bob | 6s infinite | ease-in-out | translateY 0→-6px, staggered delays |
 | Marquee | Linear scroll | 30s infinite | linear | translateX 0→-50% |
 
 ---
@@ -146,8 +145,9 @@ All buttons: SF Pro Text weight 500, 0.9375rem, padding 14px 28px, border-radius
 
 | Breakpoint | Changes |
 |-----------|---------|
-| ≤1024px | Hero → single column centered. MCP → stacked. Features header → single column. |
-| ≤768px | Bento → single column (all spans become 1). Steps → stacked. Nav: section links hidden, Docs and the CTA stay (`.nav-compact` on `/next/`; the other pages hide all nav links). Float tags hidden. Footer stacked centered. |
+| ≤1024px | Hero → single column centered, the devices under the text (up to 760px). MCP → stacked. Features header → single column. |
+| ≤768px | Bento → single column (all spans become 1). Steps → stacked. Nav: section links hidden, Docs and the CTA stay (`.nav-compact` on `/next/`; the other pages hide all nav links). Footer stacked centered. |
+| ≤520px | Hero devices one under the other: the iPad full width, the iPhone at the same scale, never under 200px tall. |
 | ≤480px | Hero h1 → 2rem. Buttons stack vertically. |
 | Phone or tablet (any width) | On `/next/` the download buttons read "Send to Mac" / "Send link to Mac" and open the share sheet with the `/download/` link (`mailto:` without Web Share). iPhone, iPad and Android: `html.handheld`, set in `<head>` before the first paint; each button carries both labels, `.only-mac` / `.only-handheld`. |
 
@@ -242,7 +242,6 @@ Text on the marker line becomes the title (`> [!TIP] A faster way`). In step car
     ├── docs/           — docs.js, pages.json, pages/*.md, js/ (diagrams), img/
     ├── js/live-widgets.js — the live buttons of the Live widgets section on /next/ (imports docs/js/face-player.js)
     ├── style.css       — Complete stylesheet (~3100 lines; docs part at "Docs")
-    ├── screenshot.png  — iPhone app screenshot (1206×2622, Retina)
     ├── deck-ipad.webp, deck-iphone.webp — /next/ hero: the deck in Apple's bezels (iPad landscape 1400×1073, iPhone 540×1102)
     ├── icon.png        — App icon (256×256)
     ├── og-image.jpg    — Social preview: docs, privacy, terms, next/ — the hero's words and the deck (see "Social preview card")

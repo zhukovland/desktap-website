@@ -335,142 +335,11 @@ html.handheld .only-mac { display: none; }
   text-transform: uppercase;
 }
 
-/* Hero phone visual */
+/* Hero visual */
 .hero-visual {
   display: flex;
   justify-content: center;
   position: relative;
-}
-
-.phone-frame {
-  position: relative;
-  width: min(380px, 80vw);
-  padding: 14px 14px;
-  border-radius: 64px;
-  background: linear-gradient(145deg, #2a2a30 0%, #0a0a0e 50%, #1c1c22 100%);
-  box-shadow:
-    inset 0 0 0 1.5px rgba(255,255,255,0.08),
-    inset 0 1px 0 rgba(255,255,255,0.12),
-    inset 0 -1px 0 rgba(0,0,0,0.6),
-    0 0 0 1px rgba(0,0,0,0.8),
-    0 32px 80px rgba(0,0,0,0.6),
-    0 0 120px rgba(120, 50, 180, 0.2);
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.phone-frame::before {
-  content: '';
-  position: absolute;
-  top: 22px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 96px;
-  height: 28px;
-  background: #000;
-  border-radius: 20px;
-  z-index: 2;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
-}
-
-.phone-frame::after {
-  content: '';
-  position: absolute;
-  left: -2px;
-  top: 110px;
-  width: 3px;
-  height: 32px;
-  background: linear-gradient(90deg, #1a1a1e, #3a3a40);
-  border-radius: 2px 0 0 2px;
-  box-shadow:
-    0 50px 0 #1a1a1e,
-    0 50px 0 0 #3a3a40,
-    0 96px 0 #1a1a1e;
-}
-
-.phone-frame img {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 50px;
-  background: #000;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: high-quality;
-  filter: contrast(1.05) saturate(1.08) brightness(1.02);
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-
-.phone-frame:hover {
-  transform: translateY(-8px) rotateX(2deg);
-}
-
-/* Floating capability badges around phone */
-.float-tag {
-  --tag-tint: 100, 210, 255;
-  position: absolute;
-  font-family: var(--display);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: -0.005em;
-  padding: 7px 13px;
-  border-radius: 999px;
-  border: 1px solid rgba(var(--tag-tint), 0.45);
-  background:
-    linear-gradient(145deg, rgba(var(--tag-tint), 0.22) 0%, rgba(var(--tag-tint), 0.08) 100%),
-    rgba(10, 10, 18, 0.72);
-  color: rgb(var(--tag-tint));
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  white-space: nowrap;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 8px 22px -6px rgba(var(--tag-tint), 0.5),
-    0 0 0 1px rgba(0, 0, 0, 0.4);
-  animation: floatTag 6s ease-in-out infinite;
-  z-index: 3;
-}
-
-/* LEFT side — odd positions */
-.float-tag:nth-child(2) {  /* ⌘ Hotkey */
-  --tag-tint: 191, 90, 242;
-  top: 6%; left: -54px; animation-delay: 0s;
-}
-.float-tag:nth-child(4) {  /* ⚙ System */
-  --tag-tint: 88, 86, 214;
-  top: 30%; left: -78px; animation-delay: 1.4s;
-}
-.float-tag:nth-child(6) {  /* ✦ AppleScript */
-  --tag-tint: 255, 214, 10;
-  top: 56%; left: -68px; animation-delay: 2.8s;
-}
-.float-tag:nth-child(8) {  /* → URL */
-  --tag-tint: 48, 209, 88;
-  bottom: 8%; left: -52px; animation-delay: 4.2s;
-}
-
-/* RIGHT side — even positions */
-.float-tag:nth-child(3) {  /* ▶ Launch App */
-  --tag-tint: 100, 210, 255;
-  top: 12%; right: -56px; animation-delay: 0.7s;
-}
-.float-tag:nth-child(5) {  /* $ Shell */
-  --tag-tint: 255, 159, 10;
-  top: 38%; right: -64px; animation-delay: 2.1s;
-}
-.float-tag:nth-child(7) {  /* ◐ Shortcut */
-  --tag-tint: 255, 55, 95;
-  top: 64%; right: -68px; animation-delay: 3.5s;
-}
-.float-tag:nth-child(9) {  /* ¶ Snippet */
-  --tag-tint: 255, 105, 97;
-  bottom: 4%; right: -52px; animation-delay: 4.9s;
-}
-
-@keyframes floatTag {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
 }
 
 /* /next/: the deck on iPad and iPhone in Apple's product bezels (.hero-duo). Apple's marketing rules for its
@@ -2908,8 +2777,6 @@ html.docs-panel-open body { overflow: hidden; }
   .nav-links { display: none; }
   .nav-links.nav-compact { display: flex; gap: 20px; }
   .nav-compact .nav-section { display: none; }
-
-  .float-tag { display: none; }
 
   .footer .container {
     flex-direction: column;
