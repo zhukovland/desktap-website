@@ -3479,6 +3479,7 @@ html.docs-panel-open body { overflow: hidden; }
   text-align: center;
   max-width: 600px;
   margin: 110px auto 36px;
+  scroll-margin-top: 88px;   /* /next/#scenes lands below the fixed nav */
 }
 
 .gs-scenes-head h3 {

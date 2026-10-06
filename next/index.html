@@ -386,13 +386,20 @@
           <li class="gs-step reveal">
             <span class="gs-num" aria-hidden="true">03</span>
             <h3>Write your own when you want to</h3>
-            <p>A live widget is a short zsh script on your Mac. Every widget from the Gallery shows its own under <b>Advanced</b>, yours to read and change.</p>
+            <p>A live widget is a zsh script on your Mac: a loop that tells the button what to show. Every widget from the Gallery shows its own under <b>Advanced</b>, yours to read and change.</p>
             <div class="gs-code">
-              <span class="gs-code-title">Startup Script</span>
-<pre><code><span class="c"># Free disk space, checked every 10 s</span>
+              <span class="gs-code-title">Startup Script · excerpt</span>
+<pre><code><span class="c"># Free disk space: GB left, checked every 10 s</span>
+<span class="c"># … the helpers from the docs: cell, post, json …</span>
+last=<span class="s">""</span> sent_at=<span class="v">-100</span>
 <b>while</b> true; <b>do</b>
   free=$(df -g / | awk <span class="s">'NR == 2 { print $4 }'</span>)
-  post <span class="s">"{\"cellId\":\"<span class="v">$cell</span>\",\"title\":\"<span class="v">$free</span> GB free\"}"</span>
+  <span class="c"># send a change at once, the same value every 30 s</span>
+  <b>if</b> [[ <span class="v">$free</span> != <span class="v">$last</span> ]] || (( SECONDS - sent_at &gt;= <span class="v">30</span> )); <b>then</b>
+    title=$(json <span class="s">"<span class="v">$free</span> GB free"</span>)
+    post <span class="s">"{\"cellId\":\"<span class="v">$cell</span>\",\"title\":<span class="v">$title</span>}"</span> &amp;&amp;
+      last=<span class="v">$free</span> sent_at=<span class="v">$SECONDS</span>
+  <b>fi</b>
   sleep <span class="v">10</span>
 <b>done</b></code></pre>
             </div>
