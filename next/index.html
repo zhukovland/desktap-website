@@ -28,7 +28,7 @@
   <meta name="theme-color" content="#000000">
   <link rel="manifest" href="/site.webmanifest">
 
-  <link rel="stylesheet" href="/assets/style.css?v=20261007c">
+  <link rel="stylesheet" href="/assets/style.css?v=20261008a">
 
   <!-- A phone or tablet can't run the Mac agent: before the first paint, so the download buttons show "Send link to Mac" at once -->
   <script>
@@ -171,6 +171,7 @@
             <li>Run migrations from your phone, not from finding your laptop</li>
             <li>Restart that service whose name you forgot</li>
           </ul>
+          <img class="for-shot" src="/assets/for-engineers.webp" alt="A Fork page on iPhone: Fetch, Pull, Push, Commit, Changes, Stage All, Stash and Refresh buttons" width="880" height="440" loading="lazy">
         </article>
 
         <article class="for-card for-designers reveal">
@@ -187,6 +188,7 @@
             <li>Switch tools — the buttons follow you</li>
             <li>Stop memorising 200 shortcuts per tool</li>
           </ul>
+          <img class="for-shot" src="/assets/for-designers.webp" alt="Figma buttons on iPhone: Auto Layout, Create Component, Group, Frame Selection, Pen, Comment, Actions and Last Plugin" width="880" height="440" loading="lazy">
         </article>
 
         <article class="for-card for-power reveal">
@@ -203,6 +205,7 @@
             <li>Caffeinate, brightness, sleep — labelled, not memorised</li>
             <li>Fifty forgotten hotkeys, parked on labelled buttons</li>
           </ul>
+          <img class="for-shot" src="/assets/for-power.webp" alt="A My Day page on iPhone: Work Setup, Focus, a keep-awake timer and Sleep, then buttons that open Slack, Linear, Figma and Zoom" width="880" height="440" loading="lazy">
         </article>
 
       </div>
@@ -215,9 +218,9 @@
       <div class="features-header">
         <div>
           <div class="label">Capabilities</div>
-          <h2>Built different.<br>Not <span style="color:var(--text-tertiary)">built generic.</span></h2>
+          <h2>A page per app.<br><span class="features-sub">A button per action.</span></h2>
         </div>
-        <p>Eight command types. Live widgets. Context-aware pages. Multi-profile workflows. iCloud sync. An MCP server your AI can drive. Engineered for power users who don't compromise.</p>
+        <p>Hotkeys, app launches, system actions, shell scripts, AppleScript, Shortcuts, links and text snippets. Bring Figma to the front and its page comes up. Profiles keep work and play apart, and an iPad gives you two more columns of buttons.</p>
       </div>
 
       <div class="bento stagger">
@@ -261,14 +264,25 @@
           </div>
         </div>
 
-        <!-- 03 — Context-Aware Pages -->
-        <div class="bento-card span-4 reveal">
+        <!-- 03 — Pages that follow the app in front (wide): the same deck with Figma, then Xcode in front -->
+        <div class="bento-card span-8 card-pages reveal">
           <span class="card-number">03</span>
           <div class="bento-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 12h16"/><path d="M12 4v16"/></svg>
           </div>
-          <h3>Pages that read the room</h3>
-          <p>Bind a page to an app once. Open Figma — your design controls appear. Switch to Xcode — the build panel takes over. Your remote thinks ahead so you don't have to.</p>
+          <h3>Pages that follow your apps</h3>
+          <p>Turn on <strong>Open with App</strong> for a page, and it comes up whenever its app comes to the front on your Mac. Figma brings its tools, Xcode its build buttons. Pin a page when you want it to stay put.</p>
+          <div class="page-flip">
+            <figure>
+              <img src="/assets/page-figma.webp" alt="The Figma page on iPhone: Move, Frame, Rectangle and Text buttons" width="880" height="293" loading="lazy">
+              <figcaption>Figma in front</figcaption>
+            </figure>
+            <span class="page-flip-arrow" aria-hidden="true">→</span>
+            <figure>
+              <img src="/assets/page-xcode.webp" alt="The Xcode page on iPhone: Build, Run, Test and Stop buttons" width="880" height="293" loading="lazy">
+              <figcaption>Xcode in front</figcaption>
+            </figure>
+          </div>
         </div>
 
         <!-- 04 — Profiles -->
@@ -286,23 +300,18 @@
           </div>
         </div>
 
-        <!-- 05 — Grid -->
-        <div class="bento-card span-4 reveal">
-          <span class="card-number">05</span>
-          <div class="bento-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <!-- 05 — iPad (full width): the text left, the iPad's screen right, no bezel -->
+        <div class="bento-card span-12 card-ipad reveal">
+          <div class="card-ipad-text">
+            <span class="card-number">05</span>
+            <div class="bento-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M8 4v16"/><path d="M16 4v16"/></svg>
+            </div>
+            <h3>More room on iPad</h3>
+            <p>An iPhone holds a grid of 4×8 buttons, an iPad 6×8: two more columns for buttons only the iPad shows. Turn it sideways and the page turns with it. Stretch a button over several cells for a gauge, the song playing or the next meeting.</p>
+            <p>iPhone and iPad share one deck through iCloud: a button you add on one is on the other.</p>
           </div>
-          <h3>A grid you actually shape</h3>
-          <p>4×8 on iPhone. 6×8 on iPad. Stretch a single button across cells — a media bar, a giant focus toggle, a header. The layout bends to you.</p>
-          <div class="grid-mini">
-            <span class="g-cell g-2x1 active"></span>
-            <span class="g-cell"></span>
-            <span class="g-cell"></span>
-            <span class="g-cell"></span>
-            <span class="g-cell active"></span>
-            <span class="g-cell"></span>
-            <span class="g-cell"></span>
-          </div>
+          <img class="card-ipad-screen" src="/assets/ipad-xcode.webp" alt="The Xcode page on an iPad held sideways: Build, Run, Test, Stop and debugger buttons next to live buttons for the next meeting, the song playing, reminders, AirPods battery and a world clock" width="1400" height="1050" loading="lazy">
         </div>
 
         <!-- 06 — AI / MCP (wide) -->
@@ -312,7 +321,7 @@
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c.36 5.49 1.86 10.14 12 12-10.14 1.86-11.64 6.51-12 12-.36-5.49-1.86-10.14-12-12C10.14 10.14 11.64 5.49 12 0z"/></svg>
           </div>
           <h3>Your AI, in the driver's seat</h3>
-          <p>Built-in MCP server. Pair Desktap with Claude Desktop, Codex, or any compatible client and your assistant becomes the configurator. Describe a workflow in plain English. Get a fully assembled page — buttons, icons, hotkeys, live data — synced to your phone in seconds.</p>
+          <p>Built-in MCP server. Pair Desktap with Claude Desktop, Codex, or any compatible client and your assistant becomes the configurator. Describe a workflow in plain English. Get a fully assembled page — buttons, icons, hotkeys, live data — on your phone as soon as you tap Accept.</p>
         </div>
 
         <!-- 07 — Synced & Private -->

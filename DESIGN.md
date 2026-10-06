@@ -77,10 +77,14 @@ Each blob is an ellipse with a 4-stop radial gradient (0.3 → 0.15 → 0.04 →
 
 3. **Marquee** — Horizontal auto-scrolling ticker strip. SF Mono uppercase items separated by small blue diamond glyphs. Bordered top and bottom. 30s infinite linear scroll, seamless loop via duplicated items.
 
-4. **Features (Bento Grid)** — Split header (title left, description right). Below: 12-column CSS grid with cards of varying spans:
-   - Row 1: 8-col card (command types with tag pills) + 4-col card (AI setup)
-   - Row 2: 4-col + 4-col + 4-col (live dashboards with animated bars, auto-switch, native Swift)
-   - Row 3: remaining cards at 4-col each
+   **For whom** (`/next/`, between the marquee and Features) — three glass cards: Engineers, Designers, Advanced users. A big tinted number and a mono label, a headline in the primary text color with its key words in a serif italic of the card's tint (never the tertiary gray: it fails contrast), five → bullets, then a picture of the deck that fits the card — `assets/for-engineers.webp` (a Fork page), `for-designers.webp` (Figma), `for-power.webp` (a "My Day" page: shell buttons, a keep-awake widget, Launch App buttons with the apps' own icons). Each is two rows of an iPhone page, a render of the app cropped to the buttons (880×440, the screen's black behind, 12px radius, a 1px ring); `margin-top: auto` keeps the three pictures level. Stacked ≤1024px, up to 520px wide.
+
+4. **Features (Bento Grid)** — Split header (title left, 1.4×, description right): says what the product does, in concrete words ("A page per app. / A button per action.", the second line in the secondary text color, not tertiary), the description lists the command types and what follows. Below: 12-column CSS grid, the tint of each card set by its place (`nth-child`):
+   - Row 1: 8-col 01 command types (tag pills) + 4-col 02 live buttons (animated bars)
+   - Row 2: 8-col 03 pages that follow the app in front — two strips of the same iPhone deck, "Figma in front" → "Xcode in front" (`assets/page-figma.webp`, `page-xcode.webp`: the top bar and first row, 880×293) + 4-col 04 profiles (chips)
+   - Row 3: 12-col 05 iPad — the text left, the iPad's screen right (`assets/ipad-xcode.webp`, the Xcode page in landscape, 1400×1050): the screen alone, no Apple bezel, so a radius, a ring and a shadow are allowed (see Hero for the bezel rules). Stacked ≤768px.
+   - Row 4: 8-col 06 AI + 4-col 07 sync & privacy
+   UI labels in the cards are quoted from the English app (**Open with App**, Accept).
 
 5. **MCP Section** — Two-column: left has label + heading + description + compatibility tags; right has a terminal window mockup with animated line-by-line reveal.
 
@@ -150,7 +154,7 @@ All buttons: SF Pro Text weight 500, 0.9375rem, padding 14px 28px, border-radius
 | Breakpoint | Changes |
 |-----------|---------|
 | ≤1024px | Hero → single column centered, the devices under the text (up to 760px). MCP → stacked. Features header → single column. |
-| ≤768px | Bento → single column (all spans become 1). Steps → stacked. Nav: section links hidden, Docs and the CTA stay (`.nav-compact` on `/next/`; the other pages hide all nav links). Footer stacked centered. |
+| ≤768px | Bento → single column (all spans become 1; the iPad card's picture goes under its text, the two page strips one under the other). Steps → stacked. Nav: section links hidden, Docs and the CTA stay (`.nav-compact` on `/next/`; the other pages hide all nav links). Footer stacked centered. |
 | ≤520px | Hero devices one under the other: the iPad full width, the iPhone at the same scale, never under 200px tall. |
 | ≤480px | Hero h1 → 2rem. Buttons stack vertically. |
 | Phone or tablet (any width) | On `/next/` and `/changelog/` the download buttons read "Send to Mac" / "Send link to Mac" and open the share sheet with the `/download/` link (`mailto:` without Web Share). iPhone, iPad and Android: `html.handheld`, set in `<head>` before the first paint; each button carries both labels, `.only-mac` / `.only-handheld`; the click is handled in `assets/agent-download.js`. |
@@ -249,6 +253,9 @@ Text on the marker line becomes the title (`> [!TIP] A faster way`). In step car
     ├── js/live-widgets.js — the live buttons of the Live widgets section on /next/ (imports docs/js/face-player.js)
     ├── style.css       — Complete stylesheet (~3100 lines; docs part at "Docs")
     ├── deck-ipad.webp, deck-iphone.webp — /next/ hero: the deck in Apple's bezels (iPad landscape 1400×1073, iPhone 540×1102)
+    ├── for-engineers.webp, for-designers.webp, for-power.webp — /next/ For whom: two rows of an iPhone page each (880×440)
+    ├── page-figma.webp, page-xcode.webp — /next/ Features 03: an iPhone page's top bar and first row (880×293)
+    ├── ipad-xcode.webp — /next/ Features 05: the iPad's screen, landscape, no bezel (1400×1050)
     ├── icon.png        — App icon (256×256)
     ├── og-image.jpg    — Social preview: docs, privacy, terms, next/, changelog/ — the hero's words and the deck screens (see "Social preview card")
     ├── og-deck-ipad.webp, og-deck-iphone.webp — the deck screens without a bezel, for og-image.jpg (iPad 1300×975, iPhone 460×1000)
