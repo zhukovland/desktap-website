@@ -474,8 +474,9 @@ html.handheld .only-mac { display: none; }
 }
 
 /* /next/: the deck on iPad and iPhone in Apple's product bezels (.hero-duo). Apple's marketing rules for its
-   devices: whole, upright, no overlap, tilt or motion of their own — so side by side, bottom-aligned, at their
-   real relative size (the iPhone 76% of the iPad's height), a still aura behind and no hover. */
+   devices: whole, upright, unchanged (no shadow, reflection or highlight on them), no overlap, no motion but a
+   fade, at least 200 px on screen — so side by side, bottom-aligned, at their real relative size (the iPhone 76%
+   of the iPad's height), a still aura behind and no hover; on a phone one under the other. */
 .hero-duo .container {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
   gap: 48px;
@@ -499,10 +500,7 @@ html.handheld .only-mac { display: none; }
   pointer-events: none;
 }
 
-.hero-devices img {
-  height: auto;
-  filter: drop-shadow(0 28px 48px rgba(0, 0, 0, 0.55));
-}
+.hero-devices img { height: auto; }
 
 .hero-ipad { width: 75%; }
 .hero-iphone { width: 21.5%; }
@@ -1337,10 +1335,16 @@ html.handheld .only-mac { display: none; }
 .hero-subtitle{ animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.4s both; }
 .hero-actions { animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.5s both; }
 .hero-visual  { animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0.6s both; }
+.hero-duo .hero-visual { animation-name: fadeIn; }  /* Apple's devices: a fade, no movement */
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(32px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 /* ---------- Legal ---------- */
@@ -2809,6 +2813,14 @@ html.docs-panel-open body { overflow: hidden; }
     flex-direction: column;
     align-items: center;
   }
+}
+
+/* Side by side the iPhone would be under 200 px tall: one under the other, the iPad full width, the iPhone at the same
+   scale (28.7% of the iPad's width), never under 200 px tall (98 px wide) */
+@media (max-width: 520px) {
+  .hero-devices { flex-direction: column; align-items: center; gap: 24px; }
+  .hero-ipad { width: 100%; }
+  .hero-iphone { width: max(28.7%, 98px); }
 }
 
 @media (max-width: 480px) {

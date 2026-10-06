@@ -73,7 +73,7 @@ Each blob is an ellipse with a 4-stop radial gradient (0.3 → 0.15 → 0.04 →
 1. **Nav** — Fixed top, blurred black backdrop (`rgba(0,0,0,0.6)` + `backdrop-filter: blur(24px)`), 56px height. Logo left, links + CTA button right. Logo uses SF Pro Display 600.
 
 2. **Hero** — Full viewport height, vertically centered. Two-column grid: left column has badge + h1 + subtitle + action buttons; right column has phone screenshot with floating tags. On mobile (≤1024px) collapses to single column, centered.
-   On `/next/` (`.hero-duo`, the right column 1.2× the left) the picture is the deck on an iPad (landscape) and an iPhone, `assets/deck-ipad.webp` and `assets/deck-iphone.webp`: renders of the app in Apple's product bezels, transparent around the devices. Apple's rules for showing its devices apply: whole and upright, side by side and bottom-aligned at their real relative size (the iPhone 76% of the iPad's height), nothing over them — no floating tags, no tilt on hover; a still accent aura behind. ≤1024px: the pair under the text, up to 760px wide. A new render replaces both files at the same size (iPad 1400×1073, iPhone 540×1102) and `assets/og-image.jpg` after them.
+   On `/next/` (`.hero-duo`, the right column 1.2× the left) the picture is the deck on an iPad (landscape) and an iPhone, `assets/deck-ipad.webp` and `assets/deck-iphone.webp`: renders of the app in Apple's product bezels, transparent around the devices. Apple's rules for showing its devices apply (App Store Marketing Guidelines): whole, upright and unchanged — no shadow, reflection or highlight on them; nothing over them (no floating tags); no motion but a fade (the pair fades in, it doesn't rise like the text; no tilt on hover); at least 200 px on screen. So: side by side and bottom-aligned at their real relative size (the iPhone 76% of the iPad's height), a still accent aura behind. ≤1024px: the pair under the text, up to 760px wide. ≤520px: one under the other — the iPad full width, the iPhone at the same scale and never under 200 px tall. A new render replaces both files at the same size (iPad 1400×1073, iPhone 540×1102) and `assets/og-image.jpg` after them ("Social preview card").
 
 3. **Marquee** — Horizontal auto-scrolling ticker strip. SF Mono uppercase items separated by small blue diamond glyphs. Bordered top and bottom. 30s infinite linear scroll, seamless loop via duplicated items.
 
@@ -254,7 +254,9 @@ No build tools, no frameworks, no external CSS libraries. Pure HTML + CSS + vani
 
 `assets/og-image.jpg` and `assets/og-soon.jpg` (1200×630) are shots of the page below. It lives here, not as a file: GitHub Pages publishes every file of the repo, and a service page shouldn't open on desktap.app by a direct link.
 
-The card is changed here, in this template (name, label, look). `og-card.html` is only a throwaway copy to shoot from: an edit made in the copy is lost when it is deleted.
+Two cards in one page. Without a query — `og-image.jpg`: the words of the `/next/` hero and the deck on iPad and iPhone (`assets/deck-ipad.webp`, `assets/deck-iphone.webp`, the hero's pictures), no name in the picture — the preview's title carries it. With `?label=…` — `og-soon.jpg`: the icon, the name and the label. A new render of the deck: replace both webp files, then shoot `og-image.jpg` again.
+
+The card is changed here, in this template (name, label, words, look). `og-card.html` is only a throwaway copy to shoot from: an edit made in the copy is lost when it is deleted.
 
 1. Copy the template into `og-card.html` in the site root (`.gitignore` keeps it out of commits) and run `python3 -m http.server 8000`.
 2. Shoot each variant into its own PNG at 1× — 1200×630, not 2400×1260 as on a Retina screen. Chrome without a window, in a throwaway profile; such a Chrome keeps running after the PNG is written, so `shot` stops it:
@@ -289,27 +291,56 @@ The card is changed here, in this template (name, label, look). `og-card.html` i
     --mono:'SF Mono',ui-monospace,Menlo,monospace;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
+  [hidden]{display:none !important;}
   html,body{width:1200px;height:630px;overflow:hidden;}
   body{background:#000;position:relative;color:#F0F0F0;font-family:var(--display);-webkit-font-smoothing:antialiased;}
   /* One still aura in the accent color */
   .aura{position:absolute;left:50%;top:50%;width:1100px;height:760px;transform:translate(-50%,-50%);
         background:radial-gradient(closest-side,rgba(59,130,246,.13),rgba(59,130,246,0));}
-  .wrap{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-  img{width:132px;height:132px;border-radius:30px;margin-bottom:40px;box-shadow:0 18px 50px rgba(0,0,0,.6);}
+
+  /* The name card (?label=…) */
+  .name-card{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .name-card img{position:relative;width:132px;height:132px;border-radius:30px;margin-bottom:40px;box-shadow:0 18px 50px rgba(0,0,0,.6);}
+  .name,.label{position:relative;}
   .name{font-size:88px;font-weight:700;letter-spacing:-.04em;line-height:1;}
   .label{margin-top:30px;font-family:var(--mono);font-size:22px;letter-spacing:.24em;text-transform:uppercase;color:#7A7A82;}
-  .label:empty{display:none;}
+
+  /* The deck card (default): the words as the /next/ hero says them; the devices as on the hero — whole, upright,
+     unchanged (no shadow on them), side by side at their real relative size, the aura behind */
+  .deck-card{position:relative;height:100%;display:flex;align-items:center;gap:36px;padding:0 56px 0 72px;}
+  .deck-card .aura{left:72%;width:900px;height:700px;background:radial-gradient(closest-side,rgba(59,130,246,.18),rgba(59,130,246,0));}
+  .pitch{position:relative;flex:1;font-size:50px;font-weight:700;line-height:1.06;letter-spacing:-.04em;
+         background:linear-gradient(180deg,#fff 0%,#a8a8b4 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .pitch .accent{display:block;margin-top:6px;font-style:italic;padding-right:.04em;
+         background:linear-gradient(135deg,#bf5af2 0%,#64d2ff 50%,#30d158 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .devices{position:relative;flex:none;width:592px;display:flex;align-items:flex-end;justify-content:space-between;}
+  .devices img{height:auto;}
+  .devices .ipad{width:75%;}
+  .devices .iphone{width:21.5%;}
 </style>
 </head>
 <body>
-  <div class="aura"></div>
-  <div class="wrap">
+  <div class="deck-card" id="deck-card">
+    <div class="aura"></div>
+    <div class="pitch">A control deck for your Mac, on iPhone and iPad. <span class="accent">Your AI builds it.</span></div>
+    <div class="devices">
+      <img class="ipad" src="assets/deck-ipad.webp" alt="">
+      <img class="iphone" src="assets/deck-iphone.webp" alt="">
+    </div>
+  </div>
+  <div class="name-card" id="name-card" hidden>
+    <div class="aura"></div>
     <img src="assets/icon.png" alt="">
     <div class="name">desktap</div>
     <div class="label" id="label"></div>
   </div>
   <script>
-    document.getElementById('label').textContent = new URLSearchParams(location.search).get('label') || '';
+    const label = new URLSearchParams(location.search).get('label');
+    if (label) {
+      document.getElementById('label').textContent = label;
+      document.getElementById('name-card').hidden = false;
+      document.getElementById('deck-card').hidden = true;
+    }
   </script>
 </body>
 </html>
