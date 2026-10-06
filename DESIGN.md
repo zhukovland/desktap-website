@@ -85,13 +85,15 @@ Each blob is an ellipse with a 4-stop radial gradient (0.3 → 0.15 → 0.04 →
 
 6. **How It Works** — Centered header. Three-column grid with 1px gap (acts as divider). Large outline step numbers (01, 02, 03 with `-webkit-text-stroke`). Arrow circles between steps.
 
-7. **CTA** — Centered heading + subtitle + two buttons. Subtle radial gradient glow behind (purple → blue → transparent).
+7. **FAQ** (`/next/` only) — Two columns: label + heading + one line on the left (sticky); on the right a list of `<details>` questions divided by 1px rules, a + that turns into an accent × when open, the first one open. Every answer ends with an accent "Docs: …" link to the page with the details. Stacks ≤1024px.
+
+8. **CTA** — Centered heading + subtitle + two buttons. Subtle radial gradient glow behind (purple → blue → transparent).
 
    **Trust line** (`.trust-line`, `/next/` hero and CTA, `/changelog/`): under the agent's download button, "Free · v1.2.3 · 7.6 MB · macOS 15+ · Notarized by Apple" in SF Pro Text 0.8125rem, secondary color, `·` separators in tertiary. Version and size come from the latest GitHub release (`assets/agent-download.js`: GitHub API, cached for the browser session, size in decimal MB as Finder shows it); until they arrive, or if GitHub doesn't answer, both stay hidden and the line reads "Free · macOS 15+ · Notarized by Apple". The version links to its entry in `/changelog/`. "Notarized by Apple" means checked for malware, not reviewed: never "Apple-approved".
 
    **Changelog** (`/changelog/`, "What's new", linked from the `/next/` footer and from the version in the trust line): the agent's releases, newest first, written by hand for people, not copied from GitHub. Header: label, H1, lede, the download button and the trust line. Then one `li.release` per release, `id` and `data-release-entry` = the GitHub tag (`v1.2.3`): on the left the version (display 700, 1.5rem, a link to its own anchor), the date (mono uppercase) and a green "Latest" pill that `agent-download.js` shows on the entry of the newest GitHub release; on the right a short title and the changes, each led by a mono pill: **New** (accent), **Improved**, **Changed** (neutral), **Fixed** (green). Stacked under 768px; under 480px the pill sits above its line. Changes say what a person or their AI gets, quoting the agent's English labels in bold and MCP tools in code; never how the app is built. A new release: add its entry at the top of the list in the same commit or soon after; until then the trust line already shows the new version and no entry is tagged "Latest".
 
-8. **Footer** — Minimal. Logo + links left, copyright right. SF Mono-ish for logo.
+9. **Footer** — Minimal. Logo + links left, copyright right. SF Mono-ish for logo.
 
 ---
 
@@ -239,17 +241,85 @@ Text on the marker line becomes the title (`> [!TIP] A faster way`). In step car
 ├── privacy.html        — Privacy Policy (legal layout)
 ├── terms.html          — Terms of Use (legal layout)
 ├── docs.html           — Docs shell (loads assets/docs/pages/<slug>.md)
-├── og-card.html        — Source of the social previews: assets/og-image.jpg, assets/og-soon.jpg (?label=Coming%20soon)
 └── assets/
     ├── docs/           — docs.js, pages.json, pages/*.md, js/ (diagrams), img/
     ├── agent-download.js — The agent's download buttons: trust line from the latest release, "Send link to Mac" on a phone
     ├── style.css       — Complete stylesheet (~3100 lines; docs part at "Docs")
     ├── screenshot.png  — iPhone app screenshot (1206×2622, Retina)
     ├── icon.png        — App icon (256×256)
+    ├── og-image.jpg    — Social preview: docs, privacy, terms, next/ (see "Social preview card")
+    ├── og-soon.jpg     — Social preview of the holding page
     └── favicon.ico     — Favicon
 ```
 
 No build tools, no frameworks, no external CSS libraries. Pure HTML + CSS + vanilla JS (~115 lines for canvas animation, scroll observer, mouse tracking, terminal animation).
+
+---
+
+## Social preview card
+
+`assets/og-image.jpg` and `assets/og-soon.jpg` (1200×630) are shots of the page below. It lives here, not as a file: GitHub Pages publishes every file of the repo, and a service page shouldn't open on desktap.app by a direct link.
+
+The card is changed here, in this template (name, label, look). `og-card.html` is only a throwaway copy to shoot from: an edit made in the copy is lost when it is deleted.
+
+1. Copy the template into `og-card.html` in the site root (`.gitignore` keeps it out of commits) and run `python3 -m http.server 8000`.
+2. Shoot each variant into its own PNG at 1× — 1200×630, not 2400×1260 as on a Retina screen. Chrome without a window, in a throwaway profile; such a Chrome keeps running after the PNG is written, so `shot` stops it:
+   ```
+   chrome="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+   shot() {
+     rm -f "$1"
+     "$chrome" --headless=new --user-data-dir="$(mktemp -d)" --force-device-scale-factor=1 --hide-scrollbars \
+       --window-size=1200,630 --screenshot="$1" "$2" >/dev/null 2>&1 &
+     local pid=$!; for i in {1..40}; do [[ -s $1 ]] && break; sleep 0.5; done; sleep 1; kill $pid
+   }
+   shot og-image.png "http://localhost:8000/og-card.html"
+   shot og-soon.png  "http://localhost:8000/og-card.html?label=Coming%20soon"
+   ```
+3. Each PNG goes to its own JPEG — the plain card to `og-image.jpg` (docs, privacy, terms, `next/`), "Coming soon" only to `og-soon.jpg` (holding page). `-z 630 1200` keeps them at exactly 1200×630 even if a shot came out at 2×:
+   ```
+   sips -z 630 1200 -s format jpeg og-image.png --out assets/og-image.jpg
+   sips -z 630 1200 -s format jpeg og-soon.png  --out assets/og-soon.jpg
+   ```
+4. Delete `og-card.html` and both PNGs.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex">
+<style>
+  :root{
+    --accent:#3B82F6;
+    --display:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',system-ui,sans-serif;
+    --mono:'SF Mono',ui-monospace,Menlo,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{width:1200px;height:630px;overflow:hidden;}
+  body{background:#000;position:relative;color:#F0F0F0;font-family:var(--display);-webkit-font-smoothing:antialiased;}
+  /* One still aura in the accent color */
+  .aura{position:absolute;left:50%;top:50%;width:1100px;height:760px;transform:translate(-50%,-50%);
+        background:radial-gradient(closest-side,rgba(59,130,246,.13),rgba(59,130,246,0));}
+  .wrap{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  img{width:132px;height:132px;border-radius:30px;margin-bottom:40px;box-shadow:0 18px 50px rgba(0,0,0,.6);}
+  .name{font-size:88px;font-weight:700;letter-spacing:-.04em;line-height:1;}
+  .label{margin-top:30px;font-family:var(--mono);font-size:22px;letter-spacing:.24em;text-transform:uppercase;color:#7A7A82;}
+  .label:empty{display:none;}
+</style>
+</head>
+<body>
+  <div class="aura"></div>
+  <div class="wrap">
+    <img src="assets/icon.png" alt="">
+    <div class="name">desktap</div>
+    <div class="label" id="label"></div>
+  </div>
+  <script>
+    document.getElementById('label').textContent = new URLSearchParams(location.search).get('label') || '';
+  </script>
+</body>
+</html>
+```
 
 ---
 
