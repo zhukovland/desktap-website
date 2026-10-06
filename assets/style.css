@@ -1457,6 +1457,7 @@ html.handheld .only-mac { display: none; }
   font-weight: 600;
   margin-top: 40px;
   margin-bottom: 12px;
+  scroll-margin-top: 88px;   /* a link to a section (/terms#subscriptions) lands below the fixed nav */
 }
 
 .legal p, .legal li {
