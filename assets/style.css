@@ -335,6 +335,53 @@ html.handheld .only-mac { display: none; }
   text-transform: uppercase;
 }
 
+/* Trust line under the agent's download button: Free · version · size · macOS · notarization.
+   Version and size are hidden until assets/agent-download.js reads them from the latest release. */
+.trust-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 4px;
+  margin-top: 18px;
+  color: var(--text-secondary);
+  font-family: var(--sans);
+  font-size: 0.8125rem;
+  letter-spacing: -0.005em;
+  line-height: 1.4;
+}
+
+.trust-line > span { white-space: nowrap; }
+
+.trust-line > span + span::before {
+  content: '·';
+  margin: 0 7px;
+  color: var(--text-tertiary);
+}
+
+.trust-line a {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.25);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s;
+}
+
+.trust-line a:hover { text-decoration-color: currentColor; }
+
+/* Inside .hero-actions / .cta-actions: a row of its own under the buttons; on a narrow screen, right under the button */
+.hero-actions .trust-line,
+.cta-actions .trust-line,
+.changelog-actions .trust-line {
+  width: 100%;
+  margin-top: 2px;
+}
+
+.cta-section .trust-line {
+  justify-content: center;
+  margin-bottom: 0;
+  font-size: 0.8125rem;
+}
+
 /* Hero phone visual */
 .hero-visual {
   display: flex;
@@ -1473,6 +1520,167 @@ html.handheld .only-mac { display: none; }
   color: var(--accent);
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+
+/* ---------- Changelog (/changelog/) ---------- */
+/* .changelog.container: beats the later `.container { padding }` of the narrow layouts */
+.changelog.container {
+  padding: 140px 32px 96px;
+  max-width: 944px;
+  margin: 0 auto;
+}
+
+.changelog-head { margin-bottom: 64px; }
+
+.changelog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.changelog-head h1 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  margin-bottom: 16px;
+}
+
+.changelog-lede {
+  max-width: 580px;
+  color: #c8c8d0;
+  font-family: var(--display);
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  margin-bottom: 32px;
+}
+
+.releases { list-style: none; }
+
+/* One release: version and date on the left, what changed on the right */
+.release {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 32px;
+  padding: 36px 0;
+  border-top: 1px solid var(--border);
+  scroll-margin-top: 80px;
+}
+
+.release-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.release-version {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.release-version a:hover { color: var(--accent); }
+
+.release-date {
+  color: var(--text-secondary);
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* "Latest" appears on the entry of the newest GitHub release (assets/agent-download.js adds .is-latest) */
+.release-latest {
+  display: none;
+  padding: 3px 9px;
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  border-radius: 999px;
+  color: var(--green);
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.release.is-latest .release-latest { display: inline-block; }
+
+.release-title {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.125rem;
+  letter-spacing: -0.02em;
+  margin-bottom: 14px;
+}
+
+/* Who the changes are for: the iPhone & iPad app, the Mac agent (they share one version) */
+.release-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 22px 0 6px;
+  color: var(--text-secondary);
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.release-title + .release-group { margin-top: 0; }
+
+.release-changes { list-style: none; }
+
+.release-changes li {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  gap: 12px;
+  align-items: baseline;
+  padding: 7px 0;
+  color: #c8c8d0;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+.release-changes code {
+  font-family: var(--mono);
+  font-size: 0.8125em;
+  color: var(--text-primary);
+}
+
+/* What kind of change: New (accent), Improved (neutral), Fixed (green) */
+.change-kind {
+  justify-self: start;
+  padding: 2px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  color: var(--text-secondary);
+  font-family: var(--mono);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.change-kind.is-new { color: var(--accent); border-color: rgba(59, 130, 246, 0.4); }
+.change-kind.is-fixed { color: var(--green); border-color: rgba(52, 211, 153, 0.35); }
+
+@media (max-width: 768px) {
+  .changelog.container { padding: 120px 20px 72px; }
+  .changelog-head { margin-bottom: 40px; }
+  .release { grid-template-columns: 1fr; gap: 16px; padding: 28px 0; }
+  .release-meta { flex-direction: row; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
+}
+
+@media (max-width: 480px) {
+  .release-changes li { grid-template-columns: 1fr; gap: 6px; }
 }
 
 /* ---------- Docs ----------
@@ -2843,6 +3051,7 @@ html.docs-panel-open body { overflow: hidden; }
   .hero-content { max-width: 100%; }
   .hero-subtitle { margin: 0 auto 40px; }
   .hero-actions { justify-content: center; }
+  .hero .trust-line { justify-content: center; }
   .mcp-layout { grid-template-columns: 1fr; gap: 48px; }
   .mcp-content p { max-width: 100%; }
   .features-header { grid-template-columns: 1fr; }
@@ -2891,11 +3100,18 @@ html.docs-panel-open body { overflow: hidden; }
     flex-direction: column;
     align-items: center;
   }
+  .cta-actions .trust-line { order: 1; margin-top: 0; }
+  .cta-actions .soon-note { order: 2; }
 }
 
 @media (max-width: 480px) {
   .hero h1 { font-size: 2rem; }
   .hero-actions { flex-direction: column; align-items: stretch; }
+  .hero-actions .trust-line, .changelog-actions .trust-line { order: 1; margin-top: 0; }
+  .hero-actions .soon-note, .changelog-actions .soon-note { order: 2; }
+  .trust-line { font-size: 0.75rem; }
+  .cta-section .trust-line { font-size: 0.75rem; }
+  .trust-line > span + span::before { margin: 0 5px; }
   .btn-primary, .btn-secondary { justify-content: center; }
   .legal { padding: 120px 20px 60px; }
 }
