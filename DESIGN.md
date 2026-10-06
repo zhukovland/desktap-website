@@ -87,6 +87,10 @@ Each blob is an ellipse with a 4-stop radial gradient (0.3 → 0.15 → 0.04 →
 
 7. **CTA** — Centered heading + subtitle + two buttons. Subtle radial gradient glow behind (purple → blue → transparent).
 
+   **Trust line** (`.trust-line`, `/next/` hero and CTA, `/changelog/`): under the agent's download button, "Free · v1.2.3 · 7.6 MB · macOS 15+ · Notarized by Apple" in SF Pro Text 0.8125rem, secondary color, `·` separators in tertiary. Version and size come from the latest GitHub release (`assets/agent-download.js`: GitHub API, cached for the browser session, size in decimal MB as Finder shows it); until they arrive, or if GitHub doesn't answer, both stay hidden and the line reads "Free · macOS 15+ · Notarized by Apple". The version links to its entry in `/changelog/`. "Notarized by Apple" means checked for malware, not reviewed: never "Apple-approved".
+
+   **Changelog** (`/changelog/`, "What's new", linked from the `/next/` footer and from the version in the trust line): the agent's releases, newest first, written by hand for people, not copied from GitHub. Header: label, H1, lede, the download button and the trust line. Then one `li.release` per release, `id` and `data-release-entry` = the GitHub tag (`v1.2.3`): on the left the version (display 700, 1.5rem, a link to its own anchor), the date (mono uppercase) and a green "Latest" pill that `agent-download.js` shows on the entry of the newest GitHub release; on the right a short title and the changes, each led by a mono pill: **New** (accent), **Improved**, **Changed** (neutral), **Fixed** (green). Stacked under 768px; under 480px the pill sits above its line. Changes say what a person or their AI gets, quoting the agent's English labels in bold and MCP tools in code; never how the app is built. A new release: add its entry at the top of the list in the same commit or soon after; until then the trust line already shows the new version and no entry is tagged "Latest".
+
 8. **Footer** — Minimal. Logo + links left, copyright right. SF Mono-ish for logo.
 
 ---
@@ -145,7 +149,7 @@ All buttons: SF Pro Text weight 500, 0.9375rem, padding 14px 28px, border-radius
 | ≤1024px | Hero → single column centered. MCP → stacked. Features header → single column. |
 | ≤768px | Bento → single column (all spans become 1). Steps → stacked. Nav: section links hidden, Docs and the CTA stay (`.nav-compact` on `/next/`; the other pages hide all nav links). Float tags hidden. Footer stacked centered. |
 | ≤480px | Hero h1 → 2rem. Buttons stack vertically. |
-| Phone or tablet (any width) | On `/next/` the download buttons read "Send to Mac" / "Send link to Mac" and open the share sheet with the `/download/` link (`mailto:` without Web Share). iPhone, iPad and Android: `html.handheld`, set in `<head>` before the first paint; each button carries both labels, `.only-mac` / `.only-handheld`. |
+| Phone or tablet (any width) | On `/next/` and `/changelog/` the download buttons read "Send to Mac" / "Send link to Mac" and open the share sheet with the `/download/` link (`mailto:` without Web Share). iPhone, iPad and Android: `html.handheld`, set in `<head>` before the first paint; each button carries both labels, `.only-mac` / `.only-handheld`; the click is handled in `assets/agent-download.js`. |
 
 ---
 
@@ -231,12 +235,14 @@ Text on the marker line becomes the title (`> [!TIP] A faster way`). In step car
 ```
 ├── index.html          — Holding page: one screen, "Coming soon" (noindex)
 ├── next/index.html     — The full landing, reworked here (noindex, absolute paths, nothing links to it)
+├── changelog/index.html — "What's new": the agent's releases, newest first (noindex like /next/; linked from /next/)
 ├── privacy.html        — Privacy Policy (legal layout)
 ├── terms.html          — Terms of Use (legal layout)
 ├── docs.html           — Docs shell (loads assets/docs/pages/<slug>.md)
 ├── og-card.html        — Source of the social previews: assets/og-image.jpg, assets/og-soon.jpg (?label=Coming%20soon)
 └── assets/
     ├── docs/           — docs.js, pages.json, pages/*.md, js/ (diagrams), img/
+    ├── agent-download.js — The agent's download buttons: trust line from the latest release, "Send link to Mac" on a phone
     ├── style.css       — Complete stylesheet (~3100 lines; docs part at "Docs")
     ├── screenshot.png  — iPhone app screenshot (1206×2622, Retina)
     ├── icon.png        — App icon (256×256)

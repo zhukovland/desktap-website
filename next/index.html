@@ -28,7 +28,7 @@
   <meta name="theme-color" content="#000000">
   <link rel="manifest" href="/site.webmanifest">
 
-  <link rel="stylesheet" href="/assets/style.css?v=20261006c">
+  <link rel="stylesheet" href="/assets/style.css?v=20261006d">
 
   <!-- A phone or tablet can't run the Mac agent: before the first paint, so the download buttons show "Send link to Mac" at once -->
   <script>
@@ -100,6 +100,14 @@
           </a>
           <!-- The iOS app is not in the App Store yet: a note, not a button. On release, swap both .soon-note spans (here and in the CTA) for the official App Store badge and reword step 01 in Setup. -->
           <span class="soon-note">iPhone &amp; iPad app <span class="soon-tag">Coming soon</span></span>
+          <!-- Trust line: version and size come from the latest GitHub release (assets/agent-download.js); without them the line still reads "Free · macOS 15+ · Notarized by Apple" -->
+          <p class="trust-line">
+            <span>Free</span>
+            <span data-release-item hidden><a href="/changelog/" data-release="version" title="What's new in this version"></a></span>
+            <span data-release-item data-release="size" hidden></span>
+            <span>macOS 15+</span>
+            <span title="Signed with a Developer ID and checked for malware by Apple">Notarized by Apple</span>
+          </p>
         </div>
       </div>
       <div class="hero-visual">
@@ -469,6 +477,14 @@
           <span class="only-mac">Get Mac Agent — Free</span><span class="only-handheld">Send link to Mac</span>
         </a>
         <span class="soon-note">iPhone &amp; iPad app <span class="soon-tag">Coming soon</span></span>
+        <!-- Trust line: see the hero -->
+        <p class="trust-line">
+          <span>Free</span>
+          <span data-release-item hidden><a href="/changelog/" data-release="version" title="What's new in this version"></a></span>
+          <span data-release-item data-release="size" hidden></span>
+          <span>macOS 15+</span>
+          <span title="Signed with a Developer ID and checked for malware by Apple">Notarized by Apple</span>
+        </p>
       </div>
     </div>
   </section>
@@ -480,6 +496,7 @@
         <span class="footer-logo">desktap</span>
         <ul class="footer-links">
           <li><a href="/docs">Docs</a></li>
+          <li><a href="/changelog/">What's new</a></li>
           <li><a href="/privacy">Privacy</a></li>
           <li><a href="/terms">Terms</a></li>
           <li><a href="mailto:support@desktap.app">Support</a></li>
@@ -572,30 +589,6 @@
       });
     }
 
-    // ── On a phone or tablet: the download buttons send the link to the Mac (share sheet: AirDrop, Messages, Mail…) ──
-    if (document.documentElement.classList.contains('handheld')) {
-      const url = new URL('/download/', location.href).href;
-      const title = 'Desktap Mac Agent';
-      const text = 'Open this on your Mac to download the Desktap agent:';
-      const mail = () => {
-        location.href = 'mailto:?subject=' + encodeURIComponent(title) + '&body=' + encodeURIComponent(text + '\n' + url);
-      };
-      let sharing = false;
-      document.querySelectorAll('[data-send-to-mac]').forEach(a => {
-        a.addEventListener('click', e => {
-          e.preventDefault();
-          if (!navigator.share) return mail();
-          if (sharing) return;
-          sharing = true;
-          // Only the link: AirDrop then opens it on the Mac and the download starts. Closing the sheet (AbortError) is
-          // a choice, a sheet still open (InvalidStateError) is not a failure either: mail only when sharing can't work.
-          navigator.share({ title, url })
-            .catch(err => { if (err.name !== 'AbortError' && err.name !== 'InvalidStateError') mail(); })
-            .finally(() => { sharing = false; });
-        });
-      });
-    }
-
     // ── Scroll-triggered reveal ──
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -642,5 +635,6 @@
 
     document.querySelectorAll('.mcp-flow').forEach(el => flowObserver.observe(el));
   </script>
+  <script src="/assets/agent-download.js?v=20261006" defer></script>
 </body>
 </html>
