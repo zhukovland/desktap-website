@@ -82,7 +82,8 @@ Each blob is an ellipse with a 4-stop radial gradient (0.3 → 0.15 → 0.04 →
    - Row 2: 4-col + 4-col + 4-col (live dashboards with animated bars, auto-switch, native Swift)
    - Row 3: remaining cards at 4-col each
 
-5. **MCP Section** — Two-column: left has label + heading + description + compatibility tags; right has a terminal window mockup with animated line-by-line reveal.
+5. **AI** (`#ai`) — what sets Desktap apart: an AI builds whole pages, and each change it sends waits for Accept on the phone. Left: label, H2 with the accent words in serif italic, a lede; then "you say → you get" (a `dl`, each ask in display italic, its result after an accent →, divided by 1px rules; under 560px the result goes under the ask), the promise card with a shield, and "Works with" tags. Right: the review card as the app draws it — `assets/ai-review-iphone.webp`, a render of the app on iPhone in Apple's bezel, at most 340px wide, a still aura behind, a fade without movement (`.reveal-fade`), a mono caption under it; ≤1024px it goes between the lede and the asks, 300px wide (260px under 560px). Under both, a glass strip for Claude Code waiting on you: the recipe's live face (`data-face="claude"`, `assets/js/live-widgets.js`) on a patch of phone screen, two lines and "The recipe →".
+   The promises use the agent's own words, as the FAQ does: "Changes an AI sends through Desktap wait for your Accept on your iPhone or iPad" and "Through Desktap, an AI can't press your buttons or delete anything" — never "Nothing changes until you tap Accept" on its own (the card on the phone may say it about its own change). AI apps are named in text, never with their logos. The examples come from the docs (AI › Asking for widgets) and the agent's **AI Assistants** header; the last one is the change on the card.
 
 6. **How It Works** — Centered header. Three-column grid with 1px gap (acts as divider). Large outline step numbers (01, 02, 03 with `-webkit-text-stroke`). Arrow circles between steps.
 
@@ -249,6 +250,7 @@ Text on the marker line becomes the title (`> [!TIP] A faster way`). In step car
     ├── js/live-widgets.js — the live buttons of the Live widgets section on /next/ (imports docs/js/face-player.js)
     ├── style.css       — Complete stylesheet (~3100 lines; docs part at "Docs")
     ├── deck-ipad.webp, deck-iphone.webp — /next/ hero: the deck in Apple's bezels (iPad landscape 1400×1073, iPhone 540×1102)
+    ├── ai-review-iphone.webp — /next/ AI: the review card of a change from an AI, on iPhone in Apple's bezel (680×1388)
     ├── icon.png        — App icon (256×256)
     ├── og-image.jpg    — Social preview: docs, privacy, terms, next/, changelog/ — the hero's words and the deck screens (see "Social preview card")
     ├── og-deck-ipad.webp, og-deck-iphone.webp — the deck screens without a bezel, for og-image.jpg (iPad 1300×975, iPhone 460×1000)
@@ -370,6 +372,6 @@ The card is changed here, in this template (name, label, words, look). `og-card.
 2. **System fonts only** — SF Pro renders natively on Apple devices (the target audience), zero FOIT/FOUT, instant paint
 3. **Semi-transparent cards with backdrop-blur** — cosmos blob light bleeds through, creating the same glass effect as the iOS app's `ultraThinMaterial`
 4. **Bento grid (not uniform cards)** — creates visual hierarchy; the 8+4 first row draws attention to the core value prop (8 command types)
-5. **Terminal mockup for MCP** — speaks directly to the developer audience, more memorable than generic chat bubbles
+5. **The real review card for AI** — a render of the app, not a mockup: it shows what a visitor will approve, with the code, which no chat bubble can
 6. **Monospace used sparingly** — only for technical labels, badges, terminal, and tags; all headings and body in system sans for Apple-clean readability
 7. **No external dependencies** — entire site loads from 4 files (HTML, CSS, 2 images), under 100KB excluding images
