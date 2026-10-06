@@ -56,7 +56,7 @@ One line
 Desktap turns your iPhone or iPad into a control deck for your Mac — and your AI builds it.
 
 25 words
-Desktap turns an iPhone or iPad into a Mac control deck. Claude, ChatGPT or any MCP client builds the buttons;
+Desktap turns an iPhone or iPad into a Mac control deck. Claude, ChatGPT or any MCP client builds buttons;
 you approve them on your phone.
 
 50 words
@@ -70,10 +70,10 @@ everything on the Mac; the phone holds the buttons: key combinations, zsh and Ap
 launches, text snippets — and live buttons that draw data, like a CPU ring or a countdown.
 
 You don't have to build the deck by hand. The agent includes an MCP server, so Claude, ChatGPT / Codex or any
-MCP client can build whole pages. Every change it sends arrives on the phone as a card that shows each script,
+MCP client can build whole pages. Every change it sends arrives on the phone as a card showing each script,
 and applies only when you tap Accept. Through Desktap, an AI can't press your buttons or delete anything.
 
-There is no account and no Desktap server: phone and Mac talk directly over the local network, encrypted. The
+There is no account and no Desktap server: phone and Mac talk over the local network, encrypted. The
 Mac agent is free; the app is free with two profiles of two pages, and Desktap Pro unlocks the rest.
 
 
