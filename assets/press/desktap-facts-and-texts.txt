@@ -1,0 +1,134 @@
+DESKTAP — PRESS KIT
+Facts, descriptions and pictures for writing about Desktap. Use them freely in articles and videos about it.
+Online: https://desktap.app/next/press/
+Press contact: Mikhail Zhukov, support@desktap.app
+
+
+FACT SHEET
+
+Product        Desktap — a control deck for your Mac on iPhone and iPad, built by your AI.
+
+What it is     An iPhone and iPad app plus a free Mac agent in the menu bar. Buttons press key combinations,
+               run zsh scripts and AppleScript, launch apps, run Shortcuts, open URLs, type text snippets and
+               switch pages — or show live data that updates on its own.
+
+AI             A built-in MCP server. Claude Desktop, Claude Code and ChatGPT / Codex connect with one click in
+               the agent; Cursor, Windsurf and any other MCP client take a config copied from it. An AI can build
+               whole pages. Every change it sends through Desktap arrives on the phone as a review card with the
+               full code and applies only after Accept. Through Desktap, an AI can't press your buttons or
+               delete anything.
+
+Gallery        34 ready-made widgets; pages of shortcuts for 35 Mac apps, such as Xcode, VS Code, Figma, Slack
+               and Spotify; 3 full-page scenes: Mac Town, Visualizer and Aquarium.
+
+Grid           4 × 8 buttons on iPhone, 6 × 8 on iPad and on the unfolded iPhone Duo. A button can span
+               several cells.
+
+Privacy        No account, no Desktap server, no analytics. Phone and Mac talk directly over the local network
+               through an encrypted connection, paired once with a 6-digit code. The deck syncs through the
+               user's own iCloud.
+
+Requirements   iPhone or iPad with iOS or iPadOS 17 or later; a Mac with macOS 15 or later running the free
+               agent; both on the same Wi-Fi network. A Mac serves one phone at a time.
+
+Price          Mac agent: free. iPhone and iPad app: free with 2 profiles of 2 pages each, with every button
+               type, live widgets and AI apps included. Desktap Pro — monthly, yearly or a one-time Lifetime
+               purchase through the App Store — unlocks unlimited profiles and pages. Prices are in the
+               App Store.
+
+Languages      English, German, Spanish, French, Russian.
+
+Availability   Mac agent: available now, notarized by Apple, updates itself. iPhone and iPad app: coming soon
+               to the App Store.
+
+Developer      Mikhail Zhukov, independent developer, Cyprus.
+
+Links          Website     https://desktap.app/
+               Mac agent   https://desktap.app/download/
+               Docs        https://desktap.app/docs
+               What's new  https://desktap.app/changelog/
+               Privacy     https://desktap.app/privacy
+
+
+DESCRIPTIONS
+
+One line
+Desktap turns your iPhone or iPad into a control deck for your Mac — and your AI builds it.
+
+25 words
+Desktap turns an iPhone or iPad into a Mac control deck. Claude, ChatGPT or any MCP client builds buttons;
+you approve them on your phone.
+
+50 words
+Desktap turns an iPhone or iPad into a control deck for your Mac. Buttons press hotkeys, run scripts, launch
+apps or show live numbers. Ask Claude, ChatGPT or any MCP client for a page: it arrives on your phone with
+every script shown, and applies only when you tap Accept.
+
+150 words
+Desktap turns the iPhone or iPad you already own into a control deck for your Mac. A free menu-bar agent runs
+everything on the Mac; the phone holds the buttons: key combinations, zsh and AppleScript, Shortcuts, app
+launches, text snippets — and live buttons that draw data, like a CPU ring or a countdown.
+
+You don't have to build the deck by hand. The agent includes an MCP server, so Claude, ChatGPT / Codex or any
+MCP client can build whole pages. Every change it sends arrives on the phone as a card showing each script,
+and applies only when you tap Accept. Through Desktap, an AI can't press your buttons or delete anything.
+
+There is no account and no Desktap server: phone and Mac talk over the local network, encrypted. The
+Mac agent is free; the app is free with two profiles of two pages, and Desktap Pro unlocks the rest.
+
+
+WHAT SETS IT APART
+
+- Your AI builds it; you approve it on the phone. An AI app doesn't just trigger actions someone set up: it
+  sends finished buttons — scripts, icons, live faces — and the phone shows every line of code before you
+  tap Accept.
+- Buttons that draw. A button can be a picture a script keeps current: rings, graphs, clocks, a build that
+  turns red. Three scenes turn a whole page into one picture, like a neon city built from the apps on your Mac.
+- No new hardware, no cloud. The iPhone or iPad you already own, no account and no Desktap server. An iPad,
+  or an unfolded iPhone Duo, gets two more columns of buttons.
+
+
+SHORT FAQ
+
+Is it safe to let an AI change the deck?
+Changes an AI sends through Desktap wait for Accept on the iPhone or iPad, with every script shown on the
+card. Running a command on the Mac is off until you turn on Allow AI to Run Commands, and then you allow each
+command. Through Desktap, an AI can't press your buttons or delete anything.
+
+Does it work away from home?
+The iPhone or iPad and the Mac need to be on the same Wi-Fi network. There is no Desktap server to carry a tap
+over the internet.
+
+Do I need to write code?
+No. Most buttons are a type you pick and set up on the phone, ready-made live widgets wait in the Gallery, and
+an AI app can write the rest.
+
+Is there a Windows or Android version?
+No. Mac, iPhone and iPad only.
+
+
+PICTURES IN THIS ARCHIVE
+
+Screens of the app as it runs, with sample data, no device frames.
+
+desktap-icon-512.png              The app icon, 512 × 512
+desktap-iphone-1-deck.png         iPhone: a deck of live widgets and buttons, 1320 × 2868
+desktap-iphone-2-xcode-page.png   iPhone: the Xcode page from the Gallery, 1320 × 2868
+desktap-iphone-3-ai-review.png    iPhone: three buttons from an AI, waiting for Accept, 1320 × 2868
+desktap-iphone-4-gallery.png      iPhone: the Gallery, 1320 × 2868
+desktap-iphone-5-mac-town.png     iPhone: the Mac Town scene, 1320 × 2868
+desktap-ipad-1-deck.png           iPad: a deck of live widgets and buttons, 2752 × 2064
+desktap-ipad-2-ai-review.png      iPad: three buttons from an AI, waiting for Accept, 2752 × 2064
+desktap-ipad-3-mac-town.png       iPad: the Mac Town scene, 2752 × 2064
+desktap-ipad-4-visualizer.png     iPad: the Visualizer scene, 2752 × 2064
+desktap-ipad-5-aquarium.png       iPad: the Aquarium scene, 2752 × 2064
+desktap-mac-agent-overview.png    Mac: the agent's window, Overview, 1520 × 1048
+desktap-mac-agent-scripts.png     Mac: the agent's window, Scripts, 1520 × 1280
+
+
+TRADEMARKS
+
+Apple, iPhone, iPad, Mac, macOS, iPadOS, Xcode and AirPods are trademarks of Apple Inc., registered in the
+U.S. and other countries and regions. App Store is a service mark of Apple Inc. Claude is a trademark of
+Anthropic. ChatGPT and Codex are trademarks of OpenAI. Other product names are trademarks of their owners.
+Desktap is not affiliated with or endorsed by Apple, Anthropic or OpenAI.
