@@ -2,7 +2,7 @@
 // and applies the site's Markdown conventions (callouts, step cards, code tabs, chips, diagrams).
 // Page list, legacy anchors and recipe cards come from assets/docs/pages.json.
 
-const MARKED_URL = 'https://cdn.jsdelivr.net/npm/marked@14.1.3/+esm';
+const MARKED_URL = new URL('js/marked-14.1.3.esm.js', import.meta.url).href;  // the site's own copy, no CDN
 const MANIFEST_URL = 'assets/docs/pages.json';
 const SITE = 'https://desktap.app/docs';
 const HELPERS_START = '# ── Desktap helpers (the same in every recipe) ──';
