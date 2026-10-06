@@ -28,7 +28,7 @@
   <meta name="theme-color" content="#000000">
   <link rel="manifest" href="/site.webmanifest">
 
-  <link rel="stylesheet" href="/assets/style.css?v=20261007d">
+  <link rel="stylesheet" href="/assets/style.css?v=20261007e">
 
   <!-- A phone or tablet can't run the Mac agent: before the first paint, so the download buttons show "Send link to Mac" at once -->
   <script>
@@ -353,6 +353,82 @@
 
       <p class="ww-foot">Your music, a price from any API, your build, your AI agent waiting on you — every button here is a drawing your script sends. If you can fetch it, you can pin it.</p>
       <p class="ww-more"><a href="/docs?p=recipes-widgets">Browse the widget recipes <span aria-hidden="true">→</span></a></p>
+    </div>
+  </section>
+
+  <!-- Gallery and scenes — start without code: the Gallery, then your AI, then your own script.
+       Pictures are renders of the app, without a bezel: a patch of the iPhone Gallery and the iPad screens (landscape) of the three scenes of its Unusual collection -->
+  <section class="gallery-scenes" id="gallery">
+    <div class="container">
+      <header class="ww-head gs-head">
+        <div class="label">Gallery</div>
+        <h2>Start without <em>code.</em></h2>
+        <p class="ww-sub">Ready-made widgets and whole living pages wait in the Gallery. Ask your AI for what isn’t there, and write a script of your own only when you want&nbsp;to.</p>
+      </header>
+
+      <div class="gs-path">
+        <div class="gs-gallery reveal">
+          <img src="/assets/gallery-widgets.webp" width="660" height="960" loading="lazy" alt="The Gallery on iPhone, For Everyone: System with System Monitor, CPU Load, Memory and Disk Free; Time &amp; Calendar with Calendar, Reminders, Timer and Stopwatch; Utilities with Keep Awake, Focus Window, Latest Download and Translate">
+        </div>
+
+        <ol class="gs-steps">
+          <li class="gs-step reveal">
+            <span class="gs-num" aria-hidden="true">01</span>
+            <h3>Add it from the Gallery</h3>
+            <p>Live widgets for your CPU, memory, disk, battery, calendar, timers and the song that’s playing, handy buttons, and whole pages that come alive. Pick one and add it: there is nothing to write.</p>
+          </li>
+          <li class="gs-step reveal">
+            <span class="gs-num" aria-hidden="true">02</span>
+            <h3>Ask your AI for the rest</h3>
+            <p>Describe the button in plain words to Claude, ChatGPT or any MCP client. It writes the script and the look; you tap <b>Accept</b> on your phone.</p>
+            <p class="gs-prompt"><span class="gs-prompt-who">You, to your AI</span>“Add a button that shows how many pull requests wait for my review, and opens them when I tap it.”</p>
+          </li>
+          <li class="gs-step reveal">
+            <span class="gs-num" aria-hidden="true">03</span>
+            <h3>Write your own when you want to</h3>
+            <p>A live widget is a zsh script on your Mac: a loop that tells the button what to show. Every widget from the Gallery shows its own under <b>Advanced</b>, yours to read and change.</p>
+            <div class="gs-code">
+              <span class="gs-code-title">Startup Script · excerpt</span>
+<pre><code><span class="c"># Free disk space: GB left, checked every 10 s</span>
+<span class="c"># … the helpers from the docs: cell, post, json …</span>
+last=<span class="s">""</span> sent_at=<span class="v">-100</span>
+<b>while</b> true; <b>do</b>
+  free=$(df -g / | awk <span class="s">'NR == 2 { print $4 }'</span>)
+  <span class="c"># send a change at once, the same value every 30 s</span>
+  <b>if</b> [[ <span class="v">$free</span> != <span class="v">$last</span> ]] || (( SECONDS - sent_at &gt;= <span class="v">30</span> )); <b>then</b>
+    title=$(json <span class="s">"<span class="v">$free</span> GB free"</span>)
+    post <span class="s">"{\"cellId\":\"<span class="v">$cell</span>\",\"title\":<span class="v">$title</span>}"</span> &amp;&amp;
+      last=<span class="v">$free</span> sent_at=<span class="v">$SECONDS</span>
+  <b>fi</b>
+  sleep <span class="v">10</span>
+<b>done</b></code></pre>
+            </div>
+            <a class="gs-more" href="/docs?p=live-widgets#your-first-live-widget-free-disk-space">Docs: Your first live widget</a>
+          </li>
+        </ol>
+      </div>
+
+      <header class="gs-scenes-head reveal" id="scenes">
+        <h3>Whole pages that come alive</h3>
+        <p>Three scenes in the Gallery’s <b>Unusual</b> collection turn every button of a page into one picture. Tap <b>Add Page</b>, and it’s your own copy to keep or take apart.</p>
+      </header>
+
+      <div class="gs-scenes stagger">
+        <figure class="gs-scene reveal">
+          <img src="/assets/scene-town.webp" width="1200" height="900" loading="lazy" alt="Mac Town on iPad: a neon city at night across the whole page, with a building for each app, such as Figma, Slack, Xcode and Terminal, a clock reading 22:00 and an airship in the sky">
+          <figcaption><b>Mac Town</b> A neon city built from the apps on your Mac. A busy Mac fills it with traffic; a tap switches apps.</figcaption>
+        </figure>
+        <figure class="gs-scene reveal">
+          <img src="/assets/scene-visualizer.webp" width="1200" height="900" loading="lazy" alt="Visualizer on iPad: every button of the page is one cell of glowing level bars, from cyan on the left to pink on the right">
+          <figcaption><b>Visualizer</b> The sound your Mac plays, across the whole page. A tap brings up the effect and the colors.</figcaption>
+        </figure>
+        <figure class="gs-scene reveal">
+          <img src="/assets/scene-aquarium.webp" width="1200" height="900" loading="lazy" alt="Aquarium on iPad: a fish tank across the whole page, with fish, a turtle and bubbles over sand, coral and seaweed">
+          <figcaption><b>Aquarium</b> A living fish tank across the whole page. Fish swim from button to button; a tap drops food where you touch.</figcaption>
+        </figure>
+      </div>
+
+      <p class="ww-more"><a href="/docs?p=scenes-and-sound#learn-from-the-gallery-scenes">How the scenes are made <span aria-hidden="true">→</span></a></p>
     </div>
   </section>
 
