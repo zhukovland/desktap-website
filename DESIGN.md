@@ -77,10 +77,14 @@ Each blob is an ellipse with a 4-stop radial gradient (0.3 → 0.15 → 0.04 →
 
 3. **Marquee** — Horizontal auto-scrolling ticker strip. SF Mono uppercase items separated by small blue diamond glyphs. Bordered top and bottom. 30s infinite linear scroll, seamless loop via duplicated items.
 
-4. **Features (Bento Grid)** — Split header (title left, description right). Below: 12-column CSS grid with cards of varying spans:
-   - Row 1: 8-col card (command types with tag pills) + 4-col card (AI setup)
-   - Row 2: 4-col + 4-col + 4-col (live dashboards with animated bars, auto-switch, native Swift)
-   - Row 3: remaining cards at 4-col each
+   **For whom** (`/next/`, between the marquee and Features) — three glass cards: Engineers, Designers, Advanced users. A big tinted number and a mono label, a headline in the primary text color with its key words in a serif italic of the card's tint (never the tertiary gray: it fails contrast), five → bullets, then a picture of the deck that fits the card — `assets/for-engineers.webp` (a Fork page), `for-designers.webp` (Figma), `for-power.webp` (a "My Day" page: shell buttons, a keep-awake widget, Launch App buttons with the apps' own icons). Each is two rows of an iPhone page, a render of the app cropped to the buttons (880×440, the screen's black behind, 12px radius, a 1px ring); `margin-top: auto` keeps the three pictures level. Stacked ≤1024px, up to 520px wide.
+
+4. **Features (Bento Grid)** — Split header (title left, 1.4×, description right): says what the product does, in concrete words ("A page per app. / A button per action.", the second line in the secondary text color, not tertiary), the description lists the command types and what follows. Below: 12-column CSS grid, the tint of each card set by its place (`nth-child`):
+   - Row 1: 8-col 01 command types (tag pills) + 4-col 02 live buttons (animated bars)
+   - Row 2: 8-col 03 pages that follow the app in front — two strips of the same iPhone deck, "Figma in front" → "Xcode in front" (`assets/page-figma.webp`, `page-xcode.webp`: the top bar and first row, 880×293) + 4-col 04 profiles (chips)
+   - Row 3: 12-col 05 iPad — the text left, the iPad's screen right (`assets/ipad-xcode.webp`, the Xcode page in landscape, 1400×1050): the screen alone, no Apple bezel, so a radius, a ring and a shadow are allowed (see Hero for the bezel rules). Stacked ≤768px.
+   - Row 4: 8-col 06 AI + 4-col 07 sync & privacy
+   UI labels in the cards are quoted from the English app (**Open with App**, Accept).
 
 5. **Gallery and scenes** (`/next/` only, `#gallery`, after Live widgets) — "Start without code": the way from the Gallery to your AI to your own script. Centered header like Live widgets. Below, two columns (`.gs-path`, 340px + the rest): on the left a patch of the iPhone Gallery (`assets/gallery-widgets.webp`, the For Everyone shelves) on the phone-screen color with an accent glow; on the right three numbered steps (`.gs-step`, mono 01–03 in accent circles joined by a thin accent line): add it from the Gallery; ask your AI (a chat bubble with an example request); write your own (a "Startup Script · excerpt" panel: the loop of the free-disk widget from the docs, its helpers left out and named in a comment, code colors as in the docs, and an accent link to the whole script). Then "Whole pages that come alive" (`#scenes`): the three scenes of the Gallery's Unusual collection — Mac Town, Visualizer, Aquarium — as iPad screens in landscape without a bezel (`assets/scene-*.webp`, rounded corners, a ring and a shadow), three columns with a caption each, and a link to "Learn from the Gallery scenes" in the docs. ≤900px everything stacks in one column (up to 560px; the Gallery patch up to 340px). Pictures are renders of the app with no name in the pixels; they reveal on scroll like the rest.
 
@@ -152,7 +156,7 @@ All buttons: SF Pro Text weight 500, 0.9375rem, padding 14px 28px, border-radius
 | Breakpoint | Changes |
 |-----------|---------|
 | ≤1024px | Hero → single column centered, the devices under the text (up to 760px). AI → single column: header, the review card (up to 300px), then the asks, the promise and Works with. Features header → single column. |
-| ≤768px | AI: the Claude Code strip wraps its link under the text. Bento → single column (all spans become 1). Steps → stacked. Nav: section links hidden, Docs and the CTA stay (`.nav-compact` on `/next/`; the other pages hide all nav links). Footer stacked centered. |
+| ≤768px | AI: the Claude Code strip wraps its link under the text. Bento → single column (all spans become 1; the iPad card's picture goes under its text, the two page strips one under the other). Steps → stacked. Nav: section links hidden, Docs and the CTA stay (`.nav-compact` on `/next/`; the other pages hide all nav links). Footer stacked centered. |
 | ≤560px | AI: each answer under its ask, the review card up to 260px, the Claude Code strip stacked (button, text, link). |
 | ≤520px | Hero devices one under the other: the iPad full width, the iPhone at the same scale, never under 200px tall. |
 | ≤480px | Hero h1 → 2rem. Buttons stack vertically. |
@@ -252,6 +256,9 @@ Text on the marker line becomes the title (`> [!TIP] A faster way`). In step car
     ├── js/live-widgets.js — the live buttons of the Live widgets section on /next/ (imports docs/js/face-player.js)
     ├── style.css       — Complete stylesheet (~3600 lines; docs part at "Docs")
     ├── deck-ipad.webp, deck-iphone.webp — /next/ hero: the deck in Apple's bezels (iPad landscape 1400×1073, iPhone 540×1102)
+    ├── for-engineers.webp, for-designers.webp, for-power.webp — /next/ For whom: two rows of an iPhone page each (880×440)
+    ├── page-figma.webp, page-xcode.webp — /next/ Features 03: an iPhone page's top bar and first row (880×293)
+    ├── ipad-xcode.webp — /next/ Features 05: the iPad's screen, landscape, no bezel (1400×1050)
     ├── ai-review-iphone.webp — /next/ AI: the review card of a change from an AI, on iPhone in Apple's bezel (680×1388)
     ├── gallery-widgets.webp — /next/ Gallery and scenes: a patch of the iPhone Gallery, For Everyone (660×960)
     ├── scene-town.webp, scene-visualizer.webp, scene-aquarium.webp — /next/ Gallery and scenes: the three Unusual scenes, iPad screens in landscape without a bezel (1200×900)

@@ -468,7 +468,7 @@ html.handheld .only-mac { display: none; }
 
 .features-header {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
   gap: 40px;
   margin-bottom: 72px;
   align-items: end;
@@ -484,6 +484,11 @@ html.handheld .only-mac { display: none; }
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+/* The second line of the header: quieter than the first, still readable (not tertiary) */
+.features-header h2 .features-sub {
+  -webkit-text-fill-color: var(--text-secondary);
 }
 
 .features-header p {
@@ -558,14 +563,15 @@ html.handheld .only-mac { display: none; }
 /* Per-card vibrant accents */
 .bento-card:nth-child(1) { --card-tint: 88, 86, 214; }   /* indigo — 8 commands */
 .bento-card:nth-child(2) { --card-tint: 48, 209, 88; }   /* green — Live widgets */
-.bento-card:nth-child(3) { --card-tint: 255, 159, 10; }  /* orange — Pages */
+.bento-card:nth-child(3) { --card-tint: 255, 159, 10; }  /* orange — Pages that follow apps */
 .bento-card:nth-child(4) { --card-tint: 255, 55, 95; }   /* pink — Profiles */
-.bento-card:nth-child(5) { --card-tint: 100, 210, 255; } /* cyan — Grid */
+.bento-card:nth-child(5) { --card-tint: 100, 210, 255; } /* cyan — iPad */
 .bento-card:nth-child(6) { --card-tint: 191, 90, 242; }  /* purple — AI/MCP */
 .bento-card:nth-child(7) { --card-tint: 255, 214, 10; }  /* yellow — Sync/Privacy */
 
 .bento-card.span-8 { grid-column: span 8; }
 .bento-card.span-4 { grid-column: span 4; }
+.bento-card.span-12 { grid-column: span 12; }
 
 .bento-icon {
   width: 52px;
@@ -608,6 +614,11 @@ html.handheld .only-mac { display: none; }
   line-height: 1.6;
   position: relative;
   z-index: 1;
+}
+
+.bento-card p strong {
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 .bento-card .card-number {
@@ -680,29 +691,61 @@ html.handheld .only-mac { display: none; }
   box-shadow: 0 0 20px -5px rgba(var(--card-tint), 0.5);
 }
 
-/* Mini grid visual */
-.grid-mini {
+/* Pages card: the same deck with Figma in front, then Xcode — the top bar and first row of each page */
+.page-flip {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 22px;
-  gap: 5px;
-  margin-top: 18px;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+  margin-top: 24px;
+  position: relative;
+  z-index: 1;
 }
 
-.g-cell {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: 5px;
-  transition: all 0.3s;
+.page-flip figure { margin: 0; }
+
+.page-flip img,
+.card-ipad-screen,
+.for-shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  background: var(--phone-screen);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 20px 48px -24px rgba(0, 0, 0, 0.9);
 }
 
-.g-cell.active {
-  background: linear-gradient(145deg, rgba(var(--card-tint), 0.4) 0%, rgba(var(--card-tint), 0.18) 100%);
-  border-color: rgba(var(--card-tint), 0.5);
-  box-shadow: 0 0 14px rgba(var(--card-tint), 0.4);
+.page-flip figcaption {
+  margin-top: 10px;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
 }
 
-.g-cell.g-2x1 { grid-column: span 2; }
+.page-flip-arrow {
+  font-family: var(--mono);
+  color: rgb(var(--card-tint));
+  margin-top: -22px; /* level with the pictures, not with picture + caption */
+}
+
+/* iPad card: the text left, the iPad's screen right — the screen alone, no Apple bezel */
+.bento-card.card-ipad {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr);
+  gap: 48px;
+  align-items: center;
+  padding-top: 56px; /* the card number above the picture, not on it */
+}
+
+.card-ipad-text p + p { margin-top: 12px; }
+
+.card-ipad-screen {
+  border-radius: 18px;
+  position: relative;
+  z-index: 1;
+}
 
 /* Live dashboard mini visual */
 .live-bars {
@@ -2990,10 +3033,15 @@ html.docs-panel-open body { overflow: hidden; }
     grid-template-columns: 1fr;
   }
 
+  .bento-card.span-12,
   .bento-card.span-8,
   .bento-card.span-4 {
     grid-column: span 1;
   }
+
+  .bento-card.card-ipad { grid-template-columns: 1fr; gap: 32px; }
+  .page-flip { grid-template-columns: 1fr; gap: 10px; }
+  .page-flip-arrow { margin: 0; justify-self: center; transform: rotate(90deg); }
 
   .steps {
     grid-template-columns: 1fr;
@@ -3138,7 +3186,7 @@ html.docs-panel-open body { overflow: hidden; }
   font-size: 1.5rem;
   line-height: 1.2;
   letter-spacing: -0.03em;
-  color: var(--text-tertiary);
+  color: var(--text-primary);
   margin: 0 0 22px;
   text-wrap: balance;
 }
@@ -3161,7 +3209,7 @@ html.docs-panel-open body { overflow: hidden; }
 .for-list {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 0 32px;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -3187,7 +3235,12 @@ html.docs-panel-open body { overflow: hidden; }
   top: 1px;
 }
 
-/* Tighten the visual link to "Built different" */
+/* A picture of the deck under each card's list, bottoms level across the row */
+.for-shot {
+  margin-top: auto;
+}
+
+/* Keep the Capabilities header close to the cards */
 .for-whom + .features {
   padding-top: 80px;
 }
