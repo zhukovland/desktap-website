@@ -779,22 +779,32 @@ html.handheld .only-mac { display: none; }
   50% { opacity: 0.8; transform: scaleY(1.15); }
 }
 
-/* ---------- MCP / Terminal ---------- */
-.mcp {
+/* ---------- AI (/next/) — the review card, what you say and get, the promise ---------- */
+.ai {
   padding: 120px 0;
+  position: relative;
 }
 
-.mcp-layout {
+.ai-layout {
   display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 64px;
-  align-items: center;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 340px);
+  grid-template-areas:
+    "head card"
+    "body card";
+  grid-template-rows: auto 1fr;
+  column-gap: 96px;
+  row-gap: 40px;
+  align-items: start;
 }
 
-.mcp-content h2 {
+.ai-head { grid-area: head; }
+.ai-card { grid-area: card; }
+.ai-body { grid-area: body; }
+
+.ai-head h2 {
   font-family: var(--display);
   font-weight: 700;
-  font-size: clamp(2.4rem, 5vw, 4.4rem);
+  font-size: clamp(2.2rem, 4.4vw, 3.6rem);
   line-height: 1.04;
   letter-spacing: -0.04em;
   margin-bottom: 24px;
@@ -802,27 +812,157 @@ html.handheld .only-mac { display: none; }
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  text-wrap: balance;
 }
 
-.mcp-content h2 .serif-accent {
+.ai-head h2 em {
+  font-family: 'New York', 'Iowan Old Style', 'Hoefler Text', Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  padding-right: 0.04em;
   background: linear-gradient(135deg, #bf5af2 0%, #64d2ff 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.mcp-content p {
+.ai-head p {
   color: var(--text-secondary);
-  font-size: 0.9375rem;
-  line-height: 1.7;
-  margin-bottom: 16px;
-  max-width: 400px;
+  font-size: 1rem;
+  line-height: 1.65;
+  max-width: 560px;
 }
 
-.mcp-content .compat-list {
+.ai-head b, .ai-promise b { color: var(--text-primary); font-weight: 500; }
+
+/* The review card in Apple's bezel: as in the hero — no shadow or anything over the device, a fade without
+   movement (.reveal-fade), a still aura behind, never under 200 px */
+.ai-card {
+  position: relative;
+  isolation: isolate;
+  margin: 0;
+  width: 100%;
+  justify-self: center;
+}
+
+.ai-card::before {
+  content: '';
+  position: absolute;
+  inset: -10% -30%;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgba(59, 130, 246, 0.16), rgba(59, 130, 246, 0));
+  pointer-events: none;
+}
+
+.ai-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.ai-card figcaption {
+  margin-top: 18px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.reveal.reveal-fade { transform: none; }
+
+/* You say → you get */
+.ai-asks {
+  margin: 0;
+  border-top: 1px solid var(--border);
+}
+
+.ai-ask {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 32px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.ai-ask dt {
+  font-family: var(--display);
+  font-size: 1.0625rem;
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+  color: var(--text-primary);
+}
+
+.ai-ask dd {
+  position: relative;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.ai-ask dd::before {
+  content: '→';
+  position: absolute;
+  left: -24px;
+  color: var(--accent);
+}
+
+.ai-promise {
   display: flex;
-  gap: 12px;
-  margin-top: 24px;
+  gap: 16px;
+  margin-top: 32px;
+  padding: 20px 22px;
+  background: rgba(14, 14, 22, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.ai-promise > svg {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  color: var(--accent);
+}
+
+.ai-promise p {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.ai-promise p + p { margin-top: 6px; }
+
+.ai-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.ai-more::after { content: '→'; transition: transform 0.2s; }
+.ai-more:hover::after { transform: translateX(3px); }
+
+.ai-works {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.ai-works-label {
+  margin-right: 4px;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
 }
 
 .compat-item {
@@ -836,198 +976,76 @@ html.handheld .only-mac { display: none; }
   color: var(--text-secondary);
 }
 
-/* MCP flow visual */
-.mcp-flow {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  position: relative;
-}
-
-.flow-card {
-  background:
-    radial-gradient(120% 80% at 0% 0%, rgba(var(--flow-tint, 191, 90, 242), 0.10) 0%, transparent 55%),
-    linear-gradient(180deg, rgba(20, 20, 30, 0.85) 0%, rgba(10, 10, 18, 0.85) 100%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(var(--flow-tint, 191, 90, 242), 0.18);
-  border-radius: 22px;
-  padding: 22px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 16px 48px -16px rgba(var(--flow-tint, 191, 90, 242), 0.35);
-}
-
-.flow-client { --flow-tint: 191, 90, 242; }
-.flow-result { --flow-tint: 100, 210, 255; }
-
-.flow-card-header {
+/* Claude Code waiting for an answer: one live button (assets/js/live-widgets.js) on a patch of phone screen */
+.ai-wait {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.flow-avatar {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  flex-shrink: 0;
-}
-
-.flow-avatar-claude {
-  background: #f0eee5;
-  box-shadow: 0 4px 16px -4px rgba(217, 119, 87, 0.5);
-  overflow: hidden;
-}
-
-.flow-avatar-claude img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-}
-
-.flow-avatar-app {
-  background: linear-gradient(145deg, rgba(100, 210, 255, 0.3), rgba(100, 210, 255, 0.1));
-  border: 1px solid rgba(100, 210, 255, 0.4);
-  box-shadow: 0 4px 16px -4px rgba(100, 210, 255, 0.5);
-}
-
-.flow-avatar-app img { border-radius: 6px; }
-
-.flow-card-title {
-  font-family: var(--display);
-  font-size: 0.9375rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  letter-spacing: -0.01em;
-}
-
-.flow-card-meta {
-  font-family: var(--mono);
-  font-size: 0.625rem;
-  color: var(--text-tertiary);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  margin-top: 2px;
-}
-
-.flow-bubble {
-  background: linear-gradient(145deg, rgba(191, 90, 242, 0.18), rgba(191, 90, 242, 0.06));
-  border: 1px solid rgba(191, 90, 242, 0.3);
-  color: var(--text-primary);
-  padding: 14px 18px;
-  border-radius: 16px 16px 16px 4px;
-  font-size: 0.9375rem;
-  line-height: 1.45;
-  font-weight: 400;
-}
-
-.flow-pipe {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 44px;
-  position: relative;
-}
-
-.flow-pipe::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: linear-gradient(180deg,
-    rgba(191, 90, 242, 0.6) 0%,
-    rgba(100, 210, 255, 0.6) 100%);
-  transform: translateX(-50%);
-  border-radius: 2px;
-  box-shadow: 0 0 12px rgba(191, 90, 242, 0.4);
-}
-
-.flow-pipe::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 0;
-  width: 6px;
-  height: 6px;
-  background: rgba(100, 210, 255, 0.95);
-  border-radius: 50%;
-  transform: translateX(-50%);
-  box-shadow: 0 0 12px rgba(100, 210, 255, 0.8);
-  animation: flowDrop 2.4s ease-in-out infinite;
-}
-
-@keyframes flowDrop {
-  0%   { top: 0;    opacity: 0; }
-  20%  { opacity: 1; }
-  80%  { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
-}
-
-.flow-pipe-label {
-  position: relative;
-  z-index: 1;
-  font-family: var(--mono);
-  font-size: 0.625rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--text-secondary);
-  background: rgba(10, 10, 18, 0.95);
-  padding: 5px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 999px;
-  backdrop-filter: blur(10px);
-}
-
-.flow-buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.flow-btn {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-  border: 1px solid rgba(255,255,255,0.08);
+  gap: 28px;
+  margin-top: 72px;
+  padding: 22px 28px 22px 22px;
+  background: rgba(14, 14, 22, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
   border-radius: 14px;
-  color: var(--text-primary);
-  font-size: 0.875rem;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  opacity: 0;
-  animation: flowBtnReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  transition: transform 0.25s, border-color 0.25s;
 }
 
-.flow-btn:hover {
-  transform: translateY(-1px);
-  border-color: rgba(100, 210, 255, 0.3);
+.ai-wait-face {
+  flex: none;
+  width: 108px;
+  padding: 14px;
+  background: var(--phone-screen);
+  border: 1px solid var(--border);
+  border-radius: 26px;
 }
 
-.flow-btn:nth-child(1) { animation-delay: 0.5s; }
-.flow-btn:nth-child(2) { animation-delay: 0.7s; }
-.flow-btn:nth-child(3) { animation-delay: 0.9s; }
-.flow-btn:nth-child(4) { animation-delay: 1.1s; }
+.ai-wait-face .ww-slot { width: 100%; }
 
-.flow-btn-icon {
+.ai-wait-text { flex: 1; }
+
+.ai-wait h3 {
+  font-family: var(--display);
   font-size: 1.125rem;
-  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
 }
 
-@keyframes flowBtnReveal {
-  from { opacity: 0; transform: translateY(10px) scale(0.96); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
+.ai-wait p {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  max-width: 620px;
+}
+
+.ai-wait .ai-more { flex: none; margin-top: 0; }
+
+@media (max-width: 1024px) {
+  .ai-layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "head" "card" "body";
+    grid-template-rows: none;
+    row-gap: 48px;
+  }
+  .ai-card { max-width: 300px; }
+}
+
+@media (max-width: 768px) {
+  .ai { padding: 100px 0; }
+  .ai-wait { flex-wrap: wrap; margin-top: 56px; }
+  .ai-wait-text { flex-basis: calc(100% - 136px); }
+  .ai-wait .ai-more { margin-left: 136px; }
+}
+
+/* Narrow: the answer under the ask, its arrow in front */
+@media (max-width: 560px) {
+  .ai-ask { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .ai-ask dd { padding-left: 22px; }
+  .ai-ask dd::before { left: 0; }
+  .ai-card { max-width: 260px; }
+  .ai-wait { flex-direction: column; align-items: flex-start; gap: 18px; padding: 22px; }
+  .ai-wait-text { flex-basis: auto; }
+  .ai-wait .ai-more { margin-left: 0; }
 }
 
 /* ---------- How It Works — horizontal ---------- */
@@ -3004,8 +3022,6 @@ html.docs-panel-open body { overflow: hidden; }
   .hero-duo .container { grid-template-columns: minmax(0, 1fr); }
   .hero-devices { max-width: 760px; margin: 0 auto; }
   .hero .trust-line { justify-content: center; }
-  .mcp-layout { grid-template-columns: 1fr; gap: 48px; }
-  .mcp-content p { max-width: 100%; }
   .features-header { grid-template-columns: 1fr; }
   .features-header p { justify-self: start; }
 }
@@ -3046,10 +3062,6 @@ html.docs-panel-open body { overflow: hidden; }
   }
 
   .hero { min-height: auto; padding: 130px 0 60px; }
-
-  .mcp-content .compat-list {
-    flex-wrap: wrap;
-  }
 
   .cta-actions {
     flex-direction: column;
@@ -3369,6 +3381,235 @@ html.docs-panel-open body { overflow: hidden; }
 
 @media (max-width: 640px) {
   .widgets { padding: 80px 0 60px; }
+}
+
+/* ---------- Gallery and scenes — start without code (/next/) ---------- */
+.gallery-scenes {
+  padding: 100px 0 110px;
+  position: relative;
+}
+
+.gallery-scenes .container { max-width: 1100px; }
+
+/* The path: a patch of the iPhone Gallery on the left, three numbered steps on the right */
+.gs-path {
+  display: grid;
+  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  gap: 72px;
+  align-items: center;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.gs-gallery {
+  background: var(--phone-screen);
+  border: 1px solid var(--border);
+  border-radius: clamp(24px, 5vw, 34px);
+  padding: 10px 6px 4px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px -30px rgba(59, 130, 246, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.6);
+}
+
+.gs-gallery img { width: 100%; height: auto; }
+
+.gs-steps {
+  list-style: none;
+  display: grid;
+  gap: 36px;
+}
+
+.gs-step {
+  position: relative;
+  padding-left: 64px;
+  min-width: 0;
+}
+
+/* A thin accent line joins the numbers, as the docs join their step cards */
+.gs-step:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 19.5px;
+  top: 48px;
+  bottom: -28px;
+  width: 1px;
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.45), rgba(59, 130, 246, 0.08));
+}
+
+.gs-num {
+  position: absolute;
+  left: 0;
+  top: -6px;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  background: var(--accent-subtle);
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+}
+
+.gs-step h3 {
+  font-family: var(--display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+
+.gs-step > p {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+}
+
+.gs-step b { color: var(--text-primary); font-weight: 500; }
+
+/* What you might ask your AI: a chat bubble */
+.gs-step > .gs-prompt {
+  margin-top: 14px;
+  padding: 12px 16px 13px;
+  max-width: 460px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid var(--border-hover);
+  border-radius: 16px 16px 16px 4px;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.gs-prompt-who {
+  display: block;
+  margin-bottom: 4px;
+  font-family: var(--mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+/* A few lines of a startup script, in the docs' code colors */
+.gs-code {
+  margin-top: 14px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-hover);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.gs-code-title {
+  display: block;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.gs-code pre {
+  margin: 0;
+  padding: 12px 14px 14px;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  line-height: 1.65;
+  color: #D4D4D8;
+}
+
+.gs-code .c { color: #7C7C86; }
+.gs-code .s { color: #A7D9BC; }
+.gs-code .v { color: #93C5FD; }
+.gs-code b { color: #fff; font-weight: 600; }
+
+.gs-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  font-size: 0.875rem;
+  color: var(--accent);
+}
+
+.gs-more::after { content: '→'; transition: transform 0.2s; }
+.gs-more:hover::after { transform: translateX(3px); }
+
+/* The scenes: three iPad screens, landscape, side by side */
+.gs-scenes-head {
+  text-align: center;
+  max-width: 600px;
+  margin: 110px auto 36px;
+  scroll-margin-top: 88px;   /* /next/#scenes lands below the fixed nav */
+}
+
+.gs-scenes-head h3 {
+  font-family: var(--display);
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+
+.gs-scenes-head p {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.gs-scenes-head b { color: var(--text-primary); font-weight: 500; }
+
+.gs-scenes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.gs-scene img {
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  background: var(--phone-screen);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 24px 60px -24px rgba(0, 0, 0, 0.9);
+}
+
+.gs-scene figcaption {
+  margin-top: 16px;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.gs-scene figcaption b {
+  display: block;
+  margin-bottom: 2px;
+  font-family: var(--display);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.gallery-scenes .ww-more { margin-top: 40px; }
+
+@media (max-width: 900px) {
+  .gs-path { grid-template-columns: 1fr; gap: 48px; max-width: 560px; }
+  .gs-gallery { width: 100%; max-width: 340px; margin: 0 auto; }
+  .gs-scenes { grid-template-columns: 1fr; gap: 36px; max-width: 560px; margin: 0 auto; }
+  .gs-scenes-head { margin-top: 88px; }
+}
+
+@media (max-width: 640px) {
+  .gallery-scenes { padding: 70px 0 80px; }
+  .gs-step { padding-left: 54px; }
+  .gs-num { width: 36px; height: 36px; font-size: 0.6875rem; }
+  .gs-step:not(:last-child)::before { left: 17.5px; top: 42px; }
+  .gs-scene img { border-radius: 10px; }
 }
 
 /* Respect users who ask the system to reduce motion */

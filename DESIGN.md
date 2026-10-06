@@ -86,19 +86,22 @@ Each blob is an ellipse with a 4-stop radial gradient (0.3 → 0.15 → 0.04 →
    - Row 4: 8-col 06 AI + 4-col 07 sync & privacy
    UI labels in the cards are quoted from the English app (**Open with App**, Accept).
 
-5. **MCP Section** — Two-column: left has label + heading + description + compatibility tags; right has a terminal window mockup with animated line-by-line reveal.
+5. **Gallery and scenes** (`/next/` only, `#gallery`, after Live widgets) — "Start without code": the way from the Gallery to your AI to your own script. Centered header like Live widgets. Below, two columns (`.gs-path`, 340px + the rest): on the left a patch of the iPhone Gallery (`assets/gallery-widgets.webp`, the For Everyone shelves) on the phone-screen color with an accent glow; on the right three numbered steps (`.gs-step`, mono 01–03 in accent circles joined by a thin accent line): add it from the Gallery; ask your AI (a chat bubble with an example request); write your own (a "Startup Script · excerpt" panel: the loop of the free-disk widget from the docs, its helpers left out and named in a comment, code colors as in the docs, and an accent link to the whole script). Then "Whole pages that come alive" (`#scenes`): the three scenes of the Gallery's Unusual collection — Mac Town, Visualizer, Aquarium — as iPad screens in landscape without a bezel (`assets/scene-*.webp`, rounded corners, a ring and a shadow), three columns with a caption each, and a link to "Learn from the Gallery scenes" in the docs. ≤900px everything stacks in one column (up to 560px; the Gallery patch up to 340px). Pictures are renders of the app with no name in the pixels; they reveal on scroll like the rest.
 
-6. **How It Works** — Centered header. Three-column grid with 1px gap (acts as divider). Large outline step numbers (01, 02, 03 with `-webkit-text-stroke`). Arrow circles between steps.
+6. **AI** (`#ai`) — what sets Desktap apart: an AI builds whole pages, and each change it sends waits for Accept on the phone. Left: label, H2 with the accent words in serif italic, a lede; then "you say → you get" (a `dl`, each ask in display italic, its result after an accent →, divided by 1px rules; under 560px the result goes under the ask), the promise card with a shield, and "Works with" tags. Right: the review card as the app draws it — `assets/ai-review-iphone.webp`, a render of the app on iPhone in Apple's bezel, at most 340px wide, a still aura behind, a fade without movement (`.reveal-fade`), a mono caption under it; ≤1024px it goes between the lede and the asks, 300px wide (260px under 560px). Under both, a glass strip for Claude Code waiting on you: the recipe's live face (`data-face="claude"`, `assets/js/live-widgets.js`) on a patch of phone screen, two lines and "The recipe →".
+   The promises use the agent's own words, as the FAQ does: "Changes an AI sends through Desktap wait for your Accept on your iPhone or iPad" and "Through Desktap, an AI can't press your buttons or delete anything" — never "Nothing changes until you tap Accept" on its own (the card on the phone may say it about its own change). AI apps are named in text, never with their logos. The examples come from the docs (AI › Asking for widgets) and the agent's **AI Assistants** header; the last one is the change on the card.
 
-7. **FAQ** (`/next/` only) — Two columns: label + heading + one line on the left (sticky); on the right a list of `<details>` questions divided by 1px rules, a + that turns into an accent × when open, the first one open. Every answer ends with an accent "Docs: …" link to the page with the details. Stacks ≤1024px.
+7. **How It Works** — Centered header. Three-column grid with 1px gap (acts as divider). Large outline step numbers (01, 02, 03 with `-webkit-text-stroke`). Arrow circles between steps.
 
-8. **CTA** — Centered heading + subtitle + two buttons. Subtle radial gradient glow behind (purple → blue → transparent).
+8. **FAQ** (`/next/` only) — Two columns: label + heading + one line on the left (sticky); on the right a list of `<details>` questions divided by 1px rules, a + that turns into an accent × when open, the first one open. Every answer ends with an accent "Docs: …" link to the page with the details. Stacks ≤1024px.
+
+9. **CTA** — Centered heading + subtitle + two buttons. Subtle radial gradient glow behind (purple → blue → transparent).
 
    **Trust line** (`.trust-line`, `/next/` hero and CTA, `/changelog/`): under the agent's download button, "Free · v1.2.3 · 7.6 MB · macOS 15+ · Notarized by Apple" in SF Pro Text 0.8125rem, secondary color, `·` separators in tertiary. Version and size come from the latest GitHub release (`assets/agent-download.js`: GitHub API, cached for the browser session, size in decimal MB as Finder shows it); until they arrive, or if GitHub doesn't answer, both stay hidden and the line reads "Free · macOS 15+ · Notarized by Apple". The version links to the entry of its major.minor version in `/changelog/`. "Notarized by Apple" means checked for malware, not reviewed: never "Apple-approved".
 
    **Changelog** (`/changelog/`, "What's new", linked from the `/next/` footer and from the version in the trust line): Desktap's releases, newest first, written by hand for people, not copied from GitHub. The iPhone & iPad app and the Mac agent come out together with one version number, so one entry covers both; only major and minor versions get an entry (2.0, 2.1…), bug-fix updates (2.0.1…) are not listed. Header: label, H1, lede, the download button with the "Coming soon" note for the app, and the trust line. Then one `li.release` per release, `id` and `data-release-entry` = `v` + major.minor (`v2.0`): on the left the version (display 700, 1.5rem, a link to its own anchor), the date and a green "Latest" pill; on the right a short title, then the changes in two groups, **iPhone & iPad** and **Mac agent** (`h3.release-group`, mono uppercase), each change led by a mono pill: **New** (accent), **Improved**, **Changed** (neutral), **Fixed** (green). `agent-download.js` reads the GitHub releases: the date is that of the first release of the version (until then the entry reads "Coming soon"), "Latest" goes on the version of the newest release, and the trust line's version (`v2.0.3`) links to its entry (`#v2.0`). Stacked under 768px; under 480px the pill sits above its line. Changes say what a person or their AI gets, quoting the app's English labels in bold and MCP tools in code; never how the app is built. A new version: add its entry at the top of the list before or on release day.
 
-9. **Footer** — Minimal. Logo + links left, copyright right. SF Mono-ish for logo.
+10. **Footer** — Minimal. Logo + links left, copyright right. SF Mono-ish for logo.
 
 ---
 
@@ -140,7 +143,6 @@ All buttons: SF Pro Text weight 500, 0.9375rem, padding 14px 28px, border-radius
 | Hero elements | Staggered fadeUp | 0.7s each | cubic-bezier(0.16,1,0.3,1) | h1→subtitle→buttons, delays 0.25–0.5s; then the devices fade in (opacity only, 1s, delay 0.6s) |
 | Scroll reveals | fadeUp on intersect | 0.8s | cubic-bezier(0.16,1,0.3,1) | IntersectionObserver, threshold 0.08, -60px rootMargin |
 | Bento cards | Staggered reveal | +100ms each | same | Children delayed 0–500ms |
-| Terminal lines | Sequential reveal | 0.3s each | default | Delays 0.3–3.2s, triggered on scroll into view |
 | Live bars | Pulsing | 1.5s infinite | ease-in-out | scaleY 1→1.15, opacity 0.4→0.8, staggered delays |
 | Live widgets on `/next/` | Button faces, drawn by `face-player.js` | as a script would send them | linear or easeInOut | A page of eight buttons on a patch of phone screen (`.ww-deck`, 4×3, gap a tenth of a column): Now Playing (Large, a gradient per track, level bars, progress), Claude Code needing input, a CI build, BTC price with a scrolling chart (Wide), weather, CPU ring, Pomodoro, GitHub stars. Only SVG the phone draws (shapes, gradients, text; no images or filters); made-up data. They come alive when the section is on screen and stop off screen; with Reduce Motion one still frame. Before the script loads: empty glass buttons. Under the deck, "Browse the widget recipes" links to `/docs?p=recipes-widgets`. |
 | Cosmos blobs | Continuous drift | ~20–25s cycle | sine/cosine | Position, size wobble, rotation |
@@ -153,8 +155,9 @@ All buttons: SF Pro Text weight 500, 0.9375rem, padding 14px 28px, border-radius
 
 | Breakpoint | Changes |
 |-----------|---------|
-| ≤1024px | Hero → single column centered, the devices under the text (up to 760px). MCP → stacked. Features header → single column. |
-| ≤768px | Bento → single column (all spans become 1; the iPad card's picture goes under its text, the two page strips one under the other). Steps → stacked. Nav: section links hidden, Docs and the CTA stay (`.nav-compact` on `/next/`; the other pages hide all nav links). Footer stacked centered. |
+| ≤1024px | Hero → single column centered, the devices under the text (up to 760px). AI → single column: header, the review card (up to 300px), then the asks, the promise and Works with. Features header → single column. |
+| ≤768px | AI: the Claude Code strip wraps its link under the text. Bento → single column (all spans become 1; the iPad card's picture goes under its text, the two page strips one under the other). Steps → stacked. Nav: section links hidden, Docs and the CTA stay (`.nav-compact` on `/next/`; the other pages hide all nav links). Footer stacked centered. |
+| ≤560px | AI: each answer under its ask, the review card up to 260px, the Claude Code strip stacked (button, text, link). |
 | ≤520px | Hero devices one under the other: the iPad full width, the iPhone at the same scale, never under 200px tall. |
 | ≤480px | Hero h1 → 2rem. Buttons stack vertically. |
 | Phone or tablet (any width) | On `/next/` and `/changelog/` the download buttons read "Send to Mac" / "Send link to Mac" and open the share sheet with the `/download/` link (`mailto:` without Web Share). iPhone, iPad and Android: `html.handheld`, set in `<head>` before the first paint; each button carries both labels, `.only-mac` / `.only-handheld`; the click is handled in `assets/agent-download.js`. |
@@ -251,11 +254,14 @@ Text on the marker line becomes the title (`> [!TIP] A faster way`). In step car
     ├── docs/           — docs.js, pages.json, pages/*.md, js/ (diagrams), img/
     ├── agent-download.js — The agent's download buttons: trust line from the latest release, "Send link to Mac" on a phone
     ├── js/live-widgets.js — the live buttons of the Live widgets section on /next/ (imports docs/js/face-player.js)
-    ├── style.css       — Complete stylesheet (~3100 lines; docs part at "Docs")
+    ├── style.css       — Complete stylesheet (~3600 lines; docs part at "Docs")
     ├── deck-ipad.webp, deck-iphone.webp — /next/ hero: the deck in Apple's bezels (iPad landscape 1400×1073, iPhone 540×1102)
     ├── for-engineers.webp, for-designers.webp, for-power.webp — /next/ For whom: two rows of an iPhone page each (880×440)
     ├── page-figma.webp, page-xcode.webp — /next/ Features 03: an iPhone page's top bar and first row (880×293)
     ├── ipad-xcode.webp — /next/ Features 05: the iPad's screen, landscape, no bezel (1400×1050)
+    ├── ai-review-iphone.webp — /next/ AI: the review card of a change from an AI, on iPhone in Apple's bezel (680×1388)
+    ├── gallery-widgets.webp — /next/ Gallery and scenes: a patch of the iPhone Gallery, For Everyone (660×960)
+    ├── scene-town.webp, scene-visualizer.webp, scene-aquarium.webp — /next/ Gallery and scenes: the three Unusual scenes, iPad screens in landscape without a bezel (1200×900)
     ├── icon.png        — App icon (256×256)
     ├── og-image.jpg    — Social preview: docs, privacy, terms, next/, changelog/ — the hero's words and the deck screens (see "Social preview card")
     ├── og-deck-ipad.webp, og-deck-iphone.webp — the deck screens without a bezel, for og-image.jpg (iPad 1300×975, iPhone 460×1000)
@@ -263,7 +269,7 @@ Text on the marker line becomes the title (`> [!TIP] A faster way`). In step car
     └── favicon.ico     — Favicon
 ```
 
-No build tools, no frameworks, no external CSS libraries. Pure HTML + CSS + vanilla JS (~115 lines for canvas animation, scroll observer, mouse tracking, terminal animation).
+No build tools, no frameworks, no external CSS libraries. Pure HTML + CSS + vanilla JS (~115 lines for canvas animation, scroll observer, mouse tracking).
 
 ---
 
@@ -377,6 +383,6 @@ The card is changed here, in this template (name, label, words, look). `og-card.
 2. **System fonts only** — SF Pro renders natively on Apple devices (the target audience), zero FOIT/FOUT, instant paint
 3. **Semi-transparent cards with backdrop-blur** — cosmos blob light bleeds through, creating the same glass effect as the iOS app's `ultraThinMaterial`
 4. **Bento grid (not uniform cards)** — creates visual hierarchy; the 8+4 first row draws attention to the core value prop (8 command types)
-5. **Terminal mockup for MCP** — speaks directly to the developer audience, more memorable than generic chat bubbles
+5. **The real review card for AI** — a render of the app, not a mockup: it shows what a visitor will approve, with the code, which no chat bubble can
 6. **Monospace used sparingly** — only for technical labels, badges, terminal, and tags; all headings and body in system sans for Apple-clean readability
 7. **No external dependencies** — entire site loads from 4 files (HTML, CSS, 2 images), under 100KB excluding images
