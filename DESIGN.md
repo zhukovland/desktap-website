@@ -85,9 +85,11 @@ Each blob is an ellipse with a 4-stop radial gradient (0.3 → 0.15 → 0.04 →
 
 6. **How It Works** — Centered header. Three-column grid with 1px gap (acts as divider). Large outline step numbers (01, 02, 03 with `-webkit-text-stroke`). Arrow circles between steps.
 
-7. **CTA** — Centered heading + subtitle + two buttons. Subtle radial gradient glow behind (purple → blue → transparent).
+7. **FAQ** (`/next/` only) — Two columns: label + heading + one line on the left (sticky); on the right a list of `<details>` questions divided by 1px rules, a + that turns into an accent × when open, the first one open. Every answer ends with an accent "Docs: …" link to the page with the details. Stacks ≤1024px.
 
-8. **Footer** — Minimal. Logo + links left, copyright right. SF Mono-ish for logo.
+8. **CTA** — Centered heading + subtitle + two buttons. Subtle radial gradient glow behind (purple → blue → transparent).
+
+9. **Footer** — Minimal. Logo + links left, copyright right. SF Mono-ish for logo.
 
 ---
 
