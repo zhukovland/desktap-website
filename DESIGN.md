@@ -137,7 +137,6 @@ All buttons: SF Pro Text weight 500, 0.9375rem, padding 14px 28px, border-radius
 | Hero elements | Staggered fadeUp | 0.7s each | cubic-bezier(0.16,1,0.3,1) | h1→subtitle→buttons, delays 0.25–0.5s; then the devices fade in (opacity only, 1s, delay 0.6s) |
 | Scroll reveals | fadeUp on intersect | 0.8s | cubic-bezier(0.16,1,0.3,1) | IntersectionObserver, threshold 0.08, -60px rootMargin |
 | Bento cards | Staggered reveal | +100ms each | same | Children delayed 0–500ms |
-| Terminal lines | Sequential reveal | 0.3s each | default | Delays 0.3–3.2s, triggered on scroll into view |
 | Live bars | Pulsing | 1.5s infinite | ease-in-out | scaleY 1→1.15, opacity 0.4→0.8, staggered delays |
 | Live widgets on `/next/` | Button faces, drawn by `face-player.js` | as a script would send them | linear or easeInOut | A page of eight buttons on a patch of phone screen (`.ww-deck`, 4×3, gap a tenth of a column): Now Playing (Large, a gradient per track, level bars, progress), Claude Code needing input, a CI build, BTC price with a scrolling chart (Wide), weather, CPU ring, Pomodoro, GitHub stars. Only SVG the phone draws (shapes, gradients, text; no images or filters); made-up data. They come alive when the section is on screen and stop off screen; with Reduce Motion one still frame. Before the script loads: empty glass buttons. Under the deck, "Browse the widget recipes" links to `/docs?p=recipes-widgets`. |
 | Cosmos blobs | Continuous drift | ~20–25s cycle | sine/cosine | Position, size wobble, rotation |
@@ -150,8 +149,9 @@ All buttons: SF Pro Text weight 500, 0.9375rem, padding 14px 28px, border-radius
 
 | Breakpoint | Changes |
 |-----------|---------|
-| ≤1024px | Hero → single column centered, the devices under the text (up to 760px). MCP → stacked. Features header → single column. |
-| ≤768px | Bento → single column (all spans become 1). Steps → stacked. Nav: section links hidden, Docs and the CTA stay (`.nav-compact` on `/next/`; the other pages hide all nav links). Footer stacked centered. |
+| ≤1024px | Hero → single column centered, the devices under the text (up to 760px). AI → single column: header, the review card (up to 300px), then the asks, the promise and Works with. Features header → single column. |
+| ≤768px | AI: the Claude Code strip wraps its link under the text. Bento → single column (all spans become 1). Steps → stacked. Nav: section links hidden, Docs and the CTA stay (`.nav-compact` on `/next/`; the other pages hide all nav links). Footer stacked centered. |
+| ≤560px | AI: each answer under its ask, the review card up to 260px, the Claude Code strip stacked (button, text, link). |
 | ≤520px | Hero devices one under the other: the iPad full width, the iPhone at the same scale, never under 200px tall. |
 | ≤480px | Hero h1 → 2rem. Buttons stack vertically. |
 | Phone or tablet (any width) | On `/next/` and `/changelog/` the download buttons read "Send to Mac" / "Send link to Mac" and open the share sheet with the `/download/` link (`mailto:` without Web Share). iPhone, iPad and Android: `html.handheld`, set in `<head>` before the first paint; each button carries both labels, `.only-mac` / `.only-handheld`; the click is handled in `assets/agent-download.js`. |
@@ -258,7 +258,7 @@ Text on the marker line becomes the title (`> [!TIP] A faster way`). In step car
     └── favicon.ico     — Favicon
 ```
 
-No build tools, no frameworks, no external CSS libraries. Pure HTML + CSS + vanilla JS (~115 lines for canvas animation, scroll observer, mouse tracking, terminal animation).
+No build tools, no frameworks, no external CSS libraries. Pure HTML + CSS + vanilla JS (~115 lines for canvas animation, scroll observer, mouse tracking).
 
 ---
 
