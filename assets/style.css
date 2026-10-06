@@ -219,6 +219,14 @@ html.handheld .only-mac { display: none; }
   padding-right: 0.04em;
 }
 
+/* A headline that says what the product is and what sets it apart (/next/): longer than a slogan, so smaller type */
+.hero h1.hero-pitch {
+  font-size: clamp(2rem, 4.6vw, 4.25rem);
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
 .hero-subtitle {
   font-family: var(--display);
   font-size: clamp(1.125rem, 1.5vw, 1.3125rem);

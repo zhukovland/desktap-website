@@ -25,6 +25,7 @@ All fonts are Apple system fonts — zero external font loading:
 ### Heading styles
 
 - **Hero h1:** `clamp(2.8rem, 6vw, 5rem)`, weight 700, line-height 1.06, tracking -0.04em
+- **Hero h1 on `/next/` (`.hero-pitch`):** two sentences, what the product is and what sets it apart; the second, in the accent gradient, starts its own line (`<br>`). Smaller than a slogan: `clamp(2rem, 4.6vw, 4.25rem)`, line-height 1.04, tracking -0.04em, `text-wrap: balance`
 - **Section h2:** `clamp(2rem, 4vw, 3.2rem)`, weight 700, line-height 1.08, tracking -0.035em
 - **Card h3:** 1.0625rem, weight 600, tracking -0.02em
 - **Section labels:** SF Mono, 0.625rem, tracking 0.12em, uppercase, accent blue color, preceded by a 20px horizontal line
