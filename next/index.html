@@ -28,7 +28,7 @@
   <meta name="theme-color" content="#000000">
   <link rel="manifest" href="/site.webmanifest">
 
-  <link rel="stylesheet" href="/assets/style.css?v=20261007b">
+  <link rel="stylesheet" href="/assets/style.css?v=20261007c">
 
   <!-- A phone or tablet can't run the Mac agent: before the first paint, so the download buttons show "Send link to Mac" at once -->
   <script>
@@ -88,7 +88,7 @@
   <canvas id="cosmos-bg" aria-hidden="true"></canvas>
 
   <!-- Hero -->
-  <section class="hero" id="main">
+  <section class="hero hero-duo" id="main">
     <div class="container">
       <div class="hero-content">
         <h1 class="hero-pitch">A control deck for your Mac, on iPhone and iPad.<br> <span class="accent">Your AI builds it.</span></h1>
@@ -112,16 +112,10 @@
         </div>
       </div>
       <div class="hero-visual">
-        <div class="phone-frame">
-          <img src="/assets/screenshot.webp" alt="Desktap dashboard on iPhone" width="1206" height="2622" fetchpriority="high">
-          <div class="float-tag">⌘ Hotkey</div>
-          <div class="float-tag">▶ Launch App</div>
-          <div class="float-tag">⚙ System</div>
-          <div class="float-tag">$ Shell</div>
-          <div class="float-tag">✦ AppleScript</div>
-          <div class="float-tag">◐ Shortcut</div>
-          <div class="float-tag">→ Open URL</div>
-          <div class="float-tag">¶ Snippet</div>
+        <!-- The deck as the app draws it, in Apple's own product bezels: whole, upright, side by side, at their real relative size; nothing over the devices -->
+        <div class="hero-devices">
+          <img class="hero-ipad" src="/assets/deck-ipad.webp" alt="A control deck on iPad: gauges for CPU, memory, disk and battery, the next meeting, a world clock, the song playing and buttons for Mac actions" width="1400" height="1073" fetchpriority="high">
+          <img class="hero-iphone" src="/assets/deck-iphone.webp" alt="The same deck on iPhone" width="540" height="1102">
         </div>
       </div>
     </div>

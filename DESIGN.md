@@ -72,7 +72,8 @@ Each blob is an ellipse with a 4-stop radial gradient (0.3 → 0.15 → 0.04 →
 
 1. **Nav** — Fixed top, blurred black backdrop (`rgba(0,0,0,0.6)` + `backdrop-filter: blur(24px)`), 56px height. Logo left, links + CTA button right. Logo uses SF Pro Display 600.
 
-2. **Hero** — Full viewport height, vertically centered. Two-column grid: left column has badge + h1 + subtitle + action buttons; right column has phone screenshot with floating tags. On mobile (≤1024px) collapses to single column, centered.
+2. **Hero** — Full viewport height, vertically centered. Two-column grid (`.hero-duo`, the right column 1.2× the left): left column has h1 + subtitle + action buttons; right column has the picture. On mobile (≤1024px) collapses to single column, centered.
+   The picture is the deck on an iPad (landscape) and an iPhone, `assets/deck-ipad.webp` and `assets/deck-iphone.webp`: renders of the app in Apple's product bezels, transparent around the devices. Apple's rules for showing its devices apply (App Store Marketing Guidelines): whole, upright and unchanged — no shadow, reflection or highlight on them; nothing over them (no floating tags); no motion but a fade (the pair fades in, it doesn't rise like the text; no tilt on hover); at least 200 px on screen. So: side by side and bottom-aligned at their real relative size (the iPhone 76% of the iPad's height), a still accent aura behind. ≤1024px: the pair under the text, up to 760px wide. ≤520px: one under the other — the iPad full width, the iPhone at the same scale and never under 200 px tall. A new render replaces both files at the same size (iPad 1400×1073, iPhone 540×1102) and `assets/og-image.jpg` after them ("Social preview card").
 
 3. **Marquee** — Horizontal auto-scrolling ticker strip. SF Mono uppercase items separated by small blue diamond glyphs. Bordered top and bottom. 30s infinite linear scroll, seamless loop via duplicated items.
 
@@ -132,7 +133,7 @@ All buttons: SF Pro Text weight 500, 0.9375rem, padding 14px 28px, border-radius
 
 | Element | Type | Duration | Easing | Details |
 |---------|------|----------|--------|---------|
-| Hero elements | Staggered fadeUp | 0.7s each | cubic-bezier(0.16,1,0.3,1) | Badge→h1→subtitle→buttons→visual, delays 0.1–0.6s |
+| Hero elements | Staggered fadeUp | 0.7s each | cubic-bezier(0.16,1,0.3,1) | h1→subtitle→buttons, delays 0.25–0.5s; then the devices fade in (opacity only, 1s, delay 0.6s) |
 | Scroll reveals | fadeUp on intersect | 0.8s | cubic-bezier(0.16,1,0.3,1) | IntersectionObserver, threshold 0.08, -60px rootMargin |
 | Bento cards | Staggered reveal | +100ms each | same | Children delayed 0–500ms |
 | Terminal lines | Sequential reveal | 0.3s each | default | Delays 0.3–3.2s, triggered on scroll into view |
@@ -140,7 +141,6 @@ All buttons: SF Pro Text weight 500, 0.9375rem, padding 14px 28px, border-radius
 | Live widgets on `/next/` | Button faces, drawn by `face-player.js` | as a script would send them | linear or easeInOut | A page of eight buttons on a patch of phone screen (`.ww-deck`, 4×3, gap a tenth of a column): Now Playing (Large, a gradient per track, level bars, progress), Claude Code needing input, a CI build, BTC price with a scrolling chart (Wide), weather, CPU ring, Pomodoro, GitHub stars. Only SVG the phone draws (shapes, gradients, text; no images or filters); made-up data. They come alive when the section is on screen and stop off screen; with Reduce Motion one still frame. Before the script loads: empty glass buttons. Under the deck, "Browse the widget recipes" links to `/docs?p=recipes-widgets`. |
 | Cosmos blobs | Continuous drift | ~20–25s cycle | sine/cosine | Position, size wobble, rotation |
 | Green badge dot | Pulse | 2s infinite | ease-in-out | Opacity 1→0.4 |
-| Floating tags | Vertical bob | 6s infinite | ease-in-out | translateY 0→-6px, staggered delays |
 | Marquee | Linear scroll | 30s infinite | linear | translateX 0→-50% |
 
 ---
@@ -149,8 +149,9 @@ All buttons: SF Pro Text weight 500, 0.9375rem, padding 14px 28px, border-radius
 
 | Breakpoint | Changes |
 |-----------|---------|
-| ≤1024px | Hero → single column centered. MCP → stacked. Features header → single column. |
-| ≤768px | Bento → single column (all spans become 1). Steps → stacked. Nav: section links hidden, Docs and the CTA stay (`.nav-compact` on `/next/`; the other pages hide all nav links). Float tags hidden. Footer stacked centered. |
+| ≤1024px | Hero → single column centered, the devices under the text (up to 760px). MCP → stacked. Features header → single column. |
+| ≤768px | Bento → single column (all spans become 1). Steps → stacked. Nav: section links hidden, Docs and the CTA stay (`.nav-compact` on `/next/`; the other pages hide all nav links). Footer stacked centered. |
+| ≤520px | Hero devices one under the other: the iPad full width, the iPhone at the same scale, never under 200px tall. |
 | ≤480px | Hero h1 → 2rem. Buttons stack vertically. |
 | Phone or tablet (any width) | On `/next/` and `/changelog/` the download buttons read "Send to Mac" / "Send link to Mac" and open the share sheet with the `/download/` link (`mailto:` without Web Share). iPhone, iPad and Android: `html.handheld`, set in `<head>` before the first paint; each button carries both labels, `.only-mac` / `.only-handheld`; the click is handled in `assets/agent-download.js`. |
 
@@ -247,10 +248,11 @@ Text on the marker line becomes the title (`> [!TIP] A faster way`). In step car
     ├── agent-download.js — The agent's download buttons: trust line from the latest release, "Send link to Mac" on a phone
     ├── js/live-widgets.js — the live buttons of the Live widgets section on /next/ (imports docs/js/face-player.js)
     ├── style.css       — Complete stylesheet (~3100 lines; docs part at "Docs")
-    ├── screenshot.png  — iPhone app screenshot (1206×2622, Retina)
+    ├── deck-ipad.webp, deck-iphone.webp — /next/ hero: the deck in Apple's bezels (iPad landscape 1400×1073, iPhone 540×1102)
     ├── icon.png        — App icon (256×256)
-    ├── og-image.jpg    — Social preview: docs, privacy, terms, next/ (see "Social preview card")
-    ├── og-soon.jpg     — Social preview of the holding page
+    ├── og-image.jpg    — Social preview: docs, privacy, terms, next/, changelog/ — the hero's words and the deck screens (see "Social preview card")
+    ├── og-deck-ipad.webp, og-deck-iphone.webp — the deck screens without a bezel, for og-image.jpg (iPad 1300×975, iPhone 460×1000)
+    ├── og-soon.jpg     — Social preview of the holding page — icon, name, "Coming soon"
     └── favicon.ico     — Favicon
 ```
 
@@ -262,7 +264,11 @@ No build tools, no frameworks, no external CSS libraries. Pure HTML + CSS + vani
 
 `assets/og-image.jpg` and `assets/og-soon.jpg` (1200×630) are shots of the page below. It lives here, not as a file: GitHub Pages publishes every file of the repo, and a service page shouldn't open on desktap.app by a direct link.
 
-The card is changed here, in this template (name, label, look). `og-card.html` is only a throwaway copy to shoot from: an edit made in the copy is lost when it is deleted.
+Two cards in one page. Without a query, the deck card — `og-image.jpg`: the words of the `/next/` hero and the same deck as the hero's, as the iPad and iPhone screens alone (`assets/og-deck-ipad.webp`, `assets/og-deck-iphone.webp`: the renders' screens without a bezel, the status bar hidden by the card), no name in the picture — the preview's title carries it. With `?label=…` — `og-soon.jpg`: the icon, the name and the label. A new render of the deck: replace both webp files at the same size (iPad 1300×975, iPhone 460×1000), then shoot `og-image.jpg` again.
+
+No Apple bezels on the card: a link preview shows it 300–600 px wide, and a device in it would be under the 200 px Apple asks for. The screens are the app's own pictures: rounded corners and a shadow are ours to choose.
+
+The card is changed here, in this template (name, label, words, look). `og-card.html` is only a throwaway copy to shoot from: an edit made in the copy is lost when it is deleted.
 
 1. Copy the template into `og-card.html` in the site root (`.gitignore` keeps it out of commits) and run `python3 -m http.server 8000`.
 2. Shoot each variant into its own PNG at 1× — 1200×630, not 2400×1260 as on a Retina screen. Chrome without a window, in a throwaway profile; such a Chrome keeps running after the PNG is written, so `shot` stops it:
@@ -277,7 +283,7 @@ The card is changed here, in this template (name, label, look). `og-card.html` i
    shot og-image.png "http://localhost:8000/og-card.html"
    shot og-soon.png  "http://localhost:8000/og-card.html?label=Coming%20soon"
    ```
-3. Each PNG goes to its own JPEG — the plain card to `og-image.jpg` (docs, privacy, terms, `next/`), "Coming soon" only to `og-soon.jpg` (holding page). `-z 630 1200` keeps them at exactly 1200×630 even if a shot came out at 2×:
+3. Each PNG goes to its own JPEG — the deck card (no query) to `og-image.jpg` (docs, privacy, terms, `next/`, `changelog/`), the name card ("Coming soon") only to `og-soon.jpg` (holding page). `-z 630 1200` keeps them at exactly 1200×630 even if a shot came out at 2×:
    ```
    sips -z 630 1200 -s format jpeg og-image.png --out assets/og-image.jpg
    sips -z 630 1200 -s format jpeg og-soon.png  --out assets/og-soon.jpg
@@ -297,27 +303,60 @@ The card is changed here, in this template (name, label, look). `og-card.html` i
     --mono:'SF Mono',ui-monospace,Menlo,monospace;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
+  [hidden]{display:none !important;}
   html,body{width:1200px;height:630px;overflow:hidden;}
   body{background:#000;position:relative;color:#F0F0F0;font-family:var(--display);-webkit-font-smoothing:antialiased;}
   /* One still aura in the accent color */
   .aura{position:absolute;left:50%;top:50%;width:1100px;height:760px;transform:translate(-50%,-50%);
         background:radial-gradient(closest-side,rgba(59,130,246,.13),rgba(59,130,246,0));}
-  .wrap{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-  img{width:132px;height:132px;border-radius:30px;margin-bottom:40px;box-shadow:0 18px 50px rgba(0,0,0,.6);}
+
+  /* The name card (?label=…) */
+  .name-card{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .name-card img{position:relative;width:132px;height:132px;border-radius:30px;margin-bottom:40px;box-shadow:0 18px 50px rgba(0,0,0,.6);}
+  .name,.label{position:relative;}
   .name{font-size:88px;font-weight:700;letter-spacing:-.04em;line-height:1;}
   .label{margin-top:30px;font-family:var(--mono);font-size:22px;letter-spacing:.24em;text-transform:uppercase;color:#7A7A82;}
-  .label:empty{display:none;}
+
+  /* The deck card (default): the words as the /next/ hero says them; the hero's deck as the iPad and iPhone screens
+     alone — no Apple bezel (see above); the status bar is cut off, so the screens read as the app, not as a device */
+  .deck-card{position:relative;height:100%;display:flex;align-items:center;gap:36px;padding:0 56px 0 72px;}
+  .deck-card .aura{left:72%;width:900px;height:700px;background:radial-gradient(closest-side,rgba(59,130,246,.18),rgba(59,130,246,0));}
+  .pitch{position:relative;flex:1;font-size:50px;font-weight:700;line-height:1.06;letter-spacing:-.04em;
+         background:linear-gradient(180deg,#fff 0%,#a8a8b4 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .pitch .accent{display:block;margin-top:6px;font-style:italic;padding-right:.04em;
+         background:linear-gradient(135deg,#bf5af2 0%,#64d2ff 50%,#30d158 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .screens{position:relative;flex:none;width:640px;height:520px;}
+  .screen{position:absolute;overflow:hidden;background:#000;
+          box-shadow:0 0 0 1px rgba(255,255,255,.14),0 30px 60px rgba(0,0,0,.6);}
+  .screen img{display:block;width:100%;}
+  .screen.ipad{left:0;top:20px;width:560px;height:405px;border-radius:22px;}
+  .screen.ipad img{margin-top:-14px;}      /* the status bar off */
+  .screen.iphone{right:0;bottom:0;width:186px;height:368px;border-radius:30px;}
+  .screen.iphone img{margin-top:-25px;}
 </style>
 </head>
 <body>
-  <div class="aura"></div>
-  <div class="wrap">
+  <div class="deck-card" id="deck-card">
+    <div class="aura"></div>
+    <div class="pitch">A control deck for your Mac, on iPhone and iPad. <span class="accent">Your AI builds it.</span></div>
+    <div class="screens">
+      <div class="screen ipad"><img src="assets/og-deck-ipad.webp" alt=""></div>
+      <div class="screen iphone"><img src="assets/og-deck-iphone.webp" alt=""></div>
+    </div>
+  </div>
+  <div class="name-card" id="name-card" hidden>
+    <div class="aura"></div>
     <img src="assets/icon.png" alt="">
     <div class="name">desktap</div>
     <div class="label" id="label"></div>
   </div>
   <script>
-    document.getElementById('label').textContent = new URLSearchParams(location.search).get('label') || '';
+    const label = new URLSearchParams(location.search).get('label');
+    if (label) {
+      document.getElementById('label').textContent = label;
+      document.getElementById('name-card').hidden = false;
+      document.getElementById('deck-card').hidden = true;
+    }
   </script>
 </body>
 </html>
