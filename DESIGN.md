@@ -252,11 +252,27 @@ No build tools, no frameworks, no external CSS libraries. Pure HTML + CSS + vani
 
 `assets/og-image.jpg` and `assets/og-soon.jpg` (1200×630) are shots of the page below. It lives here, not as a file: GitHub Pages publishes every file of the repo, and a service page shouldn't open on desktap.app by a direct link.
 
-1. Save the page as `og-card.html` in the site root (`.gitignore` keeps it out of commits).
-2. `python3 -m http.server 8000`, then shoot it at 1200×630:
-   - http://localhost:8000/og-card.html → `assets/og-image.jpg` (docs, privacy, terms, `next/`)
-   - http://localhost:8000/og-card.html?label=Coming%20soon → `assets/og-soon.jpg` (holding page)
-3. Save as JPEG (`sips -s format jpeg shot.png --out assets/og-image.jpg`), delete `og-card.html`.
+The card is changed here, in this template (name, label, look). `og-card.html` is only a throwaway copy to shoot from: an edit made in the copy is lost when it is deleted.
+
+1. Copy the template into `og-card.html` in the site root (`.gitignore` keeps it out of commits) and run `python3 -m http.server 8000`.
+2. Shoot each variant into its own PNG at 1× — 1200×630, not 2400×1260 as on a Retina screen. Chrome without a window, in a throwaway profile; such a Chrome keeps running after the PNG is written, so `shot` stops it:
+   ```
+   chrome="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+   shot() {
+     rm -f "$1"
+     "$chrome" --headless=new --user-data-dir="$(mktemp -d)" --force-device-scale-factor=1 --hide-scrollbars \
+       --window-size=1200,630 --screenshot="$1" "$2" >/dev/null 2>&1 &
+     local pid=$!; for i in {1..40}; do [[ -s $1 ]] && break; sleep 0.5; done; sleep 1; kill $pid
+   }
+   shot og-image.png "http://localhost:8000/og-card.html"
+   shot og-soon.png  "http://localhost:8000/og-card.html?label=Coming%20soon"
+   ```
+3. Each PNG goes to its own JPEG — the plain card to `og-image.jpg` (docs, privacy, terms, `next/`), "Coming soon" only to `og-soon.jpg` (holding page). `-z 630 1200` keeps them at exactly 1200×630 even if a shot came out at 2×:
+   ```
+   sips -z 630 1200 -s format jpeg og-image.png --out assets/og-image.jpg
+   sips -z 630 1200 -s format jpeg og-soon.png  --out assets/og-soon.jpg
+   ```
+4. Delete `og-card.html` and both PNGs.
 
 ```html
 <!DOCTYPE html>
