@@ -28,7 +28,14 @@
   <meta name="theme-color" content="#000000">
   <link rel="manifest" href="/site.webmanifest">
 
-  <link rel="stylesheet" href="/assets/style.css?v=20261006">
+  <link rel="stylesheet" href="/assets/style.css?v=20261006b">
+
+  <!-- A phone or tablet can't run the Mac agent: before the first paint, so the download buttons show "Send link to Mac" at once -->
+  <script>
+    if (/iPhone|iPad|iPod|Android/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+      document.documentElement.classList.add('handheld');
+    }
+  </script>
 
   <script type="application/ld+json">
   {
@@ -63,13 +70,14 @@
         <img src="/assets/icon.png" alt="" width="28" height="28">
         desktap
       </a>
-      <ul class="nav-links">
-        <li><a href="#features">Features</a></li>
-        <li><a href="#ai">AI</a></li>
-        <li><a href="#how-it-works">Setup</a></li>
+      <!-- .nav-compact: on a narrow screen the section links go, Docs and the button stay -->
+      <ul class="nav-links nav-compact">
+        <li class="nav-section"><a href="#features">Features</a></li>
+        <li class="nav-section"><a href="#ai">AI</a></li>
+        <li class="nav-section"><a href="#how-it-works">Setup</a></li>
         <li><a href="/docs">Docs</a></li>
         <li>
-          <a href="/download/" class="nav-cta">Download</a>
+          <a href="/download/" class="nav-cta" data-send-to-mac><span class="only-mac">Download</span><span class="only-handheld">Send to Mac</span></a>
         </li>
       </ul>
     </div>
@@ -85,9 +93,10 @@
         <h1>Meet your Mac's new <span class="accent">sidekick</span></h1>
         <p class="hero-subtitle">Turn your iPhone into a programmable remote for your Mac. Tap to fire hotkeys, scripts, and app launches — or pin live data straight to a button.</p>
         <div class="hero-actions">
-          <a href="/download/" class="btn-primary">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-            Download Mac Agent
+          <a href="/download/" class="btn-primary" data-send-to-mac>
+            <svg class="only-mac" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <svg class="only-handheld" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            <span class="only-mac">Download Mac Agent</span><span class="only-handheld">Send link to Mac</span>
           </a>
           <!-- The iOS app is not in the App Store yet: a note, not a button. On release, swap both .soon-note spans (here and in the CTA) for the official App Store badge and reword step 01 in Setup. -->
           <span class="soon-note">iPhone &amp; iPad app <span class="soon-tag">Coming soon</span></span>
@@ -456,8 +465,8 @@
       <h2>Ready to try?</h2>
       <p>Free to start. Pro unlocks everything.</p>
       <div class="cta-actions">
-        <a href="/download/" class="btn-primary">
-          Get Mac Agent — Free
+        <a href="/download/" class="btn-primary" data-send-to-mac>
+          <span class="only-mac">Get Mac Agent — Free</span><span class="only-handheld">Send link to Mac</span>
         </a>
         <span class="soon-note">iPhone &amp; iPad app <span class="soon-tag">Coming soon</span></span>
       </div>
@@ -560,6 +569,25 @@
           const el = document.querySelector(location.hash);
           if (el) el.scrollIntoView({ block: 'start', behavior: 'instant' });
         }
+      });
+    }
+
+    // ── On a phone or tablet: the download buttons send the link to the Mac (share sheet: AirDrop, Messages, Mail…) ──
+    if (document.documentElement.classList.contains('handheld')) {
+      const url = new URL('/download/', location.href).href;
+      const title = 'Desktap Mac Agent';
+      const text = 'Open this on your Mac to download the Desktap agent:';
+      const mail = () => {
+        location.href = 'mailto:?subject=' + encodeURIComponent(title) + '&body=' + encodeURIComponent(text + '\n' + url);
+      };
+      document.querySelectorAll('[data-send-to-mac]').forEach(a => {
+        a.addEventListener('click', e => {
+          e.preventDefault();
+          if (!navigator.share) return mail();
+          // Only the link: AirDrop then opens it on the Mac and the download starts. Closing the sheet rejects with
+          // AbortError — a choice, not a failure.
+          navigator.share({ title, url }).catch(err => { if (err.name !== 'AbortError') mail(); });
+        });
       });
     }
 
