@@ -73,7 +73,7 @@ Each blob is an ellipse with a 4-stop radial gradient (0.3 → 0.15 → 0.04 →
 1. **Nav** — Fixed top, blurred black backdrop (`rgba(0,0,0,0.6)` + `backdrop-filter: blur(24px)`), 56px height. Logo left, links + CTA button right. Logo uses SF Pro Display 600.
 
 2. **Hero** — Full viewport height, vertically centered. Two-column grid (`.hero-duo`, the right column 1.2× the left): left column has h1 + subtitle + action buttons; right column has the picture. On mobile (≤1024px) collapses to single column, centered.
-   The picture is the deck on an iPad (landscape) and an iPhone, `assets/deck-ipad.webp` and `assets/deck-iphone.webp`: renders of the app in Apple's product bezels, transparent around the devices. Apple's rules for showing its devices apply (App Store Marketing Guidelines): whole, upright and unchanged — no shadow, reflection or highlight on them; nothing over them (no floating tags); no motion but a fade (the pair fades in, it doesn't rise like the text; no tilt on hover); at least 200 px on screen. So: side by side and bottom-aligned at their real relative size (the iPhone 76% of the iPad's height), a still accent aura behind. ≤1024px: the pair under the text, up to 760px wide. ≤520px: one under the other — the iPad full width, the iPhone at the same scale and never under 200 px tall. A new render replaces both files at the same size (iPad 1400×1073, iPhone 540×1102) and `assets/og-image.jpg` after them ("Social preview card").
+   The picture is the deck on an iPad (landscape) and an iPhone, `assets/deck-ipad.webp` and `assets/deck-iphone.webp`: renders of the app in Apple's product bezels, transparent around the devices. Apple's product images may be used only for an app that is available on the App Store (the licence of the App Store Marketing Guidelines, §1): until the iPhone and iPad app is there, the bezels are the owner's call, and live pages don't show them (the social preview uses the screens alone). Apple's rules for showing its devices apply (App Store Marketing Guidelines): whole, upright and unchanged — no shadow, reflection or highlight on them; nothing over them (no floating tags); no motion but a fade (the pair fades in, it doesn't rise like the text; no tilt on hover); at least 200 px on screen. So: side by side and bottom-aligned at their real relative size (the iPhone 76% of the iPad's height), a still accent aura behind. ≤1024px: the pair under the text, up to 760px wide. ≤520px: one under the other — the iPad full width, the iPhone at the same scale and never under 200 px tall. A new render replaces both files at the same size (iPad 1400×1073, iPhone 540×1102) and `assets/og-image.jpg` after them ("Social preview card").
 
 3. **Marquee** — Horizontal auto-scrolling ticker strip. SF Mono uppercase items separated by small blue diamond glyphs. Bordered top and bottom. 30s infinite linear scroll, seamless loop via duplicated items.
 
@@ -250,7 +250,8 @@ Text on the marker line becomes the title (`> [!TIP] A faster way`). In step car
     ├── style.css       — Complete stylesheet (~3100 lines; docs part at "Docs")
     ├── deck-ipad.webp, deck-iphone.webp — /next/ hero: the deck in Apple's bezels (iPad landscape 1400×1073, iPhone 540×1102)
     ├── icon.png        — App icon (256×256)
-    ├── og-image.jpg    — Social preview: docs, privacy, terms, next/ — the hero's words and the deck (see "Social preview card")
+    ├── og-image.jpg    — Social preview: docs, privacy, terms, next/, changelog/ — the hero's words and the deck screens (see "Social preview card")
+    ├── og-deck-ipad.webp, og-deck-iphone.webp — the deck screens without a bezel, for og-image.jpg (iPad 1300×975, iPhone 460×1000)
     ├── og-soon.jpg     — Social preview of the holding page — icon, name, "Coming soon"
     └── favicon.ico     — Favicon
 ```
@@ -263,7 +264,9 @@ No build tools, no frameworks, no external CSS libraries. Pure HTML + CSS + vani
 
 `assets/og-image.jpg` and `assets/og-soon.jpg` (1200×630) are shots of the page below. It lives here, not as a file: GitHub Pages publishes every file of the repo, and a service page shouldn't open on desktap.app by a direct link.
 
-Two cards in one page. Without a query — `og-image.jpg`: the words of the `/next/` hero and the deck on iPad and iPhone (`assets/deck-ipad.webp`, `assets/deck-iphone.webp`, the hero's pictures), no name in the picture — the preview's title carries it. With `?label=…` — `og-soon.jpg`: the icon, the name and the label. A new render of the deck: replace both webp files, then shoot `og-image.jpg` again.
+Two cards in one page. Without a query, the deck card — `og-image.jpg`: the words of the `/next/` hero and the same deck as the hero's, as the iPad and iPhone screens alone (`assets/og-deck-ipad.webp`, `assets/og-deck-iphone.webp`: the renders' screens without a bezel, the status bar hidden by the card), no name in the picture — the preview's title carries it. With `?label=…` — `og-soon.jpg`: the icon, the name and the label. A new render of the deck: replace both webp files at the same size (iPad 1300×975, iPhone 460×1000), then shoot `og-image.jpg` again.
+
+No Apple bezels on the card: `og-image.jpg` is the preview of live pages (docs, privacy, terms, `changelog/`), Apple's product images may be used only for an app that is on the App Store (see "Hero"), and a link preview shows the card 300–600 px wide — a device in it would be under the 200 px Apple asks for. The screens are the app's own pictures: rounded corners and a shadow are ours to choose.
 
 The card is changed here, in this template (name, label, words, look). `og-card.html` is only a throwaway copy to shoot from: an edit made in the copy is lost when it is deleted.
 
@@ -280,7 +283,7 @@ The card is changed here, in this template (name, label, words, look). `og-card.
    shot og-image.png "http://localhost:8000/og-card.html"
    shot og-soon.png  "http://localhost:8000/og-card.html?label=Coming%20soon"
    ```
-3. Each PNG goes to its own JPEG — the plain card to `og-image.jpg` (docs, privacy, terms, `next/`), "Coming soon" only to `og-soon.jpg` (holding page). `-z 630 1200` keeps them at exactly 1200×630 even if a shot came out at 2×:
+3. Each PNG goes to its own JPEG — the deck card (no query) to `og-image.jpg` (docs, privacy, terms, `next/`, `changelog/`), the name card ("Coming soon") only to `og-soon.jpg` (holding page). `-z 630 1200` keeps them at exactly 1200×630 even if a shot came out at 2×:
    ```
    sips -z 630 1200 -s format jpeg og-image.png --out assets/og-image.jpg
    sips -z 630 1200 -s format jpeg og-soon.png  --out assets/og-soon.jpg
@@ -314,27 +317,31 @@ The card is changed here, in this template (name, label, words, look). `og-card.
   .name{font-size:88px;font-weight:700;letter-spacing:-.04em;line-height:1;}
   .label{margin-top:30px;font-family:var(--mono);font-size:22px;letter-spacing:.24em;text-transform:uppercase;color:#7A7A82;}
 
-  /* The deck card (default): the words as the /next/ hero says them; the devices as on the hero — whole, upright,
-     unchanged (no shadow on them), side by side at their real relative size, the aura behind */
+  /* The deck card (default): the words as the /next/ hero says them; the hero's deck as the iPad and iPhone screens
+     alone — no Apple bezel (see above); the status bar is cut off, so the screens read as the app, not as a device */
   .deck-card{position:relative;height:100%;display:flex;align-items:center;gap:36px;padding:0 56px 0 72px;}
   .deck-card .aura{left:72%;width:900px;height:700px;background:radial-gradient(closest-side,rgba(59,130,246,.18),rgba(59,130,246,0));}
   .pitch{position:relative;flex:1;font-size:50px;font-weight:700;line-height:1.06;letter-spacing:-.04em;
          background:linear-gradient(180deg,#fff 0%,#a8a8b4 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
   .pitch .accent{display:block;margin-top:6px;font-style:italic;padding-right:.04em;
          background:linear-gradient(135deg,#bf5af2 0%,#64d2ff 50%,#30d158 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
-  .devices{position:relative;flex:none;width:592px;display:flex;align-items:flex-end;justify-content:space-between;}
-  .devices img{height:auto;}
-  .devices .ipad{width:75%;}
-  .devices .iphone{width:21.5%;}
+  .screens{position:relative;flex:none;width:640px;height:520px;}
+  .screen{position:absolute;overflow:hidden;background:#000;
+          box-shadow:0 0 0 1px rgba(255,255,255,.14),0 30px 60px rgba(0,0,0,.6);}
+  .screen img{display:block;width:100%;}
+  .screen.ipad{left:0;top:20px;width:560px;height:405px;border-radius:22px;}
+  .screen.ipad img{margin-top:-14px;}      /* the status bar off */
+  .screen.iphone{right:0;bottom:0;width:186px;height:368px;border-radius:30px;}
+  .screen.iphone img{margin-top:-25px;}
 </style>
 </head>
 <body>
   <div class="deck-card" id="deck-card">
     <div class="aura"></div>
     <div class="pitch">A control deck for your Mac, on iPhone and iPad. <span class="accent">Your AI builds it.</span></div>
-    <div class="devices">
-      <img class="ipad" src="assets/deck-ipad.webp" alt="">
-      <img class="iphone" src="assets/deck-iphone.webp" alt="">
+    <div class="screens">
+      <div class="screen ipad"><img src="assets/og-deck-ipad.webp" alt=""></div>
+      <div class="screen iphone"><img src="assets/og-deck-iphone.webp" alt=""></div>
     </div>
   </div>
   <div class="name-card" id="name-card" hidden>
