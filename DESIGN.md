@@ -131,6 +131,7 @@ All buttons: SF Pro Text weight 500, 0.9375rem, padding 14px 28px, border-radius
 | Bento cards | Staggered reveal | +100ms each | same | Children delayed 0–500ms |
 | Terminal lines | Sequential reveal | 0.3s each | default | Delays 0.3–3.2s, triggered on scroll into view |
 | Live bars | Pulsing | 1.5s infinite | ease-in-out | scaleY 1→1.15, opacity 0.4→0.8, staggered delays |
+| Live widgets on `/next/` | Button faces, drawn by `face-player.js` | as each recipe sends them | the recipe's | A page of four buttons on a patch of phone screen (`.ww-deck`, 4 columns, gap a tenth of a column): Analog clock (Large), CPU ring, Pomodoro countdown (Normal), Network speed (Wide). They come alive when the section is on screen and stop off screen; with Reduce Motion one still frame. Before the script loads: the recipe thumbnails. Under the deck, each name links to its recipe and "Browse the widget recipes" to `/docs?p=recipes-widgets`. |
 | Cosmos blobs | Continuous drift | ~20–25s cycle | sine/cosine | Position, size wobble, rotation |
 | Green badge dot | Pulse | 2s infinite | ease-in-out | Opacity 1→0.4 |
 | Floating tags | Vertical bob | 6s infinite | ease-in-out | translateY 0→-6px, staggered delays |
@@ -237,6 +238,7 @@ Text on the marker line becomes the title (`> [!TIP] A faster way`). In step car
 ├── og-card.html        — Source of the social previews: assets/og-image.jpg, assets/og-soon.jpg (?label=Coming%20soon)
 └── assets/
     ├── docs/           — docs.js, pages.json, pages/*.md, js/ (diagrams), img/
+    ├── js/live-widgets.js — the live buttons of the Live widgets section on /next/ (imports docs/js/face-player.js)
     ├── style.css       — Complete stylesheet (~3100 lines; docs part at "Docs")
     ├── screenshot.png  — iPhone app screenshot (1206×2622, Retina)
     ├── icon.png        — App icon (256×256)

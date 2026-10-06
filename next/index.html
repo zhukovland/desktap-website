@@ -28,7 +28,7 @@
   <meta name="theme-color" content="#000000">
   <link rel="manifest" href="/site.webmanifest">
 
-  <link rel="stylesheet" href="/assets/style.css?v=20261006c">
+  <link rel="stylesheet" href="/assets/style.css?v=20261006d">
 
   <!-- A phone or tablet can't run the Mac agent: before the first paint, so the download buttons show "Send link to Mac" at once -->
   <script>
@@ -334,28 +334,25 @@
         <p class="ww-sub">Buttons don't just fire actions — they glance back. Pin any number from any API, script, or sensor on your Mac. The tile refreshes itself.</p>
       </header>
 
-      <div class="ww-wall reveal">
-        <span class="ww-pill"><span class="ww-icon">≡</span><span class="ww-key">CPU</span><span class="ww-val">42%</span></span>
-        <span class="ww-pill"><span class="ww-icon">$</span><span class="ww-key">AAPL</span><span class="ww-val ww-up">184.32 ▲</span></span>
-        <span class="ww-pill"><span class="ww-icon">☀</span><span class="ww-key">SF</span><span class="ww-val">72°F</span></span>
-        <span class="ww-pill"><span class="ww-icon">♪</span><span class="ww-key">Now</span><span class="ww-val">Lorde · Royals</span></span>
-        <span class="ww-pill"><span class="ww-dot ww-dot-ok"></span><span class="ww-key">prod</span><span class="ww-val ww-ok">99.9%</span></span>
-        <span class="ww-pill"><span class="ww-icon">⌘</span><span class="ww-key">PRs</span><span class="ww-val">3 open</span></span>
-        <span class="ww-pill"><span class="ww-icon">⊙</span><span class="ww-key">Next</span><span class="ww-val">standup · 12m</span></span>
-        <span class="ww-pill"><span class="ww-icon">₿</span><span class="ww-key">BTC</span><span class="ww-val ww-down">67,420 ▼</span></span>
-        <span class="ww-pill"><span class="ww-icon">✉</span><span class="ww-key">Inbox</span><span class="ww-val">12 unread</span></span>
-        <span class="ww-pill"><span class="ww-icon">↑</span><span class="ww-key">Build</span><span class="ww-val ww-ok">#4823 ✓</span></span>
-        <span class="ww-pill"><span class="ww-icon">▤</span><span class="ww-key">Disk</span><span class="ww-val">421 GB free</span></span>
-        <span class="ww-pill"><span class="ww-icon">≈</span><span class="ww-key">Ping</span><span class="ww-val">124 ms</span></span>
-        <span class="ww-pill"><span class="ww-icon">☁</span><span class="ww-key">London</span><span class="ww-val">18°C · rain</span></span>
-        <span class="ww-pill"><span class="ww-icon">▣</span><span class="ww-key">Docker</span><span class="ww-val">3 / 4 up</span></span>
-        <span class="ww-pill"><span class="ww-icon">!</span><span class="ww-key">Alerts</span><span class="ww-val ww-warn">2</span></span>
-        <span class="ww-pill"><span class="ww-icon">⚡</span><span class="ww-key">Battery</span><span class="ww-val">89%</span></span>
-        <span class="ww-pill"><span class="ww-icon">€</span><span class="ww-key">EUR/USD</span><span class="ww-val">1.0834</span></span>
-        <span class="ww-pill"><span class="ww-icon">◐</span><span class="ww-key">Focus</span><span class="ww-val ww-ok">on · 1h 24m</span></span>
+      <!-- A page of live buttons, drawn by /assets/js/live-widgets.js; the pictures stay if it doesn't load -->
+      <div class="ww-deck reveal" data-live-widgets>
+        <div class="ww-grid">
+          <div class="ww-slot ww-clock" data-face="clock"><img src="/assets/docs/img/recipes/analog-clock.png" width="672" height="672" alt="Analog clock: hour, minute and orange second hand, the date below" loading="lazy" decoding="async"></div>
+          <div class="ww-slot ww-cpu" data-face="cpu"><img src="/assets/docs/img/recipes/cpu-ring.png" width="320" height="320" alt="CPU ring: a colored ring around the CPU load in percent" loading="lazy" decoding="async"></div>
+          <div class="ww-slot ww-pomodoro" data-face="pomodoro"><img src="/assets/docs/img/recipes/pomodoro-on-two-buttons.png" width="320" height="320" alt="Pomodoro: a red ring around 18:42, the word focus below" loading="lazy" decoding="async"></div>
+          <div class="ww-slot ww-network" data-face="network"><img src="/assets/docs/img/recipes/network-speed.png" width="672" height="320" alt="Network speed: 12.3 MB/s and a blue chart" loading="lazy" decoding="async"></div>
+        </div>
       </div>
 
-      <p class="ww-foot">If it has an API, a shell script, or a number — pin it. Set your own refresh rate.</p>
+      <ul class="ww-names" aria-label="The recipes on this page">
+        <li><a href="/docs?p=recipes-widgets#analog-clock">Analog clock</a></li>
+        <li><a href="/docs?p=svg-faces#your-first-live-svg-widget-the-cpu-ring">CPU ring</a></li>
+        <li><a href="/docs?p=recipes-alerts#pomodoro-on-two-buttons">Pomodoro</a></li>
+        <li><a href="/docs?p=recipes-widgets#network-speed">Network speed</a></li>
+      </ul>
+
+      <p class="ww-foot">If it has an API, a shell script, or a number — pin it. Each of these is a recipe: copy it, or ask your AI for your own.</p>
+      <p class="ww-more"><a href="/docs?p=recipes-widgets">Browse the widget recipes <span aria-hidden="true">→</span></a></p>
     </div>
   </section>
 
@@ -488,6 +485,8 @@
       <div class="footer-right">&copy; 2026 Desktap</div>
     </div>
   </footer>
+
+  <script type="module" src="/assets/js/live-widgets.js"></script>
 
   <script>
     // ── Cosmos Background ──
