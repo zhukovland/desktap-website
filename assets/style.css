@@ -370,7 +370,8 @@ html.handheld .only-mac { display: none; }
 
 /* Inside .hero-actions / .cta-actions: a row of its own under the buttons; on a narrow screen, right under the button */
 .hero-actions .trust-line,
-.cta-actions .trust-line {
+.cta-actions .trust-line,
+.changelog-actions .trust-line {
   width: 100%;
   margin-top: 2px;
 }
@@ -1531,6 +1532,13 @@ html.handheld .only-mac { display: none; }
 
 .changelog-head { margin-bottom: 64px; }
 
+.changelog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
 .changelog-head h1 {
   font-family: var(--display);
   font-weight: 700;
@@ -1611,6 +1619,22 @@ html.handheld .only-mac { display: none; }
   margin-bottom: 14px;
 }
 
+/* Who the changes are for: the iPhone & iPad app, the Mac agent (they share one version) */
+.release-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 22px 0 6px;
+  color: var(--text-secondary);
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.release-title + .release-group { margin-top: 0; }
+
 .release-changes { list-style: none; }
 
 .release-changes li {
@@ -1647,20 +1671,6 @@ html.handheld .only-mac { display: none; }
 
 .change-kind.is-new { color: var(--accent); border-color: rgba(59, 130, 246, 0.4); }
 .change-kind.is-fixed { color: var(--green); border-color: rgba(52, 211, 153, 0.35); }
-
-.changelog-foot {
-  padding-top: 36px;
-  border-top: 1px solid var(--border);
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-}
-
-.changelog-foot a {
-  color: var(--text-primary);
-  text-decoration: underline;
-  text-decoration-color: rgba(255, 255, 255, 0.25);
-  text-underline-offset: 3px;
-}
 
 @media (max-width: 768px) {
   .changelog.container { padding: 120px 20px 72px; }
@@ -3097,8 +3107,8 @@ html.docs-panel-open body { overflow: hidden; }
 @media (max-width: 480px) {
   .hero h1 { font-size: 2rem; }
   .hero-actions { flex-direction: column; align-items: stretch; }
-  .hero-actions .trust-line { order: 1; margin-top: 0; }
-  .hero-actions .soon-note { order: 2; }
+  .hero-actions .trust-line, .changelog-actions .trust-line { order: 1; margin-top: 0; }
+  .hero-actions .soon-note, .changelog-actions .soon-note { order: 2; }
   .trust-line { font-size: 0.75rem; }
   .cta-section .trust-line { font-size: 0.75rem; }
   .trust-line > span + span::before { margin: 0 5px; }

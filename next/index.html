@@ -99,7 +99,7 @@
             <svg class="only-handheld" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
             <span class="only-mac">Download Mac Agent</span><span class="only-handheld">Send link to Mac</span>
           </a>
-          <!-- The iOS app is not in the App Store yet: a note, not a button. On release, swap both .soon-note spans (here and in the CTA) for the official App Store badge and reword step 01 in Setup. -->
+          <!-- The iOS app is not in the App Store yet: a note, not a button. On release, swap every .soon-note span (here, in the CTA and on /changelog/) for the official App Store badge and reword step 01 in Setup. -->
           <span class="soon-note">iPhone &amp; iPad app <span class="soon-tag">Coming soon</span></span>
           <!-- Trust line: version and size come from the latest GitHub release (assets/agent-download.js); without them the line still reads "Free · macOS 15+ · Notarized by Apple" -->
           <p class="trust-line">
@@ -439,7 +439,7 @@
           </div>
           <span class="step-number">01</span>
           <h3>Get the iPhone app</h3>
-          <!-- On release of the iOS app, reword this together with the two .soon-note spans (hero and CTA). -->
+          <!-- On release of the iOS app, reword this together with every .soon-note span (hero, CTA and /changelog/). -->
           <p>Desktap for iPhone and iPad is coming soon to the App Store. No account, no signup, nothing to configure on first launch.</p>
         </div>
         <div class="step reveal">
@@ -730,6 +730,6 @@
 
     document.querySelectorAll('.mcp-flow').forEach(el => flowObserver.observe(el));
   </script>
-  <script src="/assets/agent-download.js?v=20261006" defer></script>
+  <script src="/assets/agent-download.js?v=20261007" defer></script>
 </body>
 </html>

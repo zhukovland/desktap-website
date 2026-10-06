@@ -1,34 +1,55 @@
 // The Mac agent's download buttons (/next/, /changelog/).
 // 1. The trust line next to a button shows the version and the DMG size of the latest GitHub release.
 //    Until they arrive, or if GitHub doesn't answer, the line reads "Free · macOS 15+ · Notarized by Apple".
+//    On /changelog/ it also dates each entry and tags the latest one.
 // 2. On a phone or tablet (html.handheld, set in <head>) the buttons send the download link to the Mac.
 (function () {
-  // ── Trust line: version and size from the latest release ──
-  const API = 'https://api.github.com/repos/zhukovland/desktap-website/releases/latest';
-  const CACHE = 'desktap-agent-release';
+  // ── Trust line: version and size from the latest release; on /changelog/, the dates and the "Latest" entry ──
+  const REPO = 'https://api.github.com/repos/zhukovland/desktap-website/releases';
+  const changelog = document.querySelector('[data-release-entry]');
+  // The changelog needs every release (dates); the other pages only the latest one
+  const API = changelog ? REPO + '?per_page=100' : REPO + '/latest';
+  const CACHE = 'desktap-agent-release' + (changelog ? '-all' : '');
 
-  function show(release) {
+  // "v2.0.3" → "v2.0": the changelog lists major and minor versions only, bug-fix updates are not listed
+  const minor = tag => 'v' + tag.replace(/^v/, '').split('.').slice(0, 2).join('.');
+
+  function show(info) {
     document.querySelectorAll('[data-release="version"]').forEach(el => {
-      el.textContent = release.version;
-      if (el.tagName === 'A') el.href = '/changelog/#' + release.version;
+      el.textContent = info.version;
+      if (el.tagName === 'A') el.href = '/changelog/#' + minor(info.version);
       el.closest('[data-release-item]').hidden = false;
     });
     document.querySelectorAll('[data-release="size"]').forEach(el => {
-      el.textContent = release.size;
+      el.textContent = info.size;
       el.closest('[data-release-item]').hidden = false;
     });
-    // On /changelog/: tag the entry of the latest release
-    const entry = document.querySelector('[data-release-entry="' + release.version + '"]');
+    // On /changelog/: the entry of the latest release, and each entry's date = its first release (x.y.0 or the first after it)
+    const entry = document.querySelector('[data-release-entry="' + minor(info.version) + '"]');
     if (entry) entry.classList.add('is-latest');
+    Object.entries(info.dates || {}).forEach(([version, iso]) => {
+      const time = document.querySelector('[data-release-entry="' + version + '"] [data-release-date]');
+      if (!time) return;
+      time.dateTime = iso.slice(0, 10);
+      time.textContent = new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+    });
   }
 
   function parse(json) {
-    const dmg = (json.assets || []).find(a => /\.dmg$/i.test(a.name));
-    if (!json.tag_name || !dmg) return null;
+    const list = (Array.isArray(json) ? json : [json]).filter(r => r && r.tag_name && !r.draft && !r.prerelease);
+    const latest = list.find(r => (r.assets || []).some(a => /\.dmg$/i.test(a.name)));
+    if (!latest) return null;
+    const dmg = latest.assets.find(a => /\.dmg$/i.test(a.name));
+    const dates = {};
+    list.forEach(r => {
+      const v = minor(r.tag_name);
+      if (!dates[v] || r.published_at < dates[v]) dates[v] = r.published_at;
+    });
     return {
-      version: json.tag_name.startsWith('v') ? json.tag_name : 'v' + json.tag_name,
+      version: latest.tag_name.startsWith('v') ? latest.tag_name : 'v' + latest.tag_name,
       // Decimal megabytes, as Finder and Safari show the file
-      size: (dmg.size / 1e6).toFixed(1) + ' MB'
+      size: (dmg.size / 1e6).toFixed(1) + ' MB',
+      dates
     };
   }
 
@@ -41,10 +62,10 @@
       fetch(API, { headers: { Accept: 'application/vnd.github+json' } })
         .then(r => r.ok ? r.json() : null)
         .then(json => {
-          const release = json && parse(json);
-          if (!release) return;
-          show(release);
-          try { sessionStorage.setItem(CACHE, JSON.stringify(release)); } catch (e) {}
+          const info = json && parse(json);
+          if (!info) return;
+          show(info);
+          try { sessionStorage.setItem(CACHE, JSON.stringify(info)); } catch (e) {}
         })
         .catch(() => {});
     }

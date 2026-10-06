@@ -3,22 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>What's New in Desktap Agent for Mac — Desktap</title>
-  <meta name="description" content="Every release of the Desktap agent for Mac, newest first: what each version adds, improves and fixes.">
+  <title>What's New in Desktap — Desktap</title>
+  <meta name="description" content="What's new in Desktap for iPhone, iPad and Mac, release by release: what each version adds, improves and fixes.">
   <meta name="robots" content="noindex">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Desktap">
   <meta property="og:url" content="https://desktap.app/changelog/">
-  <meta property="og:title" content="What's New in Desktap Agent for Mac">
-  <meta property="og:description" content="Every release of the Desktap agent for Mac, newest first: what each version adds, improves and fixes.">
+  <meta property="og:title" content="What's New in Desktap">
+  <meta property="og:description" content="What's new in Desktap for iPhone, iPad and Mac, release by release: what each version adds, improves and fixes.">
   <meta property="og:image" content="https://desktap.app/assets/og-image.jpg">
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="What's New in Desktap Agent for Mac">
-  <meta name="twitter:description" content="Every release of the Desktap agent for Mac, newest first: what each version adds, improves and fixes.">
+  <meta name="twitter:title" content="What's New in Desktap">
+  <meta name="twitter:description" content="What's new in Desktap for iPhone, iPad and Mac, release by release: what each version adds, improves and fixes.">
   <meta name="twitter:image" content="https://desktap.app/assets/og-image.jpg">
 
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
@@ -59,156 +59,55 @@
   <main class="changelog container" id="main">
     <header class="changelog-head">
       <div class="label">Changelog</div>
-      <h1>What's new in Desktap Agent</h1>
-      <p class="changelog-lede">Every release of the Desktap agent for Mac, newest first. Since 1.2.0 the agent updates itself: a new version shows up as <b>Update Available</b> in its window.</p>
+      <h1>What's new in Desktap</h1>
+      <p class="changelog-lede">The iPhone and iPad app and the Mac agent come out together, with the same version number. Each entry is a release: 2.0, 2.1 and so on. Bug-fix updates in between (2.0.1, 2.0.2…) are not listed.</p>
       <div class="changelog-actions">
         <a href="/download/" class="btn-primary" data-send-to-mac>
           <span class="only-mac">Download Mac Agent</span><span class="only-handheld">Send link to Mac</span>
         </a>
+        <span class="soon-note">iPhone &amp; iPad app <span class="soon-tag">Coming soon</span></span>
+        <!-- Trust line: version and size come from the latest GitHub release (assets/agent-download.js) -->
+        <p class="trust-line">
+          <span>Free</span>
+          <span data-release-item hidden><a href="/changelog/" data-release="version" title="What's new in this version"></a></span>
+          <span data-release-item data-release="size" hidden></span>
+          <span>macOS 15+</span>
+          <span title="Signed with a Developer ID and checked for malware by Apple">Notarized by Apple</span>
+        </p>
       </div>
-      <!-- Trust line: version and size come from the latest GitHub release (assets/agent-download.js) -->
-      <p class="trust-line">
-        <span>Free</span>
-        <span data-release-item hidden><a href="/changelog/" data-release="version" title="What's new in this version"></a></span>
-        <span data-release-item data-release="size" hidden></span>
-        <span>macOS 15+</span>
-        <span title="Signed with a Developer ID and checked for malware by Apple">Notarized by Apple</span>
-      </p>
     </header>
 
-    <!-- One <li class="release"> per release, newest first. id and data-release-entry = the GitHub tag (v1.2.3):
-         the trust line links to #<tag>, and the entry of the latest release gets the "Latest" tag.
-         Kinds: <span class="change-kind is-new">New</span>, <span class="change-kind">Improved</span>, <span class="change-kind is-fixed">Fixed</span> -->
+    <!-- One <li class="release"> per release, newest first: major and minor versions only (2.0, 2.1…), bug-fix updates are not listed.
+         id and data-release-entry = "v" + major.minor (v2.0). assets/agent-download.js reads the GitHub releases: it writes the date of
+         the first release of that version into <time data-release-date> ("Coming soon" until then), tags the entry of the latest
+         release "Latest", and the trust line links to it. Two groups per release: the iPhone & iPad app, the Mac agent.
+         Kinds: <span class="change-kind is-new">New</span>, <span class="change-kind">Improved</span>, <span class="change-kind">Changed</span>, <span class="change-kind is-fixed">Fixed</span> -->
     <ol class="releases">
-      <li class="release" id="v1.2.3" data-release-entry="v1.2.3">
+      <li class="release" id="v2.0" data-release-entry="v2.0">
         <div class="release-meta">
-          <h2 class="release-version"><a href="#v1.2.3">1.2.3</a></h2>
-          <time class="release-date" datetime="2026-09-22">Sep 22, 2026</time>
-          <span class="release-latest">Latest</span>
-        </div>
-        <div class="release-body">
-          <p class="release-title">Faster live widgets, a sharper AI</p>
-          <ul class="release-changes">
-            <li><span class="change-kind is-new">New</span><span>Three new tools for your AI: <code>get_page_layout</code> shows a page and where there is room, <code>get_startup_script_status</code> tells why a live button stopped, and <code>restart_startup_script</code> starts it again.</span></li>
-            <li><span class="change-kind is-new">New</span><span>Your AI can move and resize the buttons you already have. It knows whether an iPhone or an iPad is connected, so with an iPhone it never puts a button in the columns only an iPad shows.</span></li>
-            <li><span class="change-kind">Improved</span><span>Live widgets update faster and cost your Mac less. A script can tell when its button is off screen and take a break.</span></li>
-            <li><span class="change-kind">Improved</span><span>Your AI tells “you rejected it” from “accepted, but the spot was taken”, and never sends buttons blind when it can’t read your deck.</span></li>
-            <li><span class="change-kind is-fixed">Fixed</span><span>Scripts left behind when the agent quit unexpectedly are cleaned up, so a live widget never runs twice. A failed script shows its own error message.</span></li>
-          </ul>
-        </div>
-      </li>
-      <li class="release" id="v1.2.2" data-release-entry="v1.2.2">
-        <div class="release-meta">
-          <h2 class="release-version"><a href="#v1.2.2">1.2.2</a></h2>
-          <time class="release-date" datetime="2026-09-20">Sep 20, 2026</time>
-          <span class="release-latest">Latest</span>
-        </div>
-        <div class="release-body">
-          <p class="release-title">Any AI app, one click</p>
-          <ul class="release-changes">
-            <li><span class="change-kind is-new">New</span><span>Claude Code and ChatGPT / Codex join Claude Desktop: connect any of them in one click. The agent lists only the ones on your Mac.</span></li>
-            <li><span class="change-kind is-new">New</span><span>The widget skill for Claude Code and ChatGPT / Codex teaches your assistant to draw good live widgets. One click installs it.</span></li>
-            <li><span class="change-kind is-new">New</span><span><code>render_preview</code>: your AI sees an SVG face, and how it glides into the next frame, before anything reaches your phone.</span></li>
-            <li><span class="change-kind">Improved</span><span>Every connected assistant gets short guidance from the agent: look at your deck first, preview before sending.</span></li>
-            <li><span class="change-kind is-fixed">Fixed</span><span>Codex keeps its connection to Desktap and no longer asks you to approve tools that only read.</span></li>
-          </ul>
-        </div>
-      </li>
-      <li class="release" id="v1.2.1" data-release-entry="v1.2.1">
-        <div class="release-meta">
-          <h2 class="release-version"><a href="#v1.2.1">1.2.1</a></h2>
-          <time class="release-date" datetime="2026-09-20">Sep 20, 2026</time>
-          <span class="release-latest">Latest</span>
-        </div>
-        <div class="release-body">
-          <p class="release-title">SVG faces</p>
-          <ul class="release-changes">
-            <li><span class="change-kind is-new">New</span><span>A button can wear a drawn SVG face for good, not only frames from a live script. Your AI can set one when it creates or updates a button.</span></li>
-            <li><span class="change-kind">Improved</span><span>Gradients, clipping, fill rules and more color formats: icons exported from Figma, Sketch or Illustrator draw as designed.</span></li>
-          </ul>
-        </div>
-      </li>
-      <li class="release" id="v1.2.0" data-release-entry="v1.2.0">
-        <div class="release-meta">
-          <h2 class="release-version"><a href="#v1.2.0">1.2.0</a></h2>
-          <time class="release-date" datetime="2026-09-17">Sep 17, 2026</time>
-          <span class="release-latest">Latest</span>
-        </div>
-        <div class="release-body">
-          <p class="release-title">Updates itself; live SVG widgets</p>
-          <ul class="release-changes">
-            <li><span class="change-kind is-new">New</span><span>Automatic updates. The agent looks for a new version once a day and offers it as <b>Update Available</b> in its window. Install 1.2.0 by hand once; later versions come by themselves.</span></li>
-            <li><span class="change-kind is-new">New</span><span>Live SVG widgets: a startup script can draw the whole button (a ring, a gauge, a chart), and the face glides from one update to the next.</span></li>
-            <li><span class="change-kind">Improved</span><span>Startup scripts keep retrying instead of giving up after five failures. A script with a <code>#!</code> line runs with that interpreter: python3, bash and others.</span></li>
-            <li><span class="change-kind">Improved</span><span>Taps stay instant with many live scripts running.</span></li>
-            <li><span class="change-kind">Improved</span><span>A new drag-to-Applications installer. In Applications the file is now “Desktap Agent.app” rather than “DesktapAgent.app”.</span></li>
-            <li><span class="change-kind is-fixed">Fixed</span><span>Fewer requests for the pairing code after switching macOS accounts, and live buttons no longer miss their first update after a switch.</span></li>
-          </ul>
-        </div>
-      </li>
-      <li class="release" id="v1.1.2" data-release-entry="v1.1.2">
-        <div class="release-meta">
-          <h2 class="release-version"><a href="#v1.1.2">1.1.2</a></h2>
-          <time class="release-date" datetime="2026-09-05">Sep 5, 2026</time>
-          <span class="release-latest">Latest</span>
-        </div>
-        <div class="release-body">
-          <p class="release-title">Bluetooth and pairing fixes</p>
-          <ul class="release-changes">
-            <li><span class="change-kind is-fixed">Fixed</span><span>Scripts that use Bluetooth (say, <code>blueutil</code> to connect headphones) get the macOS permission prompt instead of a silent refusal.</span></li>
-            <li><span class="change-kind is-fixed">Fixed</span><span>Each macOS account on the Mac keeps its own pairing, so switching accounts no longer asks for the code again.</span></li>
-          </ul>
-        </div>
-      </li>
-      <li class="release" id="v1.1.1" data-release-entry="v1.1.1">
-        <div class="release-meta">
-          <h2 class="release-version"><a href="#v1.1.1">1.1.1</a></h2>
-          <time class="release-date" datetime="2026-08-28">Aug 28, 2026</time>
-          <span class="release-latest">Latest</span>
-        </div>
-        <div class="release-body">
-          <p class="release-title">Richer notification actions</p>
-          <ul class="release-changes">
-            <li><span class="change-kind">Improved</span><span>Your AI can put any command type on a notification’s action buttons: a shortcut, a keystroke, a system action, AppleScript, a text snippet and more.</span></li>
-          </ul>
-        </div>
-      </li>
-      <li class="release" id="v1.1.0" data-release-entry="v1.1.0">
-        <div class="release-meta">
-          <h2 class="release-version"><a href="#v1.1.0">1.1.0</a></h2>
-          <time class="release-date" datetime="2026-08-28">Aug 28, 2026</time>
-          <span class="release-latest">Latest</span>
-        </div>
-        <div class="release-body">
-          <p class="release-title">Live buttons and notifications</p>
-          <ul class="release-changes">
-            <li><span class="change-kind is-new">New</span><span>Startup scripts: a button can run a script that starts when your phone connects and keeps the button current. The agent restarts a script that fails; <b>Running Scripts</b> shows its state, with <b>Restart</b>.</span></li>
-            <li><span class="change-kind is-new">New</span><span>Notifications: a script can notify your iPhone, your Mac or both, with up to four action buttons that run commands. Notifications for the phone wait while it is away.</span></li>
-            <li><span class="change-kind is-new">New</span><span>Several macOS accounts on one Mac: the account in front serves your phone, the others pause.</span></li>
-            <li><span class="change-kind">Improved</span><span>Your AI knows startup scripts and notifications and can write them for you.</span></li>
-            <li><span class="change-kind">Changed</span><span>A tap or long-press script now stops after 60 seconds. Anything longer belongs in a startup script.</span></li>
-          </ul>
-        </div>
-      </li>
-      <li class="release" id="v1.0.0" data-release-entry="v1.0.0">
-        <div class="release-meta">
-          <h2 class="release-version"><a href="#v1.0.0">1.0.0</a></h2>
-          <time class="release-date" datetime="2026-06-21">Jun 21, 2026</time>
+          <h2 class="release-version"><a href="#v2.0">2.0</a></h2>
+          <time class="release-date" data-release-date>Coming soon</time>
           <span class="release-latest">Latest</span>
         </div>
         <div class="release-body">
           <p class="release-title">First release</p>
+          <h3 class="release-group">iPhone &amp; iPad</h3>
           <ul class="release-changes">
-            <li><span class="change-kind is-new">New</span><span>Pairs with Desktap on iPhone and iPad over your Wi-Fi with a one-time code, then runs what the buttons ask for: keyboard shortcuts, system actions, apps, URLs, AppleScript, Shortcuts and shell scripts.</span></li>
-            <li><span class="change-kind is-new">New</span><span>Lives in the menu bar: trusted devices, running scripts with <b>Stop</b>, <b>Launch at Login</b>, and help with the Accessibility and Automation permissions.</span></li>
-            <li><span class="change-kind is-new">New</span><span>A built-in MCP server: one click connects Claude Desktop, and <b>Connect Other MCP Clients</b> gives the config for any other MCP tool. Your AI builds profiles, pages and buttons; nothing changes on your phone until you accept.</span></li>
-            <li><span class="change-kind is-new">New</span><span>If you allow it, your AI can run a command to look around your Mac (<code>run_probe</code>), each one approved on your iPhone or iPad.</span></li>
+            <li><span class="change-kind is-new">New</span><span>A deck of buttons for your Mac: keyboard shortcuts, apps, system actions, shell scripts, AppleScript, Shortcuts, URLs and text snippets, one tap each.</span></li>
+            <li><span class="change-kind is-new">New</span><span>Live widgets: a startup script keeps a button current, with a number or a drawn SVG face that glides from one update to the next.</span></li>
+            <li><span class="change-kind is-new">New</span><span>Ask your AI for a page of buttons. Every change it sends arrives as a card, and nothing changes until you tap <b>Accept</b>.</span></li>
+            <li><span class="change-kind is-new">New</span><span>Profiles and pages, shared between your iPhone and iPad through iCloud.</span></li>
+          </ul>
+          <h3 class="release-group">Mac agent</h3>
+          <ul class="release-changes">
+            <li><span class="change-kind is-new">New</span><span>Lives in the menu bar and pairs with your iPhone or iPad over Wi-Fi with a one-time code.</span></li>
+            <li><span class="change-kind is-new">New</span><span>One click connects Claude Desktop, Claude Code or ChatGPT / Codex; <b>Connect Other MCP Clients</b> gives the config for any other MCP tool.</span></li>
+            <li><span class="change-kind is-new">New</span><span>Notifications from your scripts on your iPhone, your Mac or both, with buttons that run commands.</span></li>
+            <li><span class="change-kind is-new">New</span><span>Updates itself: a new version shows up as <b>Update Available</b> in the agent's window.</span></li>
           </ul>
         </div>
       </li>
     </ol>
-
-    <p class="changelog-foot">Every version is also on <a href="https://github.com/zhukovland/desktap-website/releases">GitHub Releases</a>.</p>
   </main>
 
   <footer class="footer">
@@ -227,6 +126,6 @@
     </div>
   </footer>
 
-  <script src="/assets/agent-download.js?v=20261006" defer></script>
+  <script src="/assets/agent-download.js?v=20261007" defer></script>
 </body>
 </html>
