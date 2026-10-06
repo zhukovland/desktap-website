@@ -142,8 +142,9 @@ All buttons: SF Pro Text weight 500, 0.9375rem, padding 14px 28px, border-radius
 | Breakpoint | Changes |
 |-----------|---------|
 | ≤1024px | Hero → single column centered. MCP → stacked. Features header → single column. |
-| ≤768px | Bento → single column (all spans become 1). Steps → stacked. Nav links hidden. Float tags hidden. Footer stacked centered. |
+| ≤768px | Bento → single column (all spans become 1). Steps → stacked. Nav: section links hidden, Docs and the CTA stay (`.nav-compact` on `/next/`; the other pages hide all nav links). Float tags hidden. Footer stacked centered. |
 | ≤480px | Hero h1 → 2rem. Buttons stack vertically. |
+| Phone or tablet (any width) | On `/next/` the download buttons read "Send to Mac" / "Send link to Mac" and open the share sheet with the `/download/` link (`mailto:` without Web Share). iPhone, iPad and Android: `html.handheld`, set in `<head>` before the first paint; each button carries both labels, `.only-mac` / `.only-handheld`. |
 
 ---
 

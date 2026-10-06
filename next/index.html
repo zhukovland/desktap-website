@@ -580,13 +580,18 @@
       const mail = () => {
         location.href = 'mailto:?subject=' + encodeURIComponent(title) + '&body=' + encodeURIComponent(text + '\n' + url);
       };
+      let sharing = false;
       document.querySelectorAll('[data-send-to-mac]').forEach(a => {
         a.addEventListener('click', e => {
           e.preventDefault();
           if (!navigator.share) return mail();
-          // Only the link: AirDrop then opens it on the Mac and the download starts. Closing the sheet rejects with
-          // AbortError — a choice, not a failure.
-          navigator.share({ title, url }).catch(err => { if (err.name !== 'AbortError') mail(); });
+          if (sharing) return;
+          sharing = true;
+          // Only the link: AirDrop then opens it on the Mac and the download starts. Closing the sheet (AbortError) is
+          // a choice, a sheet still open (InvalidStateError) is not a failure either: mail only when sharing can't work.
+          navigator.share({ title, url })
+            .catch(err => { if (err.name !== 'AbortError' && err.name !== 'InvalidStateError') mail(); })
+            .finally(() => { sharing = false; });
         });
       });
     }
