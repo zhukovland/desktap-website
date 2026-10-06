@@ -90,6 +90,10 @@ Each blob is an ellipse with a 4-stop radial gradient (0.3 → 0.15 → 0.04 →
 
 8. **CTA** — Centered heading + subtitle + two buttons. Subtle radial gradient glow behind (purple → blue → transparent).
 
+   **Trust line** (`.trust-line`, `/next/` hero and CTA, `/changelog/`): under the agent's download button, "Free · v1.2.3 · 7.6 MB · macOS 15+ · Notarized by Apple" in SF Pro Text 0.8125rem, secondary color, `·` separators in tertiary. Version and size come from the latest GitHub release (`assets/agent-download.js`: GitHub API, cached for the browser session, size in decimal MB as Finder shows it); until they arrive, or if GitHub doesn't answer, both stay hidden and the line reads "Free · macOS 15+ · Notarized by Apple". The version links to the entry of its major.minor version in `/changelog/`. "Notarized by Apple" means checked for malware, not reviewed: never "Apple-approved".
+
+   **Changelog** (`/changelog/`, "What's new", linked from the `/next/` footer and from the version in the trust line): Desktap's releases, newest first, written by hand for people, not copied from GitHub. The iPhone & iPad app and the Mac agent come out together with one version number, so one entry covers both; only major and minor versions get an entry (2.0, 2.1…), bug-fix updates (2.0.1…) are not listed. Header: label, H1, lede, the download button with the "Coming soon" note for the app, and the trust line. Then one `li.release` per release, `id` and `data-release-entry` = `v` + major.minor (`v2.0`): on the left the version (display 700, 1.5rem, a link to its own anchor), the date and a green "Latest" pill; on the right a short title, then the changes in two groups, **iPhone & iPad** and **Mac agent** (`h3.release-group`, mono uppercase), each change led by a mono pill: **New** (accent), **Improved**, **Changed** (neutral), **Fixed** (green). `agent-download.js` reads the GitHub releases: the date is that of the first release of the version (until then the entry reads "Coming soon"), "Latest" goes on the version of the newest release, and the trust line's version (`v2.0.3`) links to its entry (`#v2.0`). Stacked under 768px; under 480px the pill sits above its line. Changes say what a person or their AI gets, quoting the app's English labels in bold and MCP tools in code; never how the app is built. A new version: add its entry at the top of the list before or on release day.
+
 9. **Footer** — Minimal. Logo + links left, copyright right. SF Mono-ish for logo.
 
 ---
@@ -149,7 +153,7 @@ All buttons: SF Pro Text weight 500, 0.9375rem, padding 14px 28px, border-radius
 | ≤768px | Bento → single column (all spans become 1). Steps → stacked. Nav: section links hidden, Docs and the CTA stay (`.nav-compact` on `/next/`; the other pages hide all nav links). Footer stacked centered. |
 | ≤520px | Hero devices one under the other: the iPad full width, the iPhone at the same scale, never under 200px tall. |
 | ≤480px | Hero h1 → 2rem. Buttons stack vertically. |
-| Phone or tablet (any width) | On `/next/` the download buttons read "Send to Mac" / "Send link to Mac" and open the share sheet with the `/download/` link (`mailto:` without Web Share). iPhone, iPad and Android: `html.handheld`, set in `<head>` before the first paint; each button carries both labels, `.only-mac` / `.only-handheld`. |
+| Phone or tablet (any width) | On `/next/` and `/changelog/` the download buttons read "Send to Mac" / "Send link to Mac" and open the share sheet with the `/download/` link (`mailto:` without Web Share). iPhone, iPad and Android: `html.handheld`, set in `<head>` before the first paint; each button carries both labels, `.only-mac` / `.only-handheld`; the click is handled in `assets/agent-download.js`. |
 
 ---
 
@@ -235,11 +239,13 @@ Text on the marker line becomes the title (`> [!TIP] A faster way`). In step car
 ```
 ├── index.html          — Holding page: one screen, "Coming soon" (noindex)
 ├── next/index.html     — The full landing, reworked here (noindex, absolute paths, nothing links to it)
+├── changelog/index.html — "What's new": Desktap's releases (app and agent, 2.0, 2.1…), newest first (noindex like /next/; linked from /next/)
 ├── privacy.html        — Privacy Policy (legal layout)
 ├── terms.html          — Terms of Use (legal layout)
 ├── docs.html           — Docs shell (loads assets/docs/pages/<slug>.md)
 └── assets/
     ├── docs/           — docs.js, pages.json, pages/*.md, js/ (diagrams), img/
+    ├── agent-download.js — The agent's download buttons: trust line from the latest release, "Send link to Mac" on a phone
     ├── js/live-widgets.js — the live buttons of the Live widgets section on /next/ (imports docs/js/face-player.js)
     ├── style.css       — Complete stylesheet (~3100 lines; docs part at "Docs")
     ├── deck-ipad.webp, deck-iphone.webp — /next/ hero: the deck in Apple's bezels (iPad landscape 1400×1073, iPhone 540×1102)

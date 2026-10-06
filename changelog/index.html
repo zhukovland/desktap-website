@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What's New in Desktap — Desktap</title>
+  <meta name="description" content="What's new in Desktap for iPhone, iPad and Mac, release by release: what each version adds, improves and fixes.">
+  <meta name="robots" content="noindex">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Desktap">
+  <meta property="og:url" content="https://desktap.app/changelog/">
+  <meta property="og:title" content="What's New in Desktap">
+  <meta property="og:description" content="What's new in Desktap for iPhone, iPad and Mac, release by release: what each version adds, improves and fixes.">
+  <meta property="og:image" content="https://desktap.app/assets/og-image.jpg">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="What's New in Desktap">
+  <meta name="twitter:description" content="What's new in Desktap for iPhone, iPad and Mac, release by release: what each version adds, improves and fixes.">
+  <meta name="twitter:image" content="https://desktap.app/assets/og-image.jpg">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+  <link rel="icon" href="/assets/favicon.ico" sizes="any">
+  <meta name="theme-color" content="#000000">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <link rel="stylesheet" href="/assets/style.css?v=20261007c">
+
+  <!-- A phone or tablet can't run the Mac agent: before the first paint, so the download buttons show "Send link to Mac" at once -->
+  <script>
+    if (/iPhone|iPad|iPod|Android/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+      document.documentElement.classList.add('handheld');
+    }
+  </script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <a href="/" class="nav-logo" aria-label="Desktap home">
+        <img src="/assets/icon.png" alt="" width="28" height="28">
+        desktap
+      </a>
+      <ul class="nav-links nav-compact">
+        <li><a href="/docs">Docs</a></li>
+        <li>
+          <a href="/download/" class="nav-cta" data-send-to-mac><span class="only-mac">Download</span><span class="only-handheld">Send to Mac</span></a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="changelog container" id="main">
+    <header class="changelog-head">
+      <div class="label">Changelog</div>
+      <h1>What's new in Desktap</h1>
+      <p class="changelog-lede">The iPhone and iPad app and the Mac agent come out together, with the same version number. Each entry is a release: 2.0, 2.1 and so on. Bug-fix updates in between (2.0.1, 2.0.2…) are not listed.</p>
+      <div class="changelog-actions">
+        <a href="/download/" class="btn-primary" data-send-to-mac>
+          <span class="only-mac">Download Mac Agent</span><span class="only-handheld">Send link to Mac</span>
+        </a>
+        <span class="soon-note">iPhone &amp; iPad app <span class="soon-tag">Coming soon</span></span>
+        <!-- Trust line: version and size come from the latest GitHub release (assets/agent-download.js) -->
+        <p class="trust-line">
+          <span>Free</span>
+          <span data-release-item hidden><a href="/changelog/" data-release="version" title="What's new in this version"></a></span>
+          <span data-release-item data-release="size" hidden></span>
+          <span>macOS 15+</span>
+          <span title="Signed with a Developer ID and checked for malware by Apple">Notarized by Apple</span>
+        </p>
+      </div>
+    </header>
+
+    <!-- One <li class="release"> per release, newest first: major and minor versions only (2.0, 2.1…), bug-fix updates are not listed.
+         id and data-release-entry = "v" + major.minor (v2.0). assets/agent-download.js reads the GitHub releases: it writes the date of
+         the first release of that version into <time data-release-date> ("Coming soon" until then), tags the entry of the latest
+         release "Latest", and the trust line links to it. Two groups per release: the iPhone & iPad app, the Mac agent.
+         Kinds: <span class="change-kind is-new">New</span>, <span class="change-kind">Improved</span>, <span class="change-kind">Changed</span>, <span class="change-kind is-fixed">Fixed</span> -->
+    <ol class="releases">
+      <li class="release" id="v2.0" data-release-entry="v2.0">
+        <div class="release-meta">
+          <h2 class="release-version"><a href="#v2.0">2.0</a></h2>
+          <time class="release-date" data-release-date>Coming soon</time>
+          <span class="release-latest">Latest</span>
+        </div>
+        <div class="release-body">
+          <p class="release-title">First release</p>
+          <h3 class="release-group">iPhone &amp; iPad</h3>
+          <ul class="release-changes">
+            <li><span class="change-kind is-new">New</span><span>A deck of buttons for your Mac: keyboard shortcuts, apps, system actions, shell scripts, AppleScript, Shortcuts, URLs and text snippets, one tap each.</span></li>
+            <li><span class="change-kind is-new">New</span><span>Live widgets: a startup script keeps a button current, with a number or a drawn SVG face that glides from one update to the next.</span></li>
+            <li><span class="change-kind is-new">New</span><span>Ask your AI for a page of buttons. Every change it sends arrives as a card, and nothing changes until you tap <b>Accept</b>.</span></li>
+            <li><span class="change-kind is-new">New</span><span>Profiles and pages, shared between your iPhone and iPad through iCloud.</span></li>
+          </ul>
+          <h3 class="release-group">Mac agent</h3>
+          <ul class="release-changes">
+            <li><span class="change-kind is-new">New</span><span>Lives in the menu bar and pairs with your iPhone or iPad over Wi-Fi with a one-time code.</span></li>
+            <li><span class="change-kind is-new">New</span><span>One click connects Claude Desktop, Claude Code or ChatGPT / Codex; <b>Connect Other MCP Clients</b> gives the config for any other MCP tool.</span></li>
+            <li><span class="change-kind is-new">New</span><span>Notifications from your scripts on your iPhone, your Mac or both, with buttons that run commands.</span></li>
+            <li><span class="change-kind is-new">New</span><span>Updates itself: a new version shows up as <b>Update Available</b> in the agent's window.</span></li>
+          </ul>
+        </div>
+      </li>
+    </ol>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-left">
+        <span class="footer-logo">desktap</span>
+        <ul class="footer-links">
+          <li><a href="/docs">Docs</a></li>
+          <li><a href="/changelog/" aria-current="page">What's new</a></li>
+          <li><a href="/privacy">Privacy</a></li>
+          <li><a href="/terms">Terms</a></li>
+          <li><a href="mailto:support@desktap.app">Support</a></li>
+        </ul>
+      </div>
+      <div class="footer-right">&copy; 2026 Desktap</div>
+    </div>
+  </footer>
+
+  <script src="/assets/agent-download.js?v=20261007" defer></script>
+</body>
+</html>
