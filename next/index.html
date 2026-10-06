@@ -700,19 +700,26 @@ last=<span class="s">""</span> sent_at=<span class="v">-100</span>
         { baseX: 0.75, baseY: 0.20, radius: 0.25, r: 50,  g: 180, b: 140, speedX: 0.35, speedY: 0.22, phase: 1.0 },
       ];
 
-      let dpr = 1;
+      // The picture is 80px-blurred soft gradients, so it is drawn at a quarter of the
+      // window size and the browser scales it up: same look, ~16x fewer pixels to fill.
+      const SCALE = 0.25;
+      // The drift is slow (under 100 px a second behind an 80px blur): 20 frames a second
+      // look the same as 60 and cost a third. A little under the period, so a 60 Hz or
+      // 120 Hz display lands on every third or sixth refresh.
+      const FRAME_MS = 1000 / 20 - 3;
+
       function resize() {
-        dpr = window.devicePixelRatio || 1;
-        canvas.width = window.innerWidth * dpr;
-        canvas.height = window.innerHeight * dpr;
+        const w = Math.max(1, Math.round(window.innerWidth * SCALE));
+        const h = Math.max(1, Math.round(window.innerHeight * SCALE));
+        if (canvas.width !== w || canvas.height !== h) {
+          canvas.width = w;
+          canvas.height = h;
+        }
         canvas.style.width = window.innerWidth + 'px';
         canvas.style.height = window.innerHeight + 'px';
       }
 
-      window.addEventListener('resize', resize);
-      resize();
-
-      function draw(time) {
+      function paint(time) {
         const t = time * 0.001; // seconds
         const w = canvas.width;
         const h = canvas.height;
@@ -747,11 +754,44 @@ last=<span class="s">""</span> sent_at=<span class="v">-100</span>
 
           ctx.restore();
         }
-
-        requestAnimationFrame(draw);
       }
 
-      requestAnimationFrame(draw);
+      // Runs only while the canvas is on screen and the tab is visible.
+      let frame = 0;
+      let lastPaint = -Infinity;
+      let inView = true;
+
+      function tick(time) {
+        frame = requestAnimationFrame(tick);
+        if (time - lastPaint < FRAME_MS) return;
+        lastPaint = time;
+        paint(time);
+      }
+
+      function sync() {
+        const run = inView && !document.hidden;
+        if (run && !frame) {
+          frame = requestAnimationFrame(tick);
+        } else if (!run && frame) {
+          cancelAnimationFrame(frame);
+          frame = 0;
+        }
+      }
+
+      window.addEventListener('resize', () => {
+        resize();
+        paint(performance.now()); // resizing clears the canvas
+      });
+      document.addEventListener('visibilitychange', sync);
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver((entries) => {
+          inView = entries[entries.length - 1].isIntersecting;
+          sync();
+        }).observe(canvas);
+      }
+
+      resize();
+      sync();
     })();
 
     // ── Screenshot mode: force-reveal everything + scroll to anchor ──
