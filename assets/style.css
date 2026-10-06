@@ -3318,6 +3318,235 @@ html.docs-panel-open body { overflow: hidden; }
   .widgets { padding: 80px 0 60px; }
 }
 
+/* ---------- Gallery and scenes — start without code (/next/) ---------- */
+.gallery-scenes {
+  padding: 100px 0 110px;
+  position: relative;
+}
+
+.gallery-scenes .container { max-width: 1100px; }
+
+/* The path: a patch of the iPhone Gallery on the left, three numbered steps on the right */
+.gs-path {
+  display: grid;
+  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  gap: 72px;
+  align-items: center;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.gs-gallery {
+  background: var(--phone-screen);
+  border: 1px solid var(--border);
+  border-radius: clamp(24px, 5vw, 34px);
+  padding: 10px 6px 4px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px -30px rgba(59, 130, 246, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.6);
+}
+
+.gs-gallery img { width: 100%; height: auto; }
+
+.gs-steps {
+  list-style: none;
+  display: grid;
+  gap: 36px;
+}
+
+.gs-step {
+  position: relative;
+  padding-left: 64px;
+  min-width: 0;
+}
+
+/* A thin accent line joins the numbers, as the docs join their step cards */
+.gs-step:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 19.5px;
+  top: 48px;
+  bottom: -28px;
+  width: 1px;
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.45), rgba(59, 130, 246, 0.08));
+}
+
+.gs-num {
+  position: absolute;
+  left: 0;
+  top: -6px;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  background: var(--accent-subtle);
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+}
+
+.gs-step h3 {
+  font-family: var(--display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+
+.gs-step > p {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+}
+
+.gs-step b { color: var(--text-primary); font-weight: 500; }
+
+/* What you might ask your AI: a chat bubble */
+.gs-step > .gs-prompt {
+  margin-top: 14px;
+  padding: 12px 16px 13px;
+  max-width: 460px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid var(--border-hover);
+  border-radius: 16px 16px 16px 4px;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.gs-prompt-who {
+  display: block;
+  margin-bottom: 4px;
+  font-family: var(--mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+/* A few lines of a startup script, in the docs' code colors */
+.gs-code {
+  margin-top: 14px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-hover);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.gs-code-title {
+  display: block;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.gs-code pre {
+  margin: 0;
+  padding: 12px 14px 14px;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  line-height: 1.65;
+  color: #D4D4D8;
+}
+
+.gs-code .c { color: #7C7C86; }
+.gs-code .s { color: #A7D9BC; }
+.gs-code .v { color: #93C5FD; }
+.gs-code b { color: #fff; font-weight: 600; }
+
+.gs-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  font-size: 0.875rem;
+  color: var(--accent);
+}
+
+.gs-more::after { content: '→'; transition: transform 0.2s; }
+.gs-more:hover::after { transform: translateX(3px); }
+
+/* The scenes: three iPad screens, landscape, side by side */
+.gs-scenes-head {
+  text-align: center;
+  max-width: 600px;
+  margin: 110px auto 36px;
+  scroll-margin-top: 88px;   /* /next/#scenes lands below the fixed nav */
+}
+
+.gs-scenes-head h3 {
+  font-family: var(--display);
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+
+.gs-scenes-head p {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.gs-scenes-head b { color: var(--text-primary); font-weight: 500; }
+
+.gs-scenes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.gs-scene img {
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  background: var(--phone-screen);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 24px 60px -24px rgba(0, 0, 0, 0.9);
+}
+
+.gs-scene figcaption {
+  margin-top: 16px;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.gs-scene figcaption b {
+  display: block;
+  margin-bottom: 2px;
+  font-family: var(--display);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.gallery-scenes .ww-more { margin-top: 40px; }
+
+@media (max-width: 900px) {
+  .gs-path { grid-template-columns: 1fr; gap: 48px; max-width: 560px; }
+  .gs-gallery { width: 100%; max-width: 340px; margin: 0 auto; }
+  .gs-scenes { grid-template-columns: 1fr; gap: 36px; max-width: 560px; margin: 0 auto; }
+  .gs-scenes-head { margin-top: 88px; }
+}
+
+@media (max-width: 640px) {
+  .gallery-scenes { padding: 70px 0 80px; }
+  .gs-step { padding-left: 54px; }
+  .gs-num { width: 36px; height: 36px; font-size: 0.6875rem; }
+  .gs-step:not(:last-child)::before { left: 17.5px; top: 42px; }
+  .gs-scene img { border-radius: 10px; }
+}
+
 /* Respect users who ask the system to reduce motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
