@@ -28,7 +28,7 @@
   <meta name="theme-color" content="#000000">
   <link rel="manifest" href="/site.webmanifest">
 
-  <link rel="stylesheet" href="/assets/style.css?v=20261007d">
+  <link rel="stylesheet" href="/assets/style.css?v=20261007e">
 
   <!-- A phone or tablet can't run the Mac agent: before the first paint, so the download buttons show "Send link to Mac" at once -->
   <script>
@@ -432,63 +432,66 @@ last=<span class="s">""</span> sent_at=<span class="v">-100</span>
     </div>
   </section>
 
-  <!-- MCP -->
-  <section class="mcp" id="ai">
+  <!-- AI — what sets Desktap apart: an AI builds whole pages, and every change it sends waits for Accept on the phone.
+       The promises keep the agent's own words, as the FAQ does: "Changes an AI sends through Desktap wait for your
+       Accept on your iPhone or iPad", and through Desktap it never presses buttons; never "nothing changes without you".
+       AI apps are named in text, without their logos. -->
+  <section class="ai" id="ai">
     <div class="container">
-      <div class="mcp-layout reveal">
-        <div class="mcp-content">
-          <div class="label">MCP Server</div>
-          <h2>Bring your own <span class="serif-accent">AI.</span></h2>
-          <p>Desktap ships with a built-in MCP server. The real power unlocks when you pair it with Claude, Codex, or any compatible client — one click in the agent, and your AI becomes the editor.</p>
-          <p>Describe a workflow. Get a working page. Buttons, icons, hotkeys, live widgets — generated and synced to your phone in seconds.</p>
-          <div class="compat-list">
+      <div class="ai-layout">
+        <header class="ai-head reveal">
+          <div class="label">Built by your AI</div>
+          <h2>Your AI builds whole pages. <em>You tap Accept.</em></h2>
+          <p>Tell Claude, ChatGPT or any MCP client what you need. It writes the buttons, their scripts and live widgets, and sends the change to your iPhone or iPad as a card: each new button, the code it runs, and <b>Accept</b>.</p>
+        </header>
+
+        <!-- A render of the real app (the review card) in Apple's bezel: as in the hero, whole and upright, nothing over
+             it, no shadow, a fade and no movement, a still aura behind -->
+        <figure class="ai-card reveal reveal-fade">
+          <img src="/assets/ai-review-iphone.webp" alt="The review card on iPhone: “The AI wants to add 3 buttons”, from MacBook Pro, page “Project”, the AI’s words, then Run Tests, Pull and Pull Requests, each marked NEW with what a tap does and the script of Run Tests open; at the bottom Accept, Decide Later and Reject" width="680" height="1388" loading="lazy">
+          <figcaption>A change from your AI, waiting for your answer</figcaption>
+        </figure>
+
+        <div class="ai-body reveal">
+          <!-- Asks and results as the docs give them (AI › Asking for widgets); the last one is the change on the card -->
+          <dl class="ai-asks" aria-label="You say, you get">
+            <div class="ai-ask"><dt>“A page of Figma shortcuts”</dt><dd>A page of Key Combination buttons</dd></div>
+            <div class="ai-ask"><dt>“Show CPU load as a ring”</dt><dd>A drawn ring, kept current by a script on your Mac</dd></div>
+            <div class="ai-ask"><dt>“A 25-minute focus timer: tap to start, a ring that counts down”</dt><dd>One button: a tap starts it, a script draws the ring</dd></div>
+            <div class="ai-ask"><dt>“Buttons to run my app’s tests, pull, and open its pull requests”</dt><dd>Three buttons: two scripts and a link, each shown on the card</dd></div>
+          </dl>
+
+          <div class="ai-promise">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+            <div>
+              <p><b>Changes an AI sends through Desktap wait for your Accept</b> on your iPhone or iPad.</p>
+              <p>Through Desktap, an AI can’t press your buttons or delete anything.</p>
+              <!-- When the site has a page about security, link it here -->
+              <a class="ai-more" href="/docs?p=ai#what-the-assistant-can-and-cant-do">What an AI can and can’t do</a>
+            </div>
+          </div>
+
+          <div class="ai-works">
+            <span class="ai-works-label">Works with</span>
             <span class="compat-item">Claude Desktop</span>
             <span class="compat-item">Claude Code</span>
             <span class="compat-item">ChatGPT / Codex</span>
-            <span class="compat-item">Any MCP Client</span>
+            <span class="compat-item">Cursor</span>
+            <span class="compat-item">Any MCP client</span>
           </div>
         </div>
-        <div class="mcp-visual">
-          <div class="mcp-flow">
-            <!-- Client card: AI assistant chat -->
-            <div class="flow-card flow-client">
-              <div class="flow-card-header">
-                <div class="flow-avatar flow-avatar-claude" aria-label="Claude">
-                  <img src="/assets/claude.png" alt="" width="38" height="38">
-                </div>
-                <div>
-                  <div class="flow-card-title">Claude Desktop</div>
-                  <div class="flow-card-meta">via MCP</div>
-                </div>
-              </div>
-              <div class="flow-bubble">Add Spotify media controls to my Desktap.</div>
-            </div>
+      </div>
 
-            <!-- Connecting pipe -->
-            <div class="flow-pipe">
-              <span class="flow-pipe-label">MCP</span>
-            </div>
-
-            <!-- Result card: buttons appear in Desktap -->
-            <div class="flow-card flow-result">
-              <div class="flow-card-header">
-                <div class="flow-avatar flow-avatar-app">
-                  <img src="/assets/icon.png" alt="" width="22" height="22">
-                </div>
-                <div>
-                  <div class="flow-card-title">Desktap on iPhone</div>
-                  <div class="flow-card-meta">Page "Spotify" · synced just now</div>
-                </div>
-              </div>
-              <div class="flow-buttons">
-                <div class="flow-btn"><span class="flow-btn-icon">⏯</span><span>Play / Pause</span></div>
-                <div class="flow-btn"><span class="flow-btn-icon">⏭</span><span>Next Track</span></div>
-                <div class="flow-btn"><span class="flow-btn-icon">⏮</span><span>Previous</span></div>
-                <div class="flow-btn"><span class="flow-btn-icon">🔊</span><span>Volume Up</span></div>
-              </div>
-            </div>
-          </div>
+      <!-- Claude Code waiting for an answer: the recipe's face, drawn by /assets/js/live-widgets.js -->
+      <div class="ai-wait reveal">
+        <div class="ai-wait-face" data-live-widgets>
+          <div class="ww-slot" data-face="claude"></div>
         </div>
+        <div class="ai-wait-text">
+          <h3>Know when Claude Code waits for you</h3>
+          <p>When Claude Code needs your answer, a button on your phone turns red and names the project. A tap or your next prompt clears it.</p>
+        </div>
+        <a class="ai-more" href="/docs?p=recipes-alerts#claude-code-needs-input">The recipe</a>
       </div>
     </div>
   </section>
@@ -782,23 +785,6 @@ last=<span class="s">""</span> sent_at=<span class="v">-100</span>
         card.style.setProperty('--mouse-y', (e.clientY - r.top) + 'px');
       });
     });
-
-    // ── MCP flow re-animate buttons on scroll ──
-    const flowObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const btns = entry.target.querySelectorAll('.flow-btn');
-          btns.forEach(b => {
-            b.style.animation = 'none';
-            b.offsetHeight;
-            b.style.animation = '';
-          });
-          flowObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.3 });
-
-    document.querySelectorAll('.mcp-flow').forEach(el => flowObserver.observe(el));
   </script>
   <script src="/assets/agent-download.js?v=20261007" defer></script>
 </body>
