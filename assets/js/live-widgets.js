@@ -85,9 +85,9 @@ function pomoTree(host) {
 
 const ORANGE = '#FF9500';                                  // the button's Color, Orange
 
-function clockFrame(d) {
+/** The frame for time d; the date line reads DATE when given (the start state's "–"), else d's date. */
+function clockFrame(d, date = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })) {
   const h = d.getHours(), m = d.getMinutes(), s = d.getSeconds();
-  const date = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
   return frame(['dial', 'marks', 'hour', 'minute', 'second', 'center', 'date'],
     { hour: +((h % 12) * 30 + m * 0.5).toFixed(1), minute: +(m * 6 + s * 0.1).toFixed(1), second: s * 6 }, { date });
 }
@@ -210,7 +210,7 @@ export function mount(deck) {
 
   // Start states, as the recipes' SVG Drawings: the first live frames grow out of them.
   function startStates(t) {
-    clock && clock.apply(clockFrame(new Date(2000, 0, 1, 10, 10, 0)), t, 0);
+    clock && clock.apply(clockFrame(new Date(2000, 0, 1, 10, 10, 30), '–'), t, 0);
     cpu && cpu.apply(cpuFrame(0, true), t, 0);
     pomodoro && pomodoro.apply(pomoFrame('idle', WORK), t, 0);
     network && network.apply(netFrame(hist, 0, netText), t, 0);
