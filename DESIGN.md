@@ -73,6 +73,7 @@ Each blob is an ellipse with a 4-stop radial gradient (0.3 → 0.15 → 0.04 →
 1. **Nav** — Fixed top, blurred black backdrop (`rgba(0,0,0,0.6)` + `backdrop-filter: blur(24px)`), 56px height. Logo left, links + CTA button right. Logo uses SF Pro Display 600.
 
 2. **Hero** — Full viewport height, vertically centered. Two-column grid: left column has badge + h1 + subtitle + action buttons; right column has phone screenshot with floating tags. On mobile (≤1024px) collapses to single column, centered.
+   On `/next/` (`.hero-duo`, the right column 1.2× the left) the picture is the deck on an iPad (landscape) and an iPhone, `assets/deck-ipad.webp` and `assets/deck-iphone.webp`: renders of the app in Apple's product bezels, transparent around the devices. Apple's rules for showing its devices apply: whole and upright, side by side and bottom-aligned at their real relative size (the iPhone 76% of the iPad's height), nothing over them — no floating tags, no tilt on hover; a still accent aura behind. ≤1024px: the pair under the text, up to 760px wide. A new render replaces both files at the same size (iPad 1400×1073, iPhone 540×1102) and `assets/og-image.jpg` after them.
 
 3. **Marquee** — Horizontal auto-scrolling ticker strip. SF Mono uppercase items separated by small blue diamond glyphs. Bordered top and bottom. 30s infinite linear scroll, seamless loop via duplicated items.
 
@@ -234,11 +235,12 @@ Text on the marker line becomes the title (`> [!TIP] A faster way`). In step car
 ├── privacy.html        — Privacy Policy (legal layout)
 ├── terms.html          — Terms of Use (legal layout)
 ├── docs.html           — Docs shell (loads assets/docs/pages/<slug>.md)
-├── og-card.html        — Source of the social previews: assets/og-image.jpg, assets/og-soon.jpg (?label=Coming%20soon)
+├── og-card.html        — Source of the social previews, shot at 1200×630: assets/og-image.jpg (the hero's words and the deck, no name in the picture), assets/og-soon.jpg (?label=Coming%20soon: icon, name, label)
 └── assets/
     ├── docs/           — docs.js, pages.json, pages/*.md, js/ (diagrams), img/
     ├── style.css       — Complete stylesheet (~3100 lines; docs part at "Docs")
     ├── screenshot.png  — iPhone app screenshot (1206×2622, Retina)
+    ├── deck-ipad.webp, deck-iphone.webp — /next/ hero: the deck in Apple's bezels (iPad landscape 1400×1073, iPhone 540×1102)
     ├── icon.png        — App icon (256×256)
     └── favicon.ico     — Favicon
 ```

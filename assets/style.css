@@ -473,6 +473,40 @@ html.handheld .only-mac { display: none; }
   50% { transform: translateY(-6px); }
 }
 
+/* /next/: the deck on iPad and iPhone in Apple's product bezels (.hero-duo). Apple's marketing rules for its
+   devices: whole, upright, no overlap, tilt or motion of their own — so side by side, bottom-aligned, at their
+   real relative size (the iPhone 76% of the iPad's height), a still aura behind and no hover. */
+.hero-duo .container {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: 48px;
+}
+
+.hero-devices {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.hero-devices::before {
+  content: '';
+  position: absolute;
+  inset: -12% -8%;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgba(59, 130, 246, 0.16), rgba(59, 130, 246, 0));
+  pointer-events: none;
+}
+
+.hero-devices img {
+  height: auto;
+  filter: drop-shadow(0 28px 48px rgba(0, 0, 0, 0.55));
+}
+
+.hero-ipad { width: 75%; }
+.hero-iphone { width: 21.5%; }
+
 /* ---------- Marquee ---------- */
 .marquee {
   border-top: 1px solid var(--border);
@@ -2725,6 +2759,8 @@ html.docs-panel-open body { overflow: hidden; }
   .hero-content { max-width: 100%; }
   .hero-subtitle { margin: 0 auto 40px; }
   .hero-actions { justify-content: center; }
+  .hero-duo .container { grid-template-columns: minmax(0, 1fr); }
+  .hero-devices { max-width: 760px; margin: 0 auto; }
   .mcp-layout { grid-template-columns: 1fr; gap: 48px; }
   .mcp-content p { max-width: 100%; }
   .features-header { grid-template-columns: 1fr; }
