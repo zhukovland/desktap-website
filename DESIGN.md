@@ -62,7 +62,7 @@ Four animated color blobs rendered on a full-screen `<canvas>`, matching the app
 | Pink | `200, 50, 100` | (25%, 75%) | 0.32 | medium |
 | Teal | `50, 180, 140` | (75%, 20%) | 0.25 | fast |
 
-Each blob is an ellipse with a 4-stop radial gradient (0.3 → 0.15 → 0.04 → 0 opacity), wobbles in size via sine, and rotates slowly. The canvas is `position: fixed` behind all content.
+Each blob is an ellipse with a 4-stop radial gradient (0.3 → 0.15 → 0.04 → 0 opacity), wobbles in size via sine, and rotates slowly. The canvas is `position: fixed` behind all content. Drawn at a quarter of the window size (no `devicePixelRatio`) and stretched by CSS under `blur(80px)`; about 20 frames a second, driven by a timer (a `requestAnimationFrame` loop wakes the browser on every refresh even when it skips drawing); nothing is drawn in a hidden tab; hidden with Reduce Motion. The canvas is always on screen, so scrolling never pauses it. Keep it that way — it costs CPU/GPU all the time the page is open.
 
 ---
 

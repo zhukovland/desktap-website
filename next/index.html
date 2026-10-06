@@ -704,9 +704,10 @@ last=<span class="s">""</span> sent_at=<span class="v">-100</span>
       // window size and the browser scales it up: same look, ~16x fewer pixels to fill.
       const SCALE = 0.25;
       // The drift is slow (under 100 px a second behind an 80px blur): 20 frames a second
-      // look the same as 60 and cost a third. A little under the period, so a 60 Hz or
-      // 120 Hz display lands on every third or sixth refresh.
-      const FRAME_MS = 1000 / 20 - 3;
+      // look the same as 60. A timer, not requestAnimationFrame: a rAF loop wakes the
+      // browser on every refresh (60 or 120 times a second) even if it draws only some of
+      // them; with a timer the page and the browser sleep between frames.
+      const FRAME_MS = 1000 / 20;
 
       function resize() {
         const w = Math.max(1, Math.round(window.innerWidth * SCALE));
@@ -756,25 +757,26 @@ last=<span class="s">""</span> sent_at=<span class="v">-100</span>
         }
       }
 
-      // Runs only while the canvas is on screen and the tab is visible.
-      let frame = 0;
-      let lastPaint = -Infinity;
+      // Runs only while the tab is visible (and the canvas is displayed at all: the
+      // observer also catches it being hidden by the page, e.g. Reduce Motion switched on
+      // with the page open). The canvas is fixed behind everything, so scrolling never
+      // takes it off screen.
+      let timer = 0;
       let inView = true;
 
-      function tick(time) {
-        frame = requestAnimationFrame(tick);
-        if (time - lastPaint < FRAME_MS) return;
-        lastPaint = time;
-        paint(time);
+      function tick() {
+        const now = performance.now();
+        paint(now);
+        timer = setTimeout(tick, FRAME_MS);
       }
 
       function sync() {
         const run = inView && !document.hidden;
-        if (run && !frame) {
-          frame = requestAnimationFrame(tick);
-        } else if (!run && frame) {
-          cancelAnimationFrame(frame);
-          frame = 0;
+        if (run && !timer) {
+          timer = setTimeout(tick, 0);
+        } else if (!run) {
+          clearTimeout(timer);
+          timer = 0;
         }
       }
 
