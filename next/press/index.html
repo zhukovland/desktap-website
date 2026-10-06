@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Press Kit — Desktap</title>
+  <meta name="description" content="Desktap press kit: facts, ready-made descriptions, screenshots of the app on iPhone, iPad and Mac, and the app icon, in one archive.">
+  <meta name="robots" content="noindex">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Desktap">
+  <meta property="og:url" content="https://desktap.app/next/press/">
+  <meta property="og:title" content="Desktap Press Kit">
+  <meta property="og:description" content="Facts, ready-made descriptions, screenshots and the app icon, in one archive.">
+  <meta property="og:image" content="https://desktap.app/assets/og-image.jpg">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Desktap Press Kit">
+  <meta name="twitter:description" content="Facts, ready-made descriptions, screenshots and the app icon, in one archive.">
+  <meta name="twitter:image" content="https://desktap.app/assets/og-image.jpg">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+  <link rel="icon" href="/assets/favicon.ico" sizes="any">
+  <meta name="theme-color" content="#000000">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <link rel="stylesheet" href="/assets/style.css?v=20261009">
+
+  <!-- A phone or tablet can't run the Mac agent: before the first paint, so the download button shows "Send to Mac" at once -->
+  <script>
+    if (/iPhone|iPad|iPod|Android/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+      document.documentElement.classList.add('handheld');
+    }
+  </script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <a href="/next/" class="nav-logo" aria-label="Desktap home">
+        <img src="/assets/icon.png" alt="" width="28" height="28">
+        desktap
+      </a>
+      <ul class="nav-links nav-compact">
+        <li><a href="/docs">Docs</a></li>
+        <li>
+          <a href="/download/" class="nav-cta" data-send-to-mac><span class="only-mac">Download</span><span class="only-handheld">Send to Mac</span></a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Press kit: the facts and texts of the launch research, the app's screens and the archive with all of it.
+       The same facts and texts are in assets/press/desktap-facts-and-texts.txt (inside the archive): change both together,
+       then rebuild the archive (DESIGN.md › Press kit). No prices in figures, no reviews, no logos of other companies'
+       products; pictures are renders of the app without Apple's device frames. -->
+  <main class="press container" id="main">
+    <header class="press-head">
+      <div class="label">Press kit</div>
+      <h1>Desktap press kit</h1>
+      <p class="press-lede">Facts, ready-made descriptions and screens of the app for writing about Desktap. Use them freely in articles and videos about it.</p>
+      <div class="press-actions">
+        <a href="/assets/press/desktap-press-kit.zip" class="btn-primary" download>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download press kit
+        </a>
+        <p class="press-zip-meta">ZIP · 18.3 MB · 13 pictures and the texts</p>
+      </div>
+      <p class="press-contact">Press questions: <a href="mailto:support@desktap.app?subject=Press">support@desktap.app</a> — Mikhail Zhukov, the developer.</p>
+      <ul class="press-toc" aria-label="On this page">
+        <li><a href="#facts">Facts</a></li>
+        <li><a href="#descriptions">Descriptions</a></li>
+        <li><a href="#apart">What sets it apart</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#pictures">Pictures</a></li>
+      </ul>
+    </header>
+
+    <section class="press-section" id="facts" aria-labelledby="facts-title">
+      <h2 id="facts-title">Facts</h2>
+      <dl class="press-facts">
+        <div><dt>Product</dt><dd>Desktap — a control deck for your Mac on iPhone and iPad, built by your AI.</dd></div>
+        <div><dt>What it is</dt><dd>An iPhone and iPad app plus a free Mac agent in the menu bar. Buttons press key combinations, run zsh scripts and AppleScript, launch apps, run Shortcuts, open URLs, type text snippets and switch pages — or show live data that updates on its own.</dd></div>
+        <div><dt>AI</dt><dd>A built-in MCP server. Claude Desktop, Claude Code and ChatGPT / Codex connect with one click in the agent; Cursor, Windsurf and any other MCP client take a config copied from it. An AI can build whole pages. Every change it sends through Desktap arrives on the phone as a review card with the full code and applies only after <b>Accept</b>. Through Desktap, an AI can’t press your buttons or delete anything.</dd></div>
+        <div><dt>Gallery</dt><dd>34 ready-made widgets; pages of shortcuts for 35 Mac apps, such as Xcode, VS Code, Figma, Slack and Spotify; 3 full-page scenes: Mac Town, Visualizer and Aquarium.</dd></div>
+        <div><dt>Grid</dt><dd>4 × 8 buttons on iPhone, 6 × 8 on iPad and on the unfolded iPhone Duo. A button can span several cells.</dd></div>
+        <div><dt>Privacy</dt><dd>No account, no Desktap server, no analytics. Phone and Mac talk directly over the local network through an encrypted connection, paired once with a 6-digit code. The deck syncs through the user’s own iCloud.</dd></div>
+        <div><dt>Requirements</dt><dd>iPhone or iPad with iOS or iPadOS 17 or later; a Mac with macOS 15 or later running the free agent; both on the same Wi-Fi network. A Mac serves one phone at a time.</dd></div>
+        <div><dt>Price</dt><dd>Mac agent: free. iPhone and iPad app: free with 2 profiles of 2 pages each, with every button type, live widgets and AI apps included. Desktap Pro — monthly, yearly or a one-time Lifetime purchase through the App Store — unlocks unlimited profiles and pages. Prices are in the App Store.</dd></div>
+        <div><dt>Languages</dt><dd>English, German, Spanish, French, Russian.</dd></div>
+        <div><dt>Availability</dt><dd>Mac agent: available now, notarized by Apple, updates itself. iPhone and iPad app: coming soon to the App Store.</dd></div>
+        <div><dt>Developer</dt><dd>Mikhail Zhukov, independent developer, Cyprus.</dd></div>
+        <div><dt>Links</dt><dd class="press-links">
+          <a href="/">desktap.app</a>
+          <a href="/download/">Mac agent</a>
+          <a href="/docs">Docs</a>
+          <a href="/changelog/">What’s new</a>
+          <a href="/privacy">Privacy</a>
+        </dd></div>
+      </dl>
+    </section>
+
+    <section class="press-section" id="descriptions" aria-labelledby="descriptions-title">
+      <h2 id="descriptions-title">Descriptions</h2>
+      <p class="press-note">Ready to paste, in English. The <b>Copy</b> button takes the whole text.</p>
+      <div class="press-texts">
+        <article class="press-text">
+          <header><h3>One line</h3><button type="button" class="press-copy" data-copy>Copy</button></header>
+          <div class="press-text-body"><p>Desktap turns your iPhone or iPad into a control deck for your Mac — and your AI builds it.</p></div>
+        </article>
+        <article class="press-text">
+          <header><h3>25 words</h3><button type="button" class="press-copy" data-copy>Copy</button></header>
+          <div class="press-text-body"><p>Desktap turns an iPhone or iPad into a Mac control deck. Claude, ChatGPT or any MCP client builds the buttons; you approve them on your phone.</p></div>
+        </article>
+        <article class="press-text">
+          <header><h3>50 words</h3><button type="button" class="press-copy" data-copy>Copy</button></header>
+          <div class="press-text-body"><p>Desktap turns an iPhone or iPad into a control deck for your Mac. Buttons press hotkeys, run scripts, launch apps or show live numbers. Ask Claude, ChatGPT or any MCP client for a page: it arrives on your phone with every script shown, and applies only when you tap Accept.</p></div>
+        </article>
+        <article class="press-text">
+          <header><h3>150 words</h3><button type="button" class="press-copy" data-copy>Copy</button></header>
+          <div class="press-text-body">
+            <p>Desktap turns the iPhone or iPad you already own into a control deck for your Mac. A free menu-bar agent runs everything on the Mac; the phone holds the buttons: key combinations, zsh and AppleScript, Shortcuts, app launches, text snippets — and live buttons that draw data, like a CPU ring or a countdown.</p>
+            <p>You don’t have to build the deck by hand. The agent includes an MCP server, so Claude, ChatGPT / Codex or any MCP client can build whole pages. Every change it sends arrives on the phone as a card that shows each script, and applies only when you tap Accept. Through Desktap, an AI can’t press your buttons or delete anything.</p>
+            <p>There is no account and no Desktap server: phone and Mac talk directly over the local network, encrypted. The Mac agent is free; the app is free with two profiles of two pages, and Desktap Pro unlocks the rest.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="press-section" id="apart" aria-labelledby="apart-title">
+      <h2 id="apart-title">What sets it apart</h2>
+      <ol class="press-points">
+        <li><b>Your AI builds it; you approve it on the phone.</b> An AI app doesn’t just trigger actions someone set up: it sends finished buttons — scripts, icons, live faces — and the phone shows every line of code before you tap <b>Accept</b>.</li>
+        <li><b>Buttons that draw.</b> A button can be a picture a script keeps current: rings, graphs, clocks, a build that turns red. Three scenes turn a whole page into one picture, like a neon city built from the apps on your Mac.</li>
+        <li><b>No new hardware, no cloud.</b> The iPhone or iPad you already own, no account and no Desktap server. An iPad, or an unfolded iPhone Duo, gets two more columns of buttons.</li>
+      </ol>
+    </section>
+
+    <section class="press-section" id="faq" aria-labelledby="faq-title">
+      <h2 id="faq-title">Short FAQ</h2>
+      <dl class="press-faq">
+        <dt>Is it safe to let an AI change the deck?</dt>
+        <dd>Changes an AI sends through Desktap wait for <b>Accept</b> on the iPhone or iPad, with every script shown on the card. Running a command on the Mac is off until you turn on <b>Allow AI to Run Commands</b>, and then you allow each command. Through Desktap, an AI can’t press your buttons or delete anything.</dd>
+        <dt>Does it work away from home?</dt>
+        <dd>The iPhone or iPad and the Mac need to be on the same Wi-Fi network. There is no Desktap server to carry a tap over the internet.</dd>
+        <dt>Do I need to write code?</dt>
+        <dd>No. Most buttons are a type you pick and set up on the phone, ready-made live widgets wait in the Gallery, and an AI app can write the rest.</dd>
+        <dt>Is there a Windows or Android version?</dt>
+        <dd>No. Mac, iPhone and iPad only.</dd>
+      </dl>
+    </section>
+
+    <!-- Pictures: the app's screens as it runs, with sample data, no device frames (Apple's bezels are for apps already in
+         the App Store). Each preview (assets/press/preview/*.webp) links to its full PNG; the archive has the same PNGs. -->
+    <section class="press-section" id="pictures" aria-labelledby="pictures-title">
+      <h2 id="pictures-title">Pictures</h2>
+      <p class="press-note">Screens of the app as it runs, with sample data. Click a picture for the full-size PNG; all of them are in the <a href="/assets/press/desktap-press-kit.zip" download>archive</a>.</p>
+
+      <h3 class="press-group">iPhone <span>PNG · 1320 × 2868</span></h3>
+      <div class="press-shots press-shots-phone">
+        <figure class="press-shot">
+          <a href="/assets/press/desktap-iphone-1-deck.png" download><img src="/assets/press/preview/desktap-iphone-1-deck.webp" alt="A deck on iPhone: gauges for CPU, memory, disk and battery, the song playing, the next meeting and buttons for Mac actions" width="440" height="956" loading="lazy"></a>
+          <figcaption>A deck of live widgets <span>2.2 MB</span></figcaption>
+        </figure>
+        <figure class="press-shot">
+          <a href="/assets/press/desktap-iphone-2-xcode-page.png" download><img src="/assets/press/preview/desktap-iphone-2-xcode-page.webp" alt="The Xcode page on iPhone: Build, Run, Test, Stop, the build time and debugger buttons" width="440" height="956" loading="lazy"></a>
+          <figcaption>A page for Xcode <span>1.9 MB</span></figcaption>
+        </figure>
+        <figure class="press-shot">
+          <a href="/assets/press/desktap-iphone-3-ai-review.png" download><img src="/assets/press/preview/desktap-iphone-3-ai-review.webp" alt="The review card on iPhone: the AI wants to add 3 buttons, each with its code, and Accept" width="440" height="956" loading="lazy"></a>
+          <figcaption>Buttons from an AI, waiting for Accept <span>449 KB</span></figcaption>
+        </figure>
+        <figure class="press-shot">
+          <a href="/assets/press/desktap-iphone-4-gallery.png" download><img src="/assets/press/preview/desktap-iphone-4-gallery.webp" alt="The Gallery on iPhone: the Unusual collection with Mac Town, Visualizer and Aquarium" width="440" height="956" loading="lazy"></a>
+          <figcaption>The Gallery <span>933 KB</span></figcaption>
+        </figure>
+        <figure class="press-shot">
+          <a href="/assets/press/desktap-iphone-5-mac-town.png" download><img src="/assets/press/preview/desktap-iphone-5-mac-town.webp" alt="The Mac Town scene on iPhone: a neon city whose buildings are apps on the Mac" width="440" height="956" loading="lazy"></a>
+          <figcaption>Mac Town <span>869 KB</span></figcaption>
+        </figure>
+      </div>
+
+      <h3 class="press-group">iPad <span>PNG · 2752 × 2064</span></h3>
+      <div class="press-shots press-shots-wide">
+        <figure class="press-shot">
+          <a href="/assets/press/desktap-ipad-1-deck.png" download><img src="/assets/press/preview/desktap-ipad-1-deck.webp" alt="A deck on iPad in landscape: reminders, gauges, the next meeting, the song playing and buttons for Mac actions" width="880" height="660" loading="lazy"></a>
+          <figcaption>A deck of live widgets <span>4.7 MB</span></figcaption>
+        </figure>
+        <figure class="press-shot">
+          <a href="/assets/press/desktap-ipad-2-ai-review.png" download><img src="/assets/press/preview/desktap-ipad-2-ai-review.webp" alt="The review card on iPad: the AI wants to add 3 buttons, each with its code, and Accept" width="880" height="660" loading="lazy"></a>
+          <figcaption>Buttons from an AI, waiting for Accept <span>1.1 MB</span></figcaption>
+        </figure>
+        <figure class="press-shot">
+          <a href="/assets/press/desktap-ipad-3-mac-town.png" download><img src="/assets/press/preview/desktap-ipad-3-mac-town.webp" alt="The Mac Town scene on iPad: a neon city across the whole page" width="880" height="660" loading="lazy"></a>
+          <figcaption>Mac Town <span>1.4 MB</span></figcaption>
+        </figure>
+        <figure class="press-shot">
+          <a href="/assets/press/desktap-ipad-4-visualizer.png" download><img src="/assets/press/preview/desktap-ipad-4-visualizer.webp" alt="The Visualizer scene on iPad: every button a bar of the sound the Mac plays" width="880" height="660" loading="lazy"></a>
+          <figcaption>Visualizer <span>2.5 MB</span></figcaption>
+        </figure>
+        <figure class="press-shot">
+          <a href="/assets/press/desktap-ipad-5-aquarium.png" download><img src="/assets/press/preview/desktap-ipad-5-aquarium.webp" alt="The Aquarium scene on iPad: a fish tank across the whole page" width="880" height="660" loading="lazy"></a>
+          <figcaption>Aquarium <span>2.0 MB</span></figcaption>
+        </figure>
+      </div>
+
+      <h3 class="press-group">Mac agent <span>PNG · 2×</span></h3>
+      <div class="press-shots press-shots-wide">
+        <figure class="press-shot press-shot-window">
+          <a href="/assets/press/desktap-mac-agent-overview.png" download><img src="/assets/press/preview/desktap-mac-agent-overview.webp" alt="The Desktap Agent window on the Mac, Overview: the iPhone connected, an AI app connected, permissions granted, two scripts running" width="880" height="607" loading="lazy"></a>
+          <figcaption>The agent’s window, Overview <span>1520 × 1048 · 127 KB</span></figcaption>
+        </figure>
+        <figure class="press-shot press-shot-window">
+          <a href="/assets/press/desktap-mac-agent-scripts.png" download><img src="/assets/press/preview/desktap-mac-agent-scripts.webp" alt="The Desktap Agent window on the Mac, Scripts: what the buttons run on the Mac, with Restart and Stop" width="880" height="742" loading="lazy"></a>
+          <figcaption>The agent’s window, Scripts <span>1520 × 1280 · 227 KB</span></figcaption>
+        </figure>
+      </div>
+
+      <!-- The app icon: today the site's 512 px copy. The 1024 px export from Icon Composer replaces it here and in the archive. -->
+      <h3 class="press-group">App icon <span>PNG · 512 × 512</span></h3>
+      <div class="press-shots press-shots-icon">
+        <figure class="press-shot press-shot-icon">
+          <a href="/assets/press/desktap-icon-512.png" download><img src="/assets/press/preview/desktap-icon-512.webp" alt="The Desktap app icon: six colored keys on a dark rounded square" width="240" height="240" loading="lazy"></a>
+          <figcaption>Desktap icon <span>96 KB</span></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="press-section press-legal" id="trademarks" aria-label="Trademarks">
+      <p>Apple, iPhone, iPad, Mac, macOS, iPadOS, Xcode and AirPods are trademarks of Apple Inc., registered in the U.S. and other countries and regions. App Store is a service mark of Apple Inc. Claude is a trademark of Anthropic. ChatGPT and Codex are trademarks of OpenAI. Other product names are trademarks of their owners. Desktap is not affiliated with or endorsed by Apple, Anthropic or OpenAI.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-left">
+        <span class="footer-logo">desktap</span>
+        <ul class="footer-links">
+          <li><a href="/docs">Docs</a></li>
+          <li><a href="/changelog/">What's new</a></li>
+          <li><a href="/next/press/" aria-current="page">Press</a></li>
+          <li><a href="/privacy">Privacy</a></li>
+          <li><a href="/terms">Terms</a></li>
+          <li><a href="mailto:support@desktap.app">Support</a></li>
+        </ul>
+      </div>
+      <div class="footer-right">&copy; 2026 Desktap</div>
+    </div>
+  </footer>
+
+  <script>
+    // Copy: the text of the card, its paragraphs divided by an empty line
+    document.querySelectorAll('[data-copy]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var body = button.closest('.press-text').querySelector('.press-text-body');
+        var text = Array.prototype.map.call(body.querySelectorAll('p'), function (p) { return p.textContent.trim(); }).join('\n\n');
+        if (!navigator.clipboard) return;
+        navigator.clipboard.writeText(text).then(function () {
+          button.textContent = 'Copied';
+          button.classList.add('is-done');
+          setTimeout(function () { button.textContent = 'Copy'; button.classList.remove('is-done'); }, 1600);
+        });
+      });
+    });
+  </script>
+  <script src="/assets/agent-download.js?v=20261007" defer></script>
+</body>
+</html>

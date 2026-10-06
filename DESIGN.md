@@ -101,6 +101,8 @@ Each blob is an ellipse with a 4-stop radial gradient (0.3 → 0.15 → 0.04 →
 
    **Changelog** (`/changelog/`, "What's new", linked from the `/next/` footer and from the version in the trust line): Desktap's releases, newest first, written by hand for people, not copied from GitHub. The iPhone & iPad app and the Mac agent come out together with one version number, so one entry covers both; only major and minor versions get an entry (2.0, 2.1…), bug-fix updates (2.0.1…) are not listed. Header: label, H1, lede, the download button with the "Coming soon" note for the app, and the trust line. Then one `li.release` per release, `id` and `data-release-entry` = `v` + major.minor (`v2.0`): on the left the version (display 700, 1.5rem, a link to its own anchor), the date and a green "Latest" pill; on the right a short title, then the changes in two groups, **iPhone & iPad** and **Mac agent** (`h3.release-group`, mono uppercase), each change led by a mono pill: **New** (accent), **Improved**, **Changed** (neutral), **Fixed** (green). `agent-download.js` reads the GitHub releases: the date is that of the first release of the version (until then the entry reads "Coming soon"), "Latest" goes on the version of the newest release, and the trust line's version (`v2.0.3`) links to its entry (`#v2.0`). Stacked under 768px; under 480px the pill sits above its line. Changes say what a person or their AI gets, quoting the app's English labels in bold and MCP tools in code; never how the app is built. A new version: add its entry at the top of the list before or on release day.
 
+   **Press kit** (`/next/press/`, "Press", linked only from the `/next/` footer; noindex until the move): what a journalist or a video maker needs to write about Desktap. Same frame as the changelog (container 1080, sections divided by a hairline). Header: label, H1, lede, the white button that downloads `assets/press/desktap-press-kit.zip` with its size, the press contact, mono pills to the sections. Then: **Facts** (`dl`, the name mono uppercase on the left, 200px), **Descriptions** (one line, 25, 50 and 150 words, each a card with a **Copy** button), **What sets it apart** (three numbered cards), **Short FAQ** (four questions, open), **Pictures** (iPhone, iPad, Mac agent, app icon: a `preview/*.webp` linking to its full PNG, caption with the size; no device frames until the app is in the App Store — a radius, a ring and a shadow), the trademark lines. No prices in figures, no reviews, no logos of AI apps (names in text only). The page and `desktap-facts-and-texts.txt` carry the same texts: change both, then rebuild the archive — one top folder `desktap-press-kit/` with the txt and every PNG of `assets/press/` (`zip -X -r -9`). The archive lives in the repo, not in a GitHub release: the latest release serves the agent's updates and DMG.
+
 10. **Footer** — Minimal. Logo + links left, copyright right. SF Mono-ish for logo.
 
 ---
@@ -247,11 +249,13 @@ Text on the marker line becomes the title (`> [!TIP] A faster way`). In step car
 ├── index.html          — Holding page: one screen, "Coming soon" (noindex)
 ├── next/index.html     — The full landing, reworked here (noindex, absolute paths, nothing links to it)
 ├── changelog/index.html — "What's new": Desktap's releases (app and agent, 2.0, 2.1…), newest first (noindex like /next/; linked from /next/)
+├── next/press/index.html — Press kit: facts, descriptions, pictures and the archive (noindex; linked from the /next/ footer)
 ├── privacy.html        — Privacy Policy (legal layout)
 ├── terms.html          — Terms of Use (legal layout)
 ├── docs.html           — Docs shell (loads assets/docs/pages/<slug>.md)
 └── assets/
     ├── docs/           — docs.js, pages.json, pages/*.md, js/ (diagrams), img/
+    ├── press/          — the press kit: full-size PNGs, preview/*.webp for the page, desktap-facts-and-texts.txt, desktap-press-kit.zip (all of them in one folder)
     ├── agent-download.js — The agent's download buttons: trust line from the latest release, "Send link to Mac" on a phone
     ├── js/live-widgets.js — the live buttons of the Live widgets section on /next/ (imports docs/js/face-player.js)
     ├── style.css       — Complete stylesheet (~3600 lines; docs part at "Docs")
