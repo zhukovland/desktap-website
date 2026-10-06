@@ -157,6 +157,12 @@ img { display: block; max-width: 100%; }
 }
 
 .nav-cta:hover { opacity: 0.85; }
+.nav-links .nav-cta,
+.nav-links .nav-cta:hover { color: var(--bg); }
+
+/* Download buttons: one label on a Mac, another on a phone or tablet (html.handheld, set before the first paint) */
+html:not(.handheld) .only-handheld,
+html.handheld .only-mac { display: none; }
 
 /* ---------- Hero ---------- */
 .hero {
@@ -2734,6 +2740,8 @@ html.docs-panel-open body { overflow: hidden; }
   }
 
   .nav-links { display: none; }
+  .nav-links.nav-compact { display: flex; gap: 20px; }
+  .nav-compact .nav-section { display: none; }
 
   .float-tag { display: none; }
 
