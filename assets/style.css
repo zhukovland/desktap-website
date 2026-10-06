@@ -3119,90 +3119,48 @@ html.docs-panel-open body { overflow: hidden; }
   margin: 0;
 }
 
-.ww-wall {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  max-width: 980px;
+/* A page of live buttons on a patch of phone screen (faces drawn by assets/js/live-widgets.js).
+   Four columns with a gap of a tenth of a column, as on the phone: 4.3 columns' worth of width. */
+.ww-deck {
+  container-type: inline-size;   /* cqw below: the deck's content box, the grid's width */
+  max-width: 620px;
   margin: 0 auto;
-}
-
-.ww-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 11px 16px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.015)),
-    rgba(14, 14, 22, 0.55);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  padding: clamp(14px, 3.4vw, 26px);
+  background: var(--phone-screen);
   border: 1px solid var(--border);
-  border-radius: 999px;
-  transition: border-color 0.3s, transform 0.3s, background 0.3s;
+  border-radius: clamp(24px, 5vw, 38px);
+  box-shadow: 0 30px 80px -30px rgba(59, 130, 246, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.6);
 }
 
-.ww-pill:hover {
-  border-color: var(--border-hover);
-  transform: translateY(-1px);
+.ww-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: calc(100cqw / 43);
 }
 
-.ww-icon {
-  font-family: var(--mono);
-  font-size: 0.9375rem;
-  color: var(--accent);
-  font-weight: 600;
-  line-height: 1;
-  min-width: 12px;
-  text-align: center;
-}
+.ww-slot { position: relative; aspect-ratio: 1; }
+.ww-slot:empty { border-radius: 22.37%; background: rgba(255, 255, 255, 0.08); }
+.ww-now-playing { grid-column: 1 / 3; grid-row: 1 / 3; }
+.ww-claude { grid-column: 3; grid-row: 1; }
+.ww-build { grid-column: 4; grid-row: 1; }
+.ww-price { grid-column: 3 / 5; grid-row: 2; aspect-ratio: 2.1; }
+.ww-now-playing:empty { border-radius: 10.65%; }
+.ww-price:empty { border-radius: 10.65% / 22.37%; }
+.ww-weather { grid-column: 1; grid-row: 3; }
+.ww-cpu { grid-column: 2; grid-row: 3; }
+.ww-pomodoro { grid-column: 3; grid-row: 3; }
+.ww-stars { grid-column: 4; grid-row: 3; }
 
-.ww-key {
-  font-family: var(--display);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  letter-spacing: -0.005em;
-}
-
-.ww-val {
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.02em;
-  color: var(--text-primary);
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.ww-up   { color: #34d399; }
-.ww-down { color: #ff5f57; }
-.ww-warn { color: #fbbf24; }
-.ww-ok   { color: #34d399; }
-
-.ww-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 10px rgba(59, 130, 246, 0.7);
-  animation: wwPulse 1.7s ease-in-out infinite;
-  flex-shrink: 0;
-}
-
-.ww-dot-ok {
-  background: #34d399;
-  box-shadow: 0 0 10px rgba(52, 211, 153, 0.7);
-}
-
-@keyframes wwPulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%      { opacity: 0.45; transform: scale(0.85); }
+.ww-slot > .dt-cell { position: absolute; display: block; overflow: visible; }
+.ww-slot .dt-screen { display: none; }
+.ww-slot .dt-cell text {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
 }
 
 .ww-foot {
   text-align: center;
-  margin: 56px auto 0;
+  margin: 48px auto 0;
   font-family: var(--display);
   font-size: 0.9375rem;
   color: var(--text-tertiary);
@@ -3211,12 +3169,22 @@ html.docs-panel-open body { overflow: hidden; }
   line-height: 1.5;
 }
 
+.ww-more {
+  text-align: center;
+  margin: 18px 0 0;
+}
+
+.ww-more a {
+  color: var(--accent);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.ww-more a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
 @media (max-width: 640px) {
   .widgets { padding: 80px 0 60px; }
-  .ww-wall { gap: 8px; }
-  .ww-pill { padding: 9px 13px; gap: 8px; }
-  .ww-key { font-size: 0.75rem; }
-  .ww-val { font-size: 0.6875rem; }
 }
 
 /* Respect users who ask the system to reduce motion */
