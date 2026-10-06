@@ -45,7 +45,7 @@ All fonts are Apple system fonts — zero external font loading:
 | `--border-hover` | `rgba(255, 255, 255, 0.12)` | Hover-state borders |
 | `--text-primary` | `#F0F0F0` | Headings, primary text |
 | `--text-secondary` | `#7A7A82` | Body text, descriptions |
-| `--text-tertiary` | `#44444C` | Subtle text, card numbers, comments |
+| `--text-tertiary` | `#8E8E96` | Quiet small text: footer, marquee, captions, card numbers. At least 4.5:1 on black and over the background glow, so no dimmer than secondary; set it apart by size and font, not by a darker gray |
 | `--accent` | `#3B82F6` | Electric blue — links, buttons, icons, labels |
 | `--accent-glow` | `rgba(59, 130, 246, 0.25)` | Button shadows, radial glows |
 | `--accent-subtle` | `rgba(59, 130, 246, 0.07)` | Icon backgrounds, tag highlights |
