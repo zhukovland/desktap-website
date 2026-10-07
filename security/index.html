@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security — Desktap</title>
+  <meta name="description" content="How Desktap protects your Mac and your iPhone or iPad: an encrypted connection, pairing with a code, your answer before anything new runs, and the details for developers.">
+  <meta name="robots" content="noindex">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Desktap">
+  <meta property="og:url" content="https://desktap.app/security/">
+  <meta property="og:title" content="How Desktap protects your Mac">
+  <meta property="og:description" content="An encrypted connection, pairing with a code, and your answer before anything new runs. In plain words, with the details for developers.">
+  <meta property="og:image" content="https://desktap.app/assets/og-image.jpg">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How Desktap protects your Mac">
+  <meta name="twitter:description" content="An encrypted connection, pairing with a code, and your answer before anything new runs. In plain words, with the details for developers.">
+  <meta name="twitter:image" content="https://desktap.app/assets/og-image.jpg">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+  <link rel="icon" href="/assets/favicon.ico" sizes="any">
+  <meta name="theme-color" content="#000000">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <link rel="stylesheet" href="/assets/style.css?v=20261010">
+
+  <!-- A phone or tablet can't run the Mac agent: before the first paint, so the download button shows "Send to Mac" at once -->
+  <script>
+    if (/iPhone|iPad|iPod|Android/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+      document.documentElement.classList.add('handheld');
+    }
+  </script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <a href="/" class="nav-logo" aria-label="Desktap home">
+        <img src="/assets/icon.png" alt="" width="28" height="28">
+        desktap
+      </a>
+      <ul class="nav-links nav-compact">
+        <li><a href="/docs">Docs</a></li>
+        <li>
+          <a href="/download/" class="nav-cta" data-send-to-mac><span class="only-mac">Download</span><span class="only-handheld">Send to Mac</span></a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Security: how Desktap protects the Mac and the phone, from version 2.0. Every sentence says what the apps do
+       today, and the labels and quotes are the English apps' own: when the apps change, change this page with them.
+       The four cards of "In short" are the agent's own words (Security › How Desktap protects this Mac), and the three
+       of "What an AI can do" are its AI Assistants card: change them together. What an AI can't do is said
+       "through Desktap", never as "nothing can". -->
+  <main class="sec container" id="main">
+    <header class="sec-head">
+      <div class="label">Security</div>
+      <h1>How Desktap protects your Mac and your iPhone or iPad</h1>
+      <p class="sec-lede">A tap on your iPhone or iPad runs things on your Mac, so Desktap guards the way in: only devices you paired can connect, the connection between them is encrypted, and nothing new runs through Desktap without your answer. Plain words first; the details for developers are at the end.</p>
+      <ul class="sec-toc" aria-label="On this page">
+        <li><a href="#in-short">In short</a></li>
+        <li><a href="#encrypted">Encrypted</a></li>
+        <li><a href="#pairing">Pairing</a></li>
+        <li><a href="#your-answer">Your answer</a></li>
+        <li><a href="#kept-out">Kept out</a></li>
+        <li><a href="#phone">On the phone</a></li>
+        <li><a href="#developers">For developers</a></li>
+      </ul>
+    </header>
+
+    <section class="sec-section" id="in-short" aria-labelledby="in-short-title">
+      <h2 id="in-short-title">In short</h2>
+      <p class="sec-note">Desktap Agent puts it in four points, under <b>How Desktap protects this Mac</b> in its <b>Security</b> section. Each one is explained below.</p>
+      <ul class="sec-promises">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          <b>Encrypted</b>
+          <p>Your iPhone or iPad and this Mac talk only over an encrypted connection with new keys every time. Others on your network can’t read it or slip anything in.</p>
+          <a class="sec-more" href="#encrypted">About the connection</a>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2.5"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+          <b>Only your devices</b>
+          <p>Only devices paired with this Mac can connect. Pairing a new one takes your click on this Mac and the 6-digit code it shows.</p>
+          <a class="sec-more" href="#pairing">About pairing</a>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <b>Everything goes through your Accept</b>
+          <p>Desktap runs nothing new on this Mac and puts nothing on your deck without your answer: changes from AI and other apps wait for Accept on the iPhone or iPad, each command an AI sends through Desktap waits for Allow there, and a command in a notification runs only after you click it.</p>
+          <a class="sec-more" href="#your-answer">About your answer</a>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <b>Websites, other accounts and sandboxed apps are kept out</b>
+          <p>Web pages can’t send anything to the agent: it refuses requests from a browser. Apps of other users of this Mac and sandboxed apps, such as those from the App Store, can’t deliver buttons or run commands through it: that takes the agent’s private socket.</p>
+          <a class="sec-more" href="#kept-out">About what is kept out</a>
+        </li>
+      </ul>
+    </section>
+
+    <section class="sec-section" id="encrypted" aria-labelledby="encrypted-title">
+      <h2 id="encrypted-title">An encrypted connection</h2>
+      <p>Your iPhone or iPad and your Mac talk directly, over your local network. There is no Desktap account, and no Desktap server sits in between.</p>
+      <p>Everything they send each other is encrypted, with new keys for every connection; there is no unencrypted mode. Others on the same Wi-Fi can’t read it, and a message changed on the way closes the connection instead of reaching the other side.</p>
+      <p>No password or token travels over the connection for someone to catch and reuse. Each device proves who it is with its own key, made on that device and never synced to iCloud.</p>
+    </section>
+
+    <section class="sec-section" id="pairing" aria-labelledby="pairing-title">
+      <h2 id="pairing-title">Pairing takes your click and a code</h2>
+      <p>A new iPhone or iPad connects only after you let it, on the Mac:</p>
+      <ol class="sec-steps">
+        <li>On the phone, tap your Mac. The phone asks you to “Confirm on your Mac”: “On your Mac, click Show Code in Desktap Agent.”</li>
+        <li>A <b>Pairing Request</b> appears in Desktap Agent: “‹name›” wants to pair with this Mac, the address it comes from, the device’s fingerprint and how long ago it asked. Click <b>Show Code</b> within 60 seconds, or <b>Decline</b>.</li>
+        <li>Type the code on the phone, under “Enter the code shown on your Mac”, within 90 seconds.</li>
+      </ol>
+      <ul class="sec-list">
+        <li>The code appears only after your click, never in a notification, and each request gets its own.</li>
+        <li><b>Show Code</b> doesn’t answer to Return: the agent’s window comes forward on its own with the request, so a Return typed for another app doesn’t show the code.</li>
+        <li>The name in quotes is the one the device gives itself, so compare the fingerprint too. While it waits, the phone shows its own as “This iPhone: …” or “This iPad: …”.</li>
+        <li>Wrong codes are counted. The phone says how many tries are left, and three wrong codes end the request. After five wrong codes the Mac blocks pairing until you click <b>Allow Pairing</b>; devices you already paired still connect.</li>
+        <li>After <b>Decline</b>, the same device can’t ask again for a few minutes, even from another address.</li>
+      </ul>
+
+      <h3 id="fingerprints">Fingerprints</h3>
+      <p>Every device makes its own key, on the device. A fingerprint is a short form of that key: four groups of characters, such as <code>3f2a 91c0 7b11 04de</code>. The Mac’s request card shows the phone’s fingerprint. <b>This Mac’s fingerprint</b>, in the agent’s <b>Security</b> section, is the one your iPhone or iPad shows under that Mac in <b>Paired Macs</b>.</p>
+
+      <h3 id="after-pairing">After pairing</h3>
+      <p>The phone reconnects by itself, but only to a Mac whose key it remembers, and it checks that key before it shows its own. If a computer claims to be your Mac but can’t prove it, the phone doesn’t connect and says:</p>
+      <blockquote class="sec-quote">Couldn't confirm this is “MacBook Pro”. It may be another user account on that Mac, a reinstalled Desktap Agent, or a different computer. Pair again only if you can see the code on your Mac.</blockquote>
+      <p>You can cut a device off at any time. <b>Remove</b> or <b>Remove All</b> in the agent’s <b>Devices</b> section works at once, and the phone then says the Mac removed it and that it needs to pair again. On the phone, <b>Forget</b> in <b>Paired Macs</b> works the other way round: “To use it again, pair with the code shown on that Mac.”</p>
+      <p>While another user’s session is active on the Mac, the agent lets no phone in. Its menu then reads “Paused — another user is using this Mac”.</p>
+    </section>
+
+    <section class="sec-section" id="your-answer" aria-labelledby="your-answer-title">
+      <h2 id="your-answer-title">Nothing new without your answer</h2>
+      <p>Three things can bring something new through Desktap: a change to your deck, a command from an AI and a command in a notification. Each one waits for you.</p>
+
+      <h3 id="deck-changes">Changes to your deck: Accept on the phone</h3>
+      <div class="sec-split">
+        <div>
+          <p>A change from an AI app, or from any other program that sends buttons to Desktap Agent, arrives on your iPhone or iPad as a review card. It opens in its own window above everything in the app, even the editor, the Gallery and Settings, and says which Mac sent it.</p>
+          <ul class="sec-list">
+            <li>Every script on it can be read: new code in full, changed code as a diff under <b>Show changes</b>. Code with a warning starts open.</li>
+            <li>Warnings point at what deserves a closer look, such as “Talks to the internet: …”, “Downloads something from the internet and runs it” or “Contains hidden characters”. Characters that would otherwise be invisible, or would reorder the text, show up as visible marks. Next to its warnings, the card adds: “These checks can't catch everything.”</li>
+            <li>Under “In the AI's words:” is how the AI describes the change. Check it against the code.</li>
+            <li><b>Accept</b> applies the whole change, never a part of it. It works a second after the card appears, and that second starts over when the card is rebuilt or you come back to the app, so a tap meant for something else doesn’t approve it.</li>
+            <li>If your buttons change while the card is open, it is rebuilt and says so: “Your buttons changed while this was open, so the list was updated. Take another look.”</li>
+            <li><b>Reject</b> “Tells the AI no. Nothing changes.” <b>Decide Later</b> puts the change aside: for a few minutes, you can answer from the banner above your buttons.</li>
+          </ul>
+        </div>
+        <figure class="sec-shot">
+          <a href="/assets/docs/img/ai/review-card.png"><img src="/assets/docs/img/ai/review-card.png" width="240" height="521" loading="lazy" alt="The review card on the iPhone: “The AI wants to add the button “CPU””, from MacBook Pro, page “Main”, the AI’s words, a CPU row marked NEW with “In the background: runs on your Mac while this iPhone is connected” and Show code (201 lines), “1 script will run in the background on your Mac”, and at the bottom Accept, Decide Later and Reject."></a>
+          <figcaption>A change from an AI waits on the iPhone.</figcaption>
+        </figure>
+      </div>
+
+      <h3 id="what-an-ai-can-do">What an AI can do through Desktap</h3>
+      <p>Desktap Agent lists it in its <b>AI Assistants</b> section, under “What AI can and can’t do without you”:</p>
+      <ul class="sec-ai">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <b>Through Desktap, on its own</b>
+          <p>See your profiles, pages and buttons, your apps and which one is in front</p>
+          <p>Check your startup scripts and restart one that is already on your deck</p>
+        </li>
+        <li class="is-accent">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+          <b>Through Desktap, only after you approve on your iPhone or iPad</b>
+          <p>Add or change buttons, pages and profiles: each change waits for Accept</p>
+          <p>Run a command on this Mac to check something: off unless you allow it, and then each one waits for your approval</p>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          <b>Through Desktap, never</b>
+          <p>Press your buttons or run their actions</p>
+        </li>
+      </ul>
+
+      <h3 id="ai-commands">Commands from an AI: Allow, one at a time</h3>
+      <p>An AI can ask Desktap to run a command on your Mac to check something. That is off until you turn on <b>Allow AI to Run Commands</b> in the agent’s <b>Security</b> section, and it starts off.</p>
+      <p>With it on, each command comes to the phone first: “The AI wants to run a command on MacBook Pro”, the whole command, and the AI’s reason under “In the AI's words:”. You have 35 seconds to tap <b>Allow</b> or <b>Deny</b>; no answer counts as no. Only one command waits at a time. An allowed command runs for 15 seconds at most, and “What the command prints goes back to the AI that asked for it.”</p>
+
+      <h3 id="notification-commands">Commands in notifications</h3>
+      <div class="sec-split">
+        <div>
+          <p>The scripts of your buttons, and other programs on the Mac, can show notifications with buttons on the phone and on the Mac. A notification button that opens a web page or an app, or does something light such as play/pause, the volume or the brightness, runs when you click it.</p>
+          <p>Anything else, such as a command, a shortcut, typing text, sleep or emptying the Trash, runs at a click without a question only if the scripts of your own buttons sent the notification: that is like pressing the button. From any other program, Desktap shows the whole command first and asks:</p>
+          <ul class="sec-list">
+            <li>on the Mac, “Run this from a notification?”, where both Return and Escape choose <b>Cancel</b>;</li>
+            <li>on the phone, “Run on your Mac?”, with <b>Run on Mac</b> and <b>Cancel</b>. Like <b>Accept</b>, <b>Run on Mac</b> works only a second after the sheet appears.</li>
+          </ul>
+          <p>An action runs only on the Mac that sent the notification, and a click on the notification itself runs nothing.</p>
+        </div>
+        <figure class="sec-shot">
+          <a href="/assets/docs/img/notifications/run-sheet.png"><img src="/assets/docs/img/notifications/run-sheet.png" width="240" height="521" loading="lazy" alt="The phone’s “Run on your Mac?” sheet: “The notification action “Open Log” will run on MacBook Pro:”, the notification “Backup finished”, the command “open -a Console /tmp/desktap-demo/backup.log”, “Only run it if you expected this notification and recognize this command.”, and the buttons Run on Mac and Cancel."></a>
+          <figcaption>A command from a notification asks first.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="sec-section" id="kept-out" aria-labelledby="kept-out-title">
+      <h2 id="kept-out-title">What is kept out</h2>
+      <p>Besides your iPhone or iPad, Desktap Agent answers programs on the same Mac, in two ways:</p>
+      <ul class="sec-list">
+        <li><b>The scripts of your buttons</b> reach it at <code>127.0.0.1:9848</code> with a token that changes every time the agent starts. With it, a program can redraw a button, show a notification, report why a button doesn’t work, see whether a phone is connected and what it shows, and read the sound levels. It can’t change your deck or ask to run a command, and a notification with a button that runs something is accepted this way only from scripts the agent started itself. <a href="/docs?p=scripts#the-token">About the token</a></li>
+        <li><b>Programs that change your deck or ask to run a command</b>, such as the connection of your AI app, use the agent’s private socket: a file in a folder that only your macOS account can open. A change they send, or a command they ask for, still waits for your answer on the phone.</li>
+      </ul>
+      <p>That keeps out:</p>
+      <ul class="sec-list">
+        <li><b>Web pages.</b> The agent refuses every request a browser marks as coming from a page. It also refuses a request that reaches it under a website’s name instead of localhost, a trick a page could use to pass for a program on the Mac. A page can’t reach the private socket at all.</li>
+        <li><b>Other accounts on this Mac.</b> They can’t open the folder with the socket, and the file with the token can be read by your account only.</li>
+        <li><b>Sandboxed apps</b>, such as those from the App Store. They can’t reach the socket.</li>
+      </ul>
+    </section>
+
+    <section class="sec-section" id="phone" aria-labelledby="phone-title">
+      <h2 id="phone-title">On the iPhone or iPad</h2>
+      <ul class="sec-list">
+        <li><b>Require Face ID to Change the Deck</b>, in Settings › <b>Security</b>, is off until you turn it on; on a device without Face ID it names Touch ID, Optic ID or the passcode. In the words of Settings: “The app lock asks before anyone edits the deck, opens the Gallery, pairs a new Mac or approves a change. Tapping buttons doesn't need it.” It asks again after 1, 5 or 15 minutes (<b>Ask Again After</b>, 5 by default), and turning it on or off, or changing that time, also asks for Face ID. While it is locked, the phone says what is waiting but shows it and lets you approve only after you unlock; an answer that approves nothing, such as <b>Deny</b> for a command, works without unlocking.</li>
+        <li><b>Hide Code While Recording or Mirroring</b> is on from the start: “While your screen is recorded or mirrored, scripts, links and pairing codes are hidden until you tap Show. Your buttons stay visible.”</li>
+        <li>When you leave the app, its picture in the app switcher is covered.</li>
+        <li><b>Copy All</b> in the code editor keeps the copy on this device, away from Universal Clipboard, and the copy clears itself after two minutes.</li>
+        <li>The keys of your pairings stay in this device’s Keychain and are never synced.</li>
+        <li>With iCloud on, your deck is kept in Desktap’s own iCloud storage, which other apps on your Mac can’t change. Desktap Agent itself has no access to iCloud, so a change made on the Mac reaches your deck only through the review card. Earlier versions of the app kept the deck in iCloud Drive; if the connected iPhone or iPad still runs one, the agent warns: “The Desktap app on the connected iPhone or iPad keeps its deck where any app on your Macs can change it. Update the app.”</li>
+      </ul>
+    </section>
+
+    <section class="sec-section" id="developers" aria-labelledby="developers-title">
+      <h2 id="developers-title">For developers</h2>
+      <p class="sec-note">The same protection in technical terms.</p>
+      <dl class="sec-spec">
+        <div><dt>Transport</dt><dd>TCP port 9847 on the local network, found through Bonjour (<code>_desktap._tcp</code>). The phone connects and the Mac listens. No Desktap server is involved, and the connection carries nothing unencrypted.</dd></div>
+        <div><dt>Handshake</dt><dd><code>Noise_XX_25519_ChaChaPoly_SHA256</code> with the prologue <code>Desktap-SC/1</code>, the phone as the initiator. Fresh ephemeral keys on every connection give forward secrecy. No tokens or other reusable secrets go over the wire.</dd></div>
+        <div><dt>Identity</dt><dd>One long-term X25519 key per device, made on the device and pinned at pairing. Trust comes only from the key proven in the handshake; names, addresses and Bonjour records are only shown. When reconnecting, the phone checks the Mac’s static key after the second handshake message and, unless it is a key it paired with, stops before the third, which would carry its own.</dd></div>
+        <div><dt>Fingerprints</dt><dd>Lowercase hex of the SHA-256 of the public key. The apps show the first 16 characters, in four groups.</dd></div>
+        <div><dt>Pairing</dt><dd>CPace (CPace-X25519-SHA512, draft-irtf-cfrg-cpace-20) inside the Noise session, bound to both static keys, with key confirmation. The 6-digit code comes from the system’s secure random generator, only after the click on the Mac, lives 90 seconds and never crosses the network. Three tries per request; five failed tries since the last successful pairing lock pairing until <b>Allow Pairing</b>.</dd></div>
+        <div><dt>Messages</dt><dd>After the handshake, every message is a Noise transport message, authenticated and encrypted with ChaCha20-Poly1305. A bad tag, a malformed message or one that isn’t allowed at that moment closes the connection at once: no resync and no fallback to an older protocol. Application data flows only after the Mac admits the phone.</dd></div>
+        <div><dt>Keys at rest</dt><dd>On the Mac, in the login keychain, with access tied to the agent’s code signature. On iOS, in the Keychain, this device only, available after the first unlock. Neither is synchronizable.</dd></div>
+        <div><dt>Local API</dt><dd>Button scripts reach the agent at <code>127.0.0.1:9848</code> and <code>[::1]:9848</code> with <code>Authorization: Bearer</code> and a token of 32 random bytes (<code>dtw_</code> and 43 base64url characters), new on every run, handed to scripts in <code>DESKTAP_TOKEN</code> and in <code>~/.desktap-mcp-token</code> (mode 0600). Six routes: status, view, update-button, notify, error and audio/levels. Everything else, delivering a change and asking to run a command included, is served only on the Unix socket in <code>~/Library/Application Support/Desktap/LocalAPI/</code> (socket 0600, folder 0700), without a token: owning the path is the check. A folder that is a symlink or belongs to another user isn’t served.</dd></div>
+        <div><dt>Gateway</dt><dd>Checked after the headers, before the body is read: an <code>Origin</code> or <code>Sec-Fetch-Site</code> header gets 403; a <code>Host</code> other than <code>localhost</code>, <code>127.0.0.1</code> or <code>[::1]</code> gets 421 (DNS rebinding); a missing or wrong token, 401; an unknown route, 404; an admin route over TCP, 403; a body over the route’s limit, 413. Every response carries <code>Cache-Control: no-store</code> and <code>X-Content-Type-Options: nosniff</code>.</dd></div>
+        <div><dt>Notifications</dt><dd>Over TCP, a notification with an action that runs something is accepted only from processes the agent started for button scripts; anyone else gets 403, token or not. Where a notification came from is set by the agent, never read from the request (a body with <code>origin</code> gets 400), and reaches the phone inside the encrypted connection, so both ask by the same rule. A sensitive notification can’t carry a command.</dd></div>
+        <div><dt>Commands</dt><dd>No route runs a command on its own: an AI’s command waits for <b>Allow</b> on the phone, and restarting a startup script restarts only one already on your deck.</dd></div>
+        <div><dt>Updates</dt><dd>Desktap Agent is signed with a Developer ID, notarized by Apple and runs with the hardened runtime. Updates come through Sparkle with a signed feed, and every download is checked against its EdDSA signature before it is unpacked.</dd></div>
+        <div><dt>Logs</dt><dd>The connection logs only short fingerprints, states, reasons and sizes: never keys, pairing codes or what the messages carry. Scripts appear in the agent’s log only as their length and a short digest, and the AI’s words about a change aren’t logged.</dd></div>
+      </dl>
+      <p class="sec-docs">More in the docs: <a href="/docs?p=start#pair-your-iphone-or-ipad">pairing</a>, <a href="/docs?p=from-your-mac#security">the agent’s Security section</a>, <a href="/docs?p=ai#what-the-assistant-can-and-cant-do">what an AI can and can’t do</a>, <a href="/docs?p=notifications#when-a-tap-asks-first">when a notification asks first</a>, <a href="/docs?p=api#connecting">the local API</a> and <a href="/docs?p=api#status-codes">its status codes</a>.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-left">
+        <span class="footer-logo">desktap</span>
+        <ul class="footer-links">
+          <li><a href="/docs">Docs</a></li>
+          <li><a href="/changelog/">What's new</a></li>
+          <li><a href="/next/press/">Press</a></li>
+          <li><a href="/security/" aria-current="page">Security</a></li>
+          <li><a href="/privacy">Privacy</a></li>
+          <li><a href="/terms">Terms</a></li>
+          <li><a href="mailto:support@desktap.app">Support</a></li>
+        </ul>
+      </div>
+      <div class="footer-right">&copy; 2026 Desktap</div>
+    </div>
+  </footer>
+
+  <script src="/assets/agent-download.js?v=20261007" defer></script>
+</body>
+</html>
