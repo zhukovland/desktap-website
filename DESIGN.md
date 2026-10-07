@@ -160,11 +160,11 @@ All buttons: SF Pro Text weight 500, 0.9375rem, padding 14px 28px, border-radius
 | Breakpoint | Changes |
 |-----------|---------|
 | ≤1024px | Hero → single column centered, the devices under the text (up to 760px). AI → single column: header, the review card (up to 300px), then the asks, the promise and Works with. Features header → single column. |
-| ≤768px | AI: the Claude Code strip wraps its link under the text. Bento → single column (all spans become 1; the iPad card's picture goes under its text, the two page strips one under the other). Steps → stacked. Nav: section links hidden, Docs and the CTA stay (`.nav-compact` on `/next/`; the other pages hide all nav links). Footer stacked centered. |
+| ≤768px | AI: the Claude Code strip wraps its link under the text. Bento → single column (all spans become 1; the iPad card's picture goes under its text, the two page strips one under the other). Steps → stacked. Nav: section links hidden, Docs and the CTA stay (`.nav-compact` on `/next/`, `/changelog/`, `/next/press/` and `/security/`; the other pages hide all nav links). Footer stacked centered. |
 | ≤560px | AI: each answer under its ask, the review card up to 260px, the Claude Code strip stacked (button, text, link). |
 | ≤520px | Hero devices one under the other: the iPad full width, the iPhone at the same scale, never under 200px tall. |
 | ≤480px | Hero h1 → 2rem. Buttons stack vertically. |
-| Phone or tablet (any width) | On `/next/` and `/changelog/` the download buttons read "Send to Mac" / "Send link to Mac" and open the share sheet with the `/download/` link (`mailto:` without Web Share). iPhone, iPad and Android: `html.handheld`, set in `<head>` before the first paint; each button carries both labels, `.only-mac` / `.only-handheld`; the click is handled in `assets/agent-download.js`. |
+| Phone or tablet (any width) | On `/next/`, `/changelog/`, `/next/press/` and `/security/` the download buttons read "Send to Mac" / "Send link to Mac" and open the share sheet with the `/download/` link (`mailto:` without Web Share). iPhone, iPad and Android: `html.handheld`, set in `<head>` before the first paint; each button carries both labels, `.only-mac` / `.only-handheld`; the click is handled in `assets/agent-download.js`. |
 
 ---
 
