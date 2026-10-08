@@ -401,7 +401,9 @@ html.handheld .only-mac { display: none; }
   padding: 120px 0 72px;
 }
 
-.hero-duo .container {
+/* Two classes, so it beats `.hero .container` (1fr) of the ≤1024px block: a 1fr track takes the devices' fixed
+   width as its minimum and pushes the container past the window */
+.hero.hero-duo .container {
   grid-template-columns: minmax(0, 1fr);
   justify-items: center;
   gap: 48px;
