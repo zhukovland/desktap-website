@@ -393,11 +393,29 @@ html.handheld .only-mac { display: none; }
 /* /next/: the deck on iPad and iPhone in Apple's product bezels (.hero-duo). Apple's marketing rules for its
    devices: whole, upright, unchanged (no shadow, reflection or highlight on them), no overlap, no motion but a
    fade, at least 200 px on screen — so side by side, bottom-aligned, at their real relative size (the iPhone 76%
-   of the iPad's height), a still aura behind and no hover; on a phone one under the other. */
-.hero-duo .container {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
-  gap: 48px;
+   of the iPad's height), a still aura behind and no hover; on a phone one under the other.
+   At every width the text is centered on top and the pair under it, wider than the container (up to 1320px,
+   24px from the window's edges, 16px ≤768px), so the buttons' labels read without zooming in. */
+.hero-duo {
+  min-height: auto;
+  padding: 120px 0 72px;
 }
+
+/* Two classes, so it beats `.hero .container` (1fr) of the ≤1024px block: a 1fr track takes the devices' fixed
+   width as its minimum and pushes the container past the window */
+.hero.hero-duo .container {
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  gap: 48px;
+  text-align: center;
+}
+
+.hero-duo .hero-content { max-width: 920px; }
+.hero-duo .hero-subtitle { max-width: 640px; margin: 0 auto 36px; }
+.hero-duo .hero-actions,
+.hero-duo .trust-line { justify-content: center; }
+
+.hero-duo .hero-visual { width: min(1320px, 100vw - 48px); }
 
 .hero-devices {
   position: relative;
@@ -3696,8 +3714,6 @@ html.docs-panel-open body { overflow: hidden; }
   .hero-content { max-width: 100%; }
   .hero-subtitle { margin: 0 auto 40px; }
   .hero-actions { justify-content: center; }
-  .hero-duo .container { grid-template-columns: minmax(0, 1fr); }
-  .hero-devices { max-width: 760px; margin: 0 auto; }
   .hero .trust-line { justify-content: center; }
   .features-header { grid-template-columns: 1fr; }
   .features-header p { justify-self: start; }
@@ -3743,6 +3759,7 @@ html.docs-panel-open body { overflow: hidden; }
   .footer-links a { white-space: nowrap; }
 
   .hero { min-height: auto; padding: 130px 0 60px; }
+  .hero-duo .hero-visual { width: calc(100vw - 32px); }
 
   .cta-actions {
     flex-direction: column;
