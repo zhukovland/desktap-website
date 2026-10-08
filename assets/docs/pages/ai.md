@@ -1,4 +1,4 @@
-<!-- updated: 2026-10-05 -->
+<!-- updated: 2026-10-08 -->
 # Use with an AI app
 
 Desktap Agent is also an MCP server. MCP, the Model Context Protocol, is how AI apps such as Claude and ChatGPT use tools on your Mac. Connect one, and you can describe a button instead of building it: "a page of Figma shortcuts", "show CPU load as a ring".
@@ -76,7 +76,7 @@ Reading never changes anything, and every change to your deck waits for you.
 | Restart a startup script that is already on your deck | Nothing: it reruns the script saved on that button |
 | Run one command on your Mac to look something up | **Allow AI to Run Commands** under **Security** in the agent window, then **Allow** on the phone for each command |
 
-It can't press your buttons, so it never runs a tap action or a long press, and it can't delete anything. You delete on the phone: the ✕ on a button in edit mode, **Delete Page** or **Delete Profile** at the bottom of the page or profile editor.
+It can't press your buttons, so it never runs a tap action or a long press, and it can't delete a button, a page or a profile. You delete on the phone: the ✕ on a button in edit mode, **Delete Page** or **Delete Profile** at the bottom of the page or profile editor.
 
 When the AI app connects, the agent gives the assistant a short set of rules; there is nothing to install. Among them:
 
