@@ -16,7 +16,7 @@ AI             A built-in MCP server. Claude Desktop, Claude Code and ChatGPT / 
                the agent; Cursor, Windsurf and any other MCP client take a config copied from it. An AI can build
                whole pages. Every change it sends through Desktap arrives on the phone as a review card with the
                full code and applies only after Accept. Through Desktap, an AI can't press your buttons or
-               delete anything.
+               delete them.
 
 Gallery        34 ready-made widgets; pages of shortcuts for 35 Mac apps, such as Xcode, VS Code, Figma, Slack
                and Spotify; 3 full-page scenes: Mac Town, Visualizer and Aquarium.
@@ -71,7 +71,7 @@ launches, text snippets — and live buttons that draw data, like a CPU ring or 
 
 You don't have to build the deck by hand. The agent includes an MCP server, so Claude, ChatGPT / Codex or any
 MCP client can build whole pages. Every change it sends arrives on the phone as a card showing each script,
-and applies only when you tap Accept. Through Desktap, an AI can't press your buttons or delete anything.
+and applies only when you tap Accept. Through Desktap, an AI can't press your buttons or delete them.
 
 There is no account and no Desktap server: phone and Mac talk over the local network, encrypted. The
 Mac agent is free; the app is free with two profiles of two pages, and Desktap Pro unlocks the rest.
@@ -93,7 +93,7 @@ SHORT FAQ
 Is it safe to let an AI change the deck?
 Changes an AI sends through Desktap wait for Accept on the iPhone or iPad, with every script shown on the
 card. Running a command on the Mac is off until you turn on Allow AI to Run Commands, and then you allow each
-command. Through Desktap, an AI can't press your buttons or delete anything.
+command. Through Desktap, an AI can't press your buttons or delete them.
 
 Does it work away from home?
 The iPhone or iPad and the Mac need to be on the same Wi-Fi network. There is no Desktap server to carry a tap
