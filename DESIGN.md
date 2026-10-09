@@ -269,12 +269,16 @@ Text on the marker line becomes the title (`> [!TIP] A faster way`). In step car
     ├── ai-review-iphone.webp — /next/ AI: the review card of a change from an AI, on iPhone in Apple's bezel (680×1388)
     ├── gallery-widgets.webp — /next/ Gallery and scenes: a patch of the iPhone Gallery, For Everyone (660×960)
     ├── scene-town.webp, scene-visualizer.webp, scene-aquarium.webp — /next/ Gallery and scenes: the three Unusual scenes, iPad screens in landscape without a bezel (1200×900)
-    ├── icon.png        — App icon (256×256)
+    ├── icon.png        — App icon "Neon" (512×512; the web manifest, the og-soon card)
+    ├── icon-96.png     — The same icon for the nav and the page headers (shown at 28–32 px)
+    ├── apple-touch-icon.png, favicon-16.png, favicon-32.png — the same icon at 180, 16 and 32 px
     ├── og-image.jpg    — Social preview: docs, privacy, terms, next/, changelog/ — the hero's words and the deck screens (see "Social preview card")
     ├── og-deck-ipad.webp, og-deck-iphone.webp — the deck screens without a bezel, for og-image.jpg (iPad 1300×975, iPhone 460×1000)
     ├── og-soon.jpg     — Social preview of the holding page — icon, name, "Coming soon"
-    └── favicon.ico     — Favicon
+    └── favicon.ico     — Favicon (16, 32 and 48 px inside)
 ```
+
+Every icon file, the press kit's included, is the app's own icon as Icon Composer renders it for iOS (`ictool … --platform iOS --rendition Default` at the file's size, not a downscale), converted to sRGB (`sips -m` with the sRGB profile) and run through `pngcrush`. sRGB, not Display P3: the neon must not come out brighter than in the app. A new app icon replaces all of them, the press kit's PNG, its preview and the archive, and `og-soon.jpg` after them ("Social preview card").
 
 No build tools, no frameworks, no external CSS libraries. Pure HTML + CSS + vanilla JS (~115 lines for canvas animation, scroll observer, mouse tracking).
 
@@ -291,12 +295,12 @@ No Apple bezels on the card: a link preview shows it 300–600 px wide, and a de
 The card is changed here, in this template (name, label, words, look). `og-card.html` is only a throwaway copy to shoot from: an edit made in the copy is lost when it is deleted.
 
 1. Copy the template into `og-card.html` in the site root (`.gitignore` keeps it out of commits) and run `python3 -m http.server 8000`.
-2. Shoot each variant into its own PNG at 1× — 1200×630, not 2400×1260 as on a Retina screen. Chrome without a window, in a throwaway profile; such a Chrome keeps running after the PNG is written, so `shot` stops it:
+2. Shoot each variant into its own PNG at 1× — 1200×630, not 2400×1260 as on a Retina screen. Chrome without a window, in a throwaway profile, in sRGB colours (as the icon is); such a Chrome keeps running after the PNG is written, so `shot` stops it:
    ```
    chrome="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
    shot() {
      rm -f "$1"
-     "$chrome" --headless=new --user-data-dir="$(mktemp -d)" --force-device-scale-factor=1 --hide-scrollbars \
+     "$chrome" --headless=new --user-data-dir="$(mktemp -d)" --force-device-scale-factor=1 --force-color-profile=srgb --hide-scrollbars \
        --window-size=1200,630 --screenshot="$1" "$2" >/dev/null 2>&1 &
      local pid=$!; for i in {1..40}; do [[ -s $1 ]] && break; sleep 0.5; done; sleep 1; kill $pid
    }

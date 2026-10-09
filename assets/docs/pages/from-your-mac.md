@@ -1,4 +1,4 @@
-<!-- updated: 2026-10-05 -->
+<!-- updated: 2026-10-09 -->
 # Working from your Mac
 
 You build a button on your iPhone or iPad, but you test it, debug it and connect it to other programs on the Mac. This page shows how to move code between the two, try a script in Terminal before it goes on a button, send an update by hand and let other programs change a button. It ends with a tour of Desktap Agent: its menu and its windows.
@@ -169,7 +169,7 @@ A program can also send a notification through the socket. An action button on i
 
 ## The agent on your Mac
 
-Desktap Agent runs in the menu bar, with no Dock icon. Its icon is a 3×2 grid, filled in while the phone is connected. A dot on its corner means an AI app's change or command waits for your answer on the phone. Its menu opens the agent window, which shows which scripts run and why a widget is waiting.
+Desktap Agent runs in the menu bar, with no Dock icon. Its icon is a rounded square, the key from the Desktap app icon, filled in while the phone is connected. A dot on its corner means an AI app's change or command waits for your answer on the phone. Its menu opens the agent window, which shows which scripts run and why a widget is waiting.
 
 ### The menu
 

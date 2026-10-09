@@ -111,7 +111,7 @@ PICTURES IN THIS ARCHIVE
 
 Screens of the app as it runs, with sample data, no device frames.
 
-desktap-icon-512.png              The app icon, 512 × 512
+desktap-icon-1024.png             The app icon, 1024 × 1024
 desktap-iphone-1-deck.png         iPhone: a deck of live widgets and buttons, 1320 × 2868
 desktap-iphone-2-xcode-page.png   iPhone: the Xcode page from the Gallery, 1320 × 2868
 desktap-iphone-3-ai-review.png    iPhone: three buttons from an AI, waiting for Accept, 1320 × 2868

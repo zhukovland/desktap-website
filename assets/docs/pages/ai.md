@@ -1,4 +1,4 @@
-<!-- updated: 2026-10-08 -->
+<!-- updated: 2026-10-09 -->
 # Use with an AI app
 
 Desktap Agent is also an MCP server. MCP, the Model Context Protocol, is how AI apps such as Claude and ChatGPT use tools on your Mac. Connect one, and you can describe a button instead of building it: "a page of Figma shortcuts", "show CPU load as a ring".
@@ -9,7 +9,7 @@ The assistant in that app looks at your deck, writes the buttons and their scrip
 
 > [!STEP] 1 · Open the agent window
 >
-> Click the Desktap Agent icon (a 3×2 grid) in the menu bar, choose **Show Agent Window** (⌘O), then **AI Assistants** in the sidebar. Each AI app found on this Mac has a card: a row with a **Connect** button, and under it **MCP server connected** and, for Claude Code and ChatGPT / Codex, **Widget skill installed**.
+> Click the Desktap Agent icon (a rounded square) in the menu bar, choose **Show Agent Window** (⌘O), then **AI Assistants** in the sidebar. Each AI app found on this Mac has a card: a row with a **Connect** button, and under it **MCP server connected** and, for Claude Code and ChatGPT / Codex, **Widget skill installed**.
 >
 > Only apps the agent finds get a card: install one and switch back to the agent. With none installed, the section names the apps Desktap works with and links to their downloads.
 >
