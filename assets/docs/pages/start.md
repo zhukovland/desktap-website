@@ -1,4 +1,4 @@
-<!-- updated: 2026-10-09 -->
+<!-- updated: 2026-10-05 -->
 # Get started
 
 A Desktap button can run a script on your Mac, and the script can change how the button looks. That is how you build live widgets: buttons that keep themselves current, like a CPU ring, a timer or a build status.
@@ -48,7 +48,7 @@ You need a Mac with macOS 15 or later and your iPhone or iPad with Desktap, on t
 >
 > The agent lives in the menu bar, not in the Dock. Its menu holds **Show Agent Window** (⌘O), **Settings…** (⌘,) and **Quit Desktap** (⌘Q). Can't see the icon on a full menu bar? It can hide behind the camera: open Desktap Agent from Applications again, and its window comes back.
 >
-> Done when the badge on the phone shows your Mac's name and the agent's rounded-square icon in the menu bar is filled in.
+> Done when the badge on the phone shows your Mac's name and a small grid icon is in the menu bar.
 
 ## Your first button
 
